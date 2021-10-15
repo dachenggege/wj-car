@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418849223823978503', 1123598815738675201, 'series', '车系', 'menu', '/hand/series', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418849223823978504', '1418849223823978503', 'series_add', '新增', 'add', '/hand/series/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418849223823978505', '1418849223823978503', 'series_edit', '修改', 'edit', '/hand/series/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418849223823978506', '1418849223823978503', 'series_delete', '删除', 'delete', '/api/second-hand-car/series/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418849223823978507', '1418849223823978503', 'series_view', '查看', 'view', '/hand/series/view', 'file-text', 4, 2, 2, 1, NULL, 0);

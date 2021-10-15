@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.MemberRightsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="memberRightsResultMap" type="org.springblade.car.entity.MemberRights">
+        <id column="id" property="id"/>
+        <result column="level" property="level"/>
+        <result column="level_name" property="levelName"/>
+        <result column="price" property="price"/>
+        <result column="roletype" property="roletype"/>
+        <result column="is_publish_car" property="isPublishCar"/>
+        <result column="is_look_car" property="isLookCar"/>
+        <result column="is_look_ptrade_price" property="isLookPtradePrice"/>
+        <result column="is_pprice" property="isPprice"/>
+        <result column="is_ptrade_price" property="isPtradePrice"/>
+        <result column="is_pinterior_price" property="isPinteriorPrice"/>
+        <result column="is_pcost_price" property="isPcostPrice"/>
+        <result column="is_buy_data" property="isBuyData"/>
+        <result column="show_phone_num" property="showPhoneNum"/>
+        <result column="is_create_shop" property="isCreateShop"/>
+        <result column="is_car_browse_list" property="isCarBrowseList"/>
+        <result column="is_car_call_list" property="isCarCallList"/>
+        <result column="create_shop_num" property="createShopNum"/>
+        <result column="shop_member_num" property="shopMemberNum"/>
+        <result column="join_shop_num" property="joinShopNum"/>
+        <result column="shop_allied_num" property="shopAlliedNum"/>
+        <result column="free_vin_parse_num" property="freeVinParseNum"/>
+        <result column="free_vin_parse_num1" property="freeVinParseNum1"/>
+        <result column="free_vin_parse_num2" property="freeVinParseNum2"/>
+        <result column="vin_parse_price" property="vinParsePrice"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectMemberRightsPage" resultMap="memberRightsResultMap">
+        select * from t_member_rights where is_deleted = 0
+    </select>
+
+</mapper>

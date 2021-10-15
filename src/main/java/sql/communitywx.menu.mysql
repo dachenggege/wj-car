@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1417850732268044294', 1123598815738675201, 'communitywx', '小程序配置信息', 'menu', '/hand/communitywx', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1417850732268044295', '1417850732268044294', 'communitywx_add', '新增', 'add', '/hand/communitywx/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1417850732268044296', '1417850732268044294', 'communitywx_edit', '修改', 'edit', '/hand/communitywx/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1417850732268044297', '1417850732268044294', 'communitywx_delete', '删除', 'delete', '/api/second-hand-car/communitywx/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1417850732268044298', '1417850732268044294', 'communitywx_view', '查看', 'view', '/hand/communitywx/view', 'file-text', 4, 2, 2, 1, NULL, 0);

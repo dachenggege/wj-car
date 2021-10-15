@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.MemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="memberResultMap" type="org.springblade.car.entity.Member">
+        <id column="id" property="id"/>
+        <result column="roletype" property="roletype"/>
+        <result column="session_key" property="sessionKey"/>
+        <result column="openid" property="openid"/>
+        <result column="nickname" property="nickname"/>
+        <result column="sex" property="sex"/>
+        <result column="province" property="province"/>
+        <result column="province_name" property="provinceName"/>
+        <result column="city" property="city"/>
+        <result column="city_name" property="cityName"/>
+        <result column="county" property="county"/>
+        <result column="county_name" property="countyName"/>
+        <result column="headimgurl" property="headimgurl"/>
+        <result column="unionid" property="unionid"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="car_dealer" property="carDealer"/>
+        <result column="dealer_address" property="dealerAddress"/>
+        <result column="certificate" property="certificate"/>
+        <result column="person_audit_status" property="personAuditStatus"/>
+        <result column="person_audit_time" property="personAuditTime"/>
+        <result column="person_nopassnotice" property="personNopassnotice"/>
+        <result column="company" property="company"/>
+        <result column="corporate" property="corporate"/>
+        <result column="company_certificate" property="companyCertificate"/>
+        <result column="company_audit_status" property="companyAuditStatus"/>
+        <result column="company_audit_time" property="companyAuditTime"/>
+        <result column="company_nopassnotice" property="companyNopassnotice"/>
+        <result column="member_lv" property="memberLv"/>
+        <result column="expiry_date" property="expiryDate"/>
+        <result column="is_expiry" property="isExpiry"/>
+        <result column="vi" property="vi"/>
+        <result column="encrypted_data" property="encryptedData"/>
+        <result column="last_login" property="lastLogin"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectMemberPage" resultMap="memberResultMap">
+        select * from t_member where is_deleted = 0
+        <if test="member.id != null">
+            and t.id=#{member.id}
+        </if>
+        <if test="member.roletype != null">
+            and t.roletype=#{member.roletype}
+        </if>
+        <if test="member.openid != null and member.openid !=''">
+            and t.openid=#{member.openid}
+        </if>
+        <if test="member.name != null and member.name !=''">
+            and t.name like concat(concat('%', #{member.name}), '%')
+        </if>
+        <if test="member.nickname != null and member.nickname !=''">
+            and t.nickname like concat(concat('%', #{member.nickname}), '%')
+        </if>
+
+        <if test="member.province != null and member.province !=''">
+            and t.province=#{member.province}
+        </if>
+
+        <if test="member.city != null and member.city !=''">
+            and t.city=#{member.city}
+        </if>
+        <if test="member.county != null and member.county !=''">
+            and t.county=#{member.county}
+        </if>
+        <if test="member.phone != null and member.phone !=''">
+            and t.phone=#{member.phone}
+        </if>
+
+        <if test="member.isExpiry != null ">
+            and t.is_expiry=#{member.isExpiry}
+
+        </if>
+
+        <if test="member.startCreateTime != null ">
+            and t.create_time &gt; #{member.startCreateTime}
+        </if>
+        <if test="member.endCreateTime != null ">
+            and t.create_time &lt; #{member.endCreateTime}
+        </if>
+
+        <if test="member.startExpiryDate != null ">
+            and t.expiry_date &gt; #{member.startExpiryDate}
+        </if>
+        <if test="member.endExpiryDate != null ">
+            and t.expiry_date &lt; #{member.endExpiryDate}
+        </if>
+
+        <if test="member.sort != null and member.sort !=''">
+            order by ${member.sort}
+        </if>
+
+    </select>
+
+</mapper>

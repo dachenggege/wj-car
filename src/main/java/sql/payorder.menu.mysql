@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418096681921888262', 1123598815738675201, 'payorder', '订单表', 'menu', '/hand/payorder', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418096681921888263', '1418096681921888262', 'payorder_add', '新增', 'add', '/hand/payorder/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418096681921888264', '1418096681921888262', 'payorder_edit', '修改', 'edit', '/hand/payorder/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418096681921888265', '1418096681921888262', 'payorder_delete', '删除', 'delete', '/api/second-hand-car/payorder/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1418096681921888266', '1418096681921888262', 'payorder_view', '查看', 'view', '/hand/payorder/view', 'file-text', 4, 2, 2, 1, NULL, 0);

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.ShopMemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="shopMemberResultMap" type="org.springblade.car.entity.ShopMember">
+        <id column="id" property="id"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <select id="selectShopMemberPage" resultType="org.springblade.car.dto.ShopMemberDTO">
+        select roletype,session_key,openid,nickname,sex,province,city,county,headimgurl,unionid,pure_phone_number,NAME,phone,isshop,last_login
+        ,m.id as id ,m.member_id as memberId ,m.shop_id as shopId from t_member t,t_shop_member m where t.is_deleted = 0 and m.is_deleted=0
+        and t.id=m.member_id
+        <if test="member.shopId != null and member.shopId !=''">
+            and m.shop_id=#{member.shopId}
+        </if>
+        <if test="member.memberId != null ">
+            and t.id=#{member.memberId}
+        </if>
+
+        <if test="member.name != null and member.name !=''">
+            and t.name like concat(concat('%', #{member.name}), '%')
+        </if>
+        <if test="member.province != null and member.province !=''">
+            and t.province=#{member.province}
+        </if>
+        <if test="member.city != null and member.city !=''">
+            and t.city=#{member.city}
+        </if>
+        <if test="member.county != null and member.county !=''">
+            and t.county=#{member.county}
+        </if>
+        <if test="member.phone != null and member.phone !=''">
+            and t.phone=#{member.phone}
+        </if>
+
+    </select>
+</mapper>

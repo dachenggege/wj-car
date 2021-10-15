@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1440892675839246343', 1123598815738675201, 'vinparse', '汽车vin查询', 'menu', '/hand/vinparse', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1440892675839246344', '1440892675839246343', 'vinparse_add', '新增', 'add', '/hand/vinparse/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1440892675839246345', '1440892675839246343', 'vinparse_edit', '修改', 'edit', '/hand/vinparse/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1440892675839246346', '1440892675839246343', 'vinparse_delete', '删除', 'delete', '/api/second-hand-car/vinparse/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1440892675839246347', '1440892675839246343', 'vinparse_view', '查看', 'view', '/hand/vinparse/view', 'file-text', 4, 2, 2, 1, NULL, 0);

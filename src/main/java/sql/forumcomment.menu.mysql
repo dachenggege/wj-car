@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307802925944838', 1123598815738675201, 'forumcomment', '帖子评论', 'menu', '/hand/forumcomment', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307802925944839', '1420307802925944838', 'forumcomment_add', '新增', 'add', '/hand/forumcomment/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307802925944840', '1420307802925944838', 'forumcomment_edit', '修改', 'edit', '/hand/forumcomment/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307802925944841', '1420307802925944838', 'forumcomment_delete', '删除', 'delete', '/api/second-hand-car/forumcomment/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307802925944842', '1420307802925944838', 'forumcomment_view', '查看', 'view', '/hand/forumcomment/view', 'file-text', 4, 2, 2, 1, NULL, 0);

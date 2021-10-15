@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.SeriesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="seriesResultMap" type="org.springblade.car.entity.Series">
+        <id column="id" property="id"/>
+        <result column="series_name" property="seriesName"/>
+        <result column="series_groupname" property="seriesGroupname"/>
+        <result column="is_green" property="isGreen"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="listorder" property="listorder"/>
+        <result column="open" property="open"/>
+        <result column="model_id" property="modelId"/>
+        <result column="model_name" property="modelName"/>
+    </resultMap>
+
+
+    <select id="selectSeriesPage" resultMap="seriesResultMap">
+        select * from t_series t where t.is_deleted = 0
+        <if test="series.id != null and series.id !=''">
+            and t.id=#{series.id}
+        </if>
+        <if test="series.seriesName != null and series.seriesName !=''">
+            and t.series_name like concat(concat('%', #{series.seriesName}), '%')
+        </if>
+        <if test="series.brandId != null and series.brandId !=''">
+            and t.brand_id=#{series.brandId}
+        </if>
+        <if test="series.brandName != null and series.brandName !=''">
+            and t.brand_name like concat(concat('%', #{series.brandName}), '%')
+        </if>
+    </select>
+
+</mapper>

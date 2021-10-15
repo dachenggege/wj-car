@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.ShopCollectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="shopCollectResultMap" type="org.springblade.car.entity.ShopCollect">
+        <id column="id" property="id"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="is_collect" property="isCollect"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectShopCollectPage" resultType="org.springblade.car.vo.ShopVO" >
+        select t.* from t_shop t ,t_shop_collect c where t.is_deleted = 0 and c.is_deleted = 0
+        and t.id=c.shop_id
+        <if test="shopCollect.memberId != null ">
+            and c.member_id=#{shopCollect.memberId}
+        </if>
+        <if test="shopCollect.isCollect != null">
+            and c.is_collect=#{shopCollect.isCollect}
+        </if>
+    </select>
+
+    <select id="selectShopCollectAcceptPage" resultType="org.springblade.car.dto.ShopCollectDTO" >
+        SELECT c.id ,t.id AS shopId,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
+        (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
+        c.member_id AS collecterId,c.is_collect AS isCollect,
+        (SELECT NAME FROM t_member m WHERE c.member_id=m.id) AS collecterName
+        FROM t_shop t ,t_shop_collect c WHERE t.is_deleted = 0 AND c.is_deleted = 0
+        AND t.id=c.shop_id
+        <if test="shopCollect.id != null ">
+            and c.id=#{shopCollect.id}
+        </if>
+        <if test="shopCollect.shopMemberId != null ">
+            and t.member_id=#{shopCollect.shopMemberId}
+        </if>
+        <if test="shopCollect.collecterId != null ">
+            and c.member_id=#{shopCollect.collecterId}
+        </if>
+        <if test="shopCollect.isCollect != null">
+            and c.is_collect=#{shopCollect.isCollect}
+        </if>
+    </select>
+
+    <select id="selectShopCollect" resultType="org.springblade.car.entity.ShopCollect"
+            parameterType="org.springblade.car.entity.ShopCollect">
+        select * from t_shop_collect t where t.is_deleted = 0
+        <if test="shopCollect.id != null and shopCollect.id !=''">
+            and t.id=#{shopCollect.id}
+        </if>
+        <if test="shopCollect.isCollect != null">
+            and t.is_collect=#{shopCollect.isCollect}
+        </if>
+        <if test="shopCollect.memberId != null ">
+            and t.member_id=#{shopCollect.memberId}
+        </if>
+
+    </select>
+
+</mapper>

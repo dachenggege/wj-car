@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.PhoneRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="phoneRecordResultMap" type="org.springblade.car.entity.PhoneRecord">
+        <id column="id" property="id"/>
+        <result column="typename" property="typename"/>
+        <result column="type" property="type"/>
+        <result column="member_id" property="memberId"/>
+        <result column="cars_id" property="carsId"/>
+        <result column="forum_id" property="forumId"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectPhoneRecordPage" resultType="org.springblade.car.vo.PhoneRecordVO">
+        SELECT t.*,m.phone AS callPhone,m.name AS callName,m.`nickname` AS callNickName,
+        CASE t.type
+        WHEN 2 THEN
+        (SELECT b.phone FROM t_cars c,t_member b WHERE c.is_deleted = 0  AND b.is_deleted=0
+        AND c.member_id =b.id AND c.id=t.cars_id)
+        WHEN 3 THEN
+        (SELECT b.phone FROM `t_forum` c,t_member b WHERE c.is_deleted = 0  AND b.is_deleted=0
+        AND c.member_id =b.id AND c.id=t.forum_id)
+        ELSE ''
+        END
+        AS answerPhone,
+        CASE t.type
+        WHEN 2 THEN
+        (SELECT IFNULL(b.name,b.nickname) FROM t_cars c,t_member b WHERE c.is_deleted = 0  AND b.is_deleted=0
+        AND c.member_id =b.id AND c.id=t.cars_id)
+        WHEN 3 THEN
+        (SELECT IFNULL(b.name,b.nickname) FROM `t_forum` c,t_member b WHERE c.is_deleted = 0  AND b.is_deleted=0
+        AND c.member_id =b.id AND c.id=t.forum_id)
+        ELSE ''
+        END
+        AS answerName
+
+        FROM t_phone_record t,t_member m
+        WHERE t.is_deleted = 0 AND m.is_deleted = 0
+        AND t.member_id=m.id
+
+        <if test="vo.callName != null and vo.callName !=''">
+            and m.name like concat(concat('%', #{vo.callName}), '%')
+        </if>
+        <if test="vo.callNickName != null and vo.callNickName !=''">
+            and m.nickname like concat(concat('%', #{vo.callNickName}), '%')
+        </if>
+        <if test="vo.type != null and vo.type !=''">
+            and t.type =#{vo.type}
+        </if>
+        order by t.create_time
+    </select>
+
+    <select id="selectCarsPhoneRecordPage" resultType="org.springblade.car.dto.CallPhoneCarsDTO">
+        SELECT cc.* FROM (
+        SELECT t.*,
+        (SELECT phone FROM t_member m WHERE m.id=c.`member_id`)AS phone,
+        (SELECT NAME FROM t_member m WHERE m.id=c.`member_id`)AS memberName,
+        (SELECT phone FROM t_member m WHERE m.id=t.`member_id`)AS callphone,
+        (SELECT NAME FROM t_member m WHERE m.id=t.`member_id`)AS callmemberName
+        FROM t_phone_record t ,t_cars c
+        WHERE c.`is_deleted`=0 AND t.`is_deleted`=0
+        AND t.`cars_id`=c.id  AND t.`type`=2
+        <if test="dto.memberId != null ">
+            AND t.member_id=#{dto.memberId}
+        </if>
+
+        UNION
+        SELECT t.*,
+        (SELECT phone FROM t_member m WHERE m.id=c.`member_id`)AS phone,
+        (SELECT NAME FROM t_member m WHERE m.id=c.`member_id`)AS memberName,
+        (SELECT phone FROM t_member m WHERE m.id=t.`member_id`)AS callphone,
+        (SELECT NAME FROM t_member m WHERE m.id=t.`member_id`)AS callmemberName
+        FROM t_phone_record t ,t_forum c
+        WHERE c.`is_deleted`=0 AND t.`is_deleted`=0
+        AND t.`forum_id`=c.id  AND t.`type`=3
+        <if test="dto.memberId != null ">
+            AND t.member_id=#{dto.memberId}
+        </if>
+
+        ) cc
+
+        order by cc.create_time
+ </select>
+</mapper>

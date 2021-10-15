@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.PayOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="payOrderResultMap" type="org.springblade.car.entity.PayOrder">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="type" property="type"/>
+        <result column="right_id" property="rightId"/>
+        <result column="out_trade_no" property="outTradeNo"/>
+        <result column="pay_money" property="payMoney"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectPayOrderPage" resultType="org.springblade.car.vo.PayOrderVO">
+        SELECT t.*,m.name AS memberName,m.phone, CASE t.type WHEN 1 THEN '充值会员' WHEN 2 THEN 'VIN订单查询' ELSE '--' END AS  typeName
+        FROM t_pay_order t , t_member m WHERE t.is_deleted = 0 AND m.is_deleted = 0
+        AND t.member_id=m.id
+        <if test="payOrder.phone != null and payOrder.phone !=''">
+            and m.phone=#{payOrder.phone}
+        </if>
+        <if test="payOrder.status != null and payOrder.status !=''">
+            and t.status=#{payOrder.status}
+        </if>
+        <if test="payOrder.outTradeNo != null and payOrder.outTradeNo !=''">
+            and t.out_trade_no=#{payOrder.outTradeNo}
+        </if>
+        <if test="payOrder.memberId != null ">
+            and t.member_id=#{payOrder.memberId}
+        </if>
+        <if test="payOrder.outTradeNo != null and payOrder.outTradeNo !=''">
+            and t.out_trade_no=#{payOrder.outTradeNo}
+        </if>
+        <if test="payOrder.id != null and payOrder.id !=''">
+            and t.id=#{payOrder.id}
+        </if>
+        <if test="payOrder.memberId != null ">
+            and t.member_id=#{payOrder.memberId}
+        </if>
+        <if test="payOrder.memberName != null and payOrder.memberName !=''">
+            and m.name like concat(concat('%', #{payOrder.memberName}), '%')
+        </if>
+        <if test="payOrder.province != null and payOrder.province !=''">
+            and m.province=#{payOrder.province}
+        </if>
+        <if test="payOrder.city != null and payOrder.city != ''">
+            and m.city=#{payOrder.city}
+        </if>
+        <if test="payOrder.county != null and payOrder.county != ''">
+            and m.county=#{payOrder.county}
+        </if>
+        <if test="payOrder.areas != null and payOrder.areas != ''">
+            and (m.province IN
+            <foreach collection="payOrder.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city IN
+            <foreach collection="payOrder.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county IN
+            <foreach collection="payOrder.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="payOrder.noareas != null and payOrder.noareas != ''">
+            and (m.province NOT IN
+            <foreach collection="payOrder.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city NOT IN
+            <foreach collection="payOrder.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county NOT IN
+            <foreach collection="payOrder.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        order by t.create_time desc
+    </select>
+
+</mapper>

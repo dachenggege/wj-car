@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1442698403533066247', 1123598815738675201, 'sharerecord', '订单分享', 'menu', '/hand/sharerecord', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1442698403533066248', '1442698403533066247', 'sharerecord_add', '新增', 'add', '/hand/sharerecord/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1442698403533066249', '1442698403533066247', 'sharerecord_edit', '修改', 'edit', '/hand/sharerecord/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1442698403533066250', '1442698403533066247', 'sharerecord_delete', '删除', 'delete', '/api/second-hand-car/sharerecord/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1442698403533066251', '1442698403533066247', 'sharerecord_view', '查看', 'view', '/hand/sharerecord/view', 'file-text', 4, 2, 2, 1, NULL, 0);

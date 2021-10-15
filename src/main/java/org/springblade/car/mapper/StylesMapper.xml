@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.StylesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="stylesResultMap" type="org.springblade.car.entity.Styles">
+        <id column="id" property="id"/>
+        <result column="styles_name" property="stylesName"/>
+        <result column="styles_price" property="stylesPrice"/>
+        <result column="styles_year" property="stylesYear"/>
+        <result column="min_reg_year" property="minRegYear"/>
+        <result column="max_reg_year" property="maxRegYear"/>
+        <result column="styles_gas" property="stylesGas"/>
+        <result column="liter_type" property="literType"/>
+        <result column="gear_type" property="gearType"/>
+        <result column="discharge_standard" property="dischargeStandard"/>
+        <result column="is_green" property="isGreen"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="series_id" property="seriesId"/>
+        <result column="series_name" property="seriesName"/>
+        <result column="listorder" property="listorder"/>
+        <result column="open" property="open"/>
+        <result column="group_name" property="groupName"/>
+        <result column="configuration" property="configuration"/>
+    </resultMap>
+
+
+    <select id="selectStylesPage" resultMap="stylesResultMap">
+        select * from t_styles t where is_deleted = 0
+        <if test="styles.id != null and styles.id !=''">
+            and t.id=#{styles.id}
+        </if>
+        <if test="styles.stylesName != null and styles.stylesName !=''">
+            and t.styles_name like concat(concat('%', #{styles.stylesName}), '%')
+        </if>
+        <if test="styles.brandId != null and styles.brandId !=''">
+            and t.brand_id=#{styles.brandId}
+        </if>
+        <if test="styles.brandName != null and styles.brandName !=''">
+            and t.brand_name like concat(concat('%', #{styles.brandName}), '%')
+        </if>
+
+        <if test="styles.seriesId != null and styles.seriesId !=''">
+            and t.series_id=#{styles.seriesId}
+        </if>
+        <if test="styles.seriesName != null and styles.seriesName !=''">
+            and t.series_name like concat(concat('%', #{styles.seriesName}), '%')
+        </if>
+    </select>
+    <select id="selectStylesVin" resultType="org.springblade.car.entity.Styles" parameterType="java.util.Map">
+        select * from t_styles t where is_deleted = 0
+        <if test="styles_year != null">
+            and t.styles_year=#{styles_year}
+        </if>
+        <if test="styles_price != null">
+            and t.styles_price=#{styles_price}
+        </if>
+        <if test="group_name != null and sgroup_name !=''">
+            and t.group_name like concat(concat('%', #{group_name}), '%')
+        </if>
+    </select>
+
+</mapper>

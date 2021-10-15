@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.ShopMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="shopResultMap" type="org.springblade.car.entity.Shop">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="phone" property="phone"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_address" property="shopAddress"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="county" property="county"/>
+        <result column="shop_img" property="shopImg"/>
+        <result column="certificate" property="certificate"/>
+        <result column="audit_status" property="auditStatus"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="nopassnotice" property="nopassnotice"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="area_name" property="areaName"/>
+    </resultMap>
+    <select id="selectShopCount" resultType="int">
+        SELECT count(1)
+        FROM t_shop t , t_member m WHERE t.is_deleted = 0 AND m.is_deleted = 0
+        AND t.member_id=m.id
+        <if test="shop.id != null and shop.id !=''">
+            and t.id=#{shop.id}
+        </if>
+        <if test="shop.auditStatus != null and shop.auditStatus !=''">
+            and t.audit_status=#{shop.auditStatus}
+        </if>
+        <if test="shop.memberId != null ">
+            and t.member_id=#{shop.memberId}
+        </if>
+        <if test="shop.shopName != null and shop.shopName !=''">
+            and t.shop_name like concat(concat('%', #{shop.shopName}), '%')
+        </if>
+        <if test="shop.province != null and shop.province !=''">
+            and t.province=#{shop.province}
+        </if>
+        <if test="shop.city != null and shop.city !=''">
+            and t.city=#{shop.city}
+        </if>
+        <if test="shop.county != null and shop.county !=''">
+            and t.county=#{shop.county}
+        </if>
+        <if test="shop.areas != null and shop.areas != ''">
+            and (m.province IN
+            <foreach collection="shop.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city IN
+            <foreach collection="shop.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county IN
+            <foreach collection="shop.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="shop.noareas != null and shop.noareas != ''">
+            and (m.province NOT IN
+            <foreach collection="shop.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city NOT IN
+            <foreach collection="shop.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county NOT IN
+            <foreach collection="shop.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="shop.startCreateTime != null ">
+            and t.create_time &gt; #{shop.startCreateTime}
+        </if>
+        <if test="shop.endCreateTime != null ">
+            and t.create_time &lt; #{shop.endCreateTime}
+        </if>
+    </select>
+
+    <select id="selectShopPage" resultType="org.springblade.car.vo.ShopVO">
+        SELECT t.*,m.name AS shopMember ,
+        (SELECT COUNT(1) FROM t_shop_member WHERE is_deleted = 0 and shop_id=t.id) AS memberNum,
+        (SELECT COUNT(1) FROM t_cars WHERE is_deleted = 0 and member_id=t.member_id) AS carNum
+        FROM t_shop t , t_member m WHERE t.is_deleted = 0 AND m.is_deleted = 0
+        AND t.member_id=m.id
+        <if test="shop.id != null and shop.id !=''">
+            and t.id=#{shop.id}
+        </if>
+        <if test="shop.auditStatus != null and shop.auditStatus !=''">
+            and t.audit_status=#{shop.auditStatus}
+        </if>
+        <if test="shop.memberId != null ">
+            and t.member_id=#{shop.memberId}
+        </if>
+        <if test="shop.shopName != null and shop.shopName !=''">
+            and t.shop_name like concat(concat('%', #{shop.shopName}), '%')
+        </if>
+        <if test="shop.province != null and shop.province !=''">
+            and t.province=#{shop.province}
+        </if>
+        <if test="shop.city != null and shop.city !=''">
+            and t.city=#{shop.city}
+        </if>
+        <if test="shop.county != null and shop.county !=''">
+            and t.county=#{shop.county}
+        </if>
+        <if test="shop.areas != null and shop.areas != ''">
+            and (m.province IN
+            <foreach collection="shop.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city IN
+            <foreach collection="shop.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county IN
+            <foreach collection="shop.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="shop.noareas != null and shop.noareas != ''">
+            and (m.province NOT IN
+            <foreach collection="shop.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city NOT IN
+            <foreach collection="shop.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county NOT IN
+            <foreach collection="shop.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+    </select>
+
+
+    <select id="selectMyShopPage" resultType="org.springblade.car.vo.ShopVO">
+        select t.*,
+        ( SELECT name FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) as shopMember ,
+        ( select count(1) from t_shop_member where is_deleted = 0 and shop_id = t.id ) as memberNum ,
+        ( select count(1) from t_cars where is_deleted = 0 and member_id = t.member_id ) as carNum
+        from t_shop t, t_shop_member s, t_member b
+        WHERE t.is_deleted = 0 AND b.is_deleted = 0
+        and t.id=s.`shop_id`
+        AND s.member_id=b.id
+        <if test="shop.id != null and shop.id !=''">
+            and t.id=#{shop.id}
+        </if>
+        <if test="shop.auditStatus != null and shop.auditStatus !=''">
+            and t.audit_status=#{shop.auditStatus}
+        </if>
+        <if test="shop.memberId != null ">
+            and s.member_id=#{shop.memberId}
+        </if>
+        <if test="shop.shopName != null and shop.shopName !=''">
+            and t.shop_name like concat(concat('%', #{shop.shopName}), '%')
+        </if>
+        <if test="shop.province != null and shop.province !=''">
+            and t.province=#{shop.province}
+        </if>
+        <if test="shop.city != null and shop.city !=''">
+            and t.city=#{shop.city}
+        </if>
+        <if test="shop.county != null and shop.county !=''">
+            and t.county=#{shop.county}
+        </if>
+
+    </select>
+    <select id="getShopDetail" resultType="org.springblade.car.vo.ShopVO"
+            parameterType="org.springblade.car.vo.ShopVO">
+        SELECT t.*,b.name AS shopMember ,
+        (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS memberNum,
+        (SELECT COUNT(1) FROM t_cars WHERE member_id=t.member_id) AS carNum
+        FROM t_shop t , t_member b WHERE t.is_deleted = 0 AND b.is_deleted = 0
+        AND t.member_id=b.id
+    <if test="shop.id != null and shop.id !=''">
+        and t.id=#{shop.id}
+    </if>
+
+    </select>
+</mapper>

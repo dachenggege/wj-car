@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1436995546515271687', 1123598815738675201, 'phonerecord', '电话咨询记录', 'menu', '/hand/phonerecord', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1436995546515271688', '1436995546515271687', 'phonerecord_add', '新增', 'add', '/hand/phonerecord/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1436995546515271689', '1436995546515271687', 'phonerecord_edit', '修改', 'edit', '/hand/phonerecord/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1436995546515271690', '1436995546515271687', 'phonerecord_delete', '删除', 'delete', '/api/second-hand-car/phonerecord/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1436995546515271691', '1436995546515271687', 'phonerecord_view', '查看', 'view', '/hand/phonerecord/view', 'file-text', 4, 2, 2, 1, NULL, 0);

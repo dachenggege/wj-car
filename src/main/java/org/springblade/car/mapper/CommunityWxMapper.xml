@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.CommunityWxMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="communityWxResultMap" type="org.springblade.car.entity.CommunityWx">
+        <id column="id" property="id"/>
+        <result column="appid" property="appid"/>
+        <result column="mch_id" property="mchId"/>
+        <result column="sign_key" property="signKey"/>
+        <result column="notify_url" property="notifyUrl"/>
+        <result column="spbill_create_ip" property="spbillCreateIp"/>
+        <result column="app_secret" property="appSecret"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectCommunityWxPage" resultMap="communityWxResultMap">
+        select * from t_community_wx where is_deleted = 0
+    </select>
+
+</mapper>

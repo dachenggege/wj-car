@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.ForumLikeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="forumLikeResultMap" type="org.springblade.car.entity.ForumLike">
+        <id column="id" property="id"/>
+        <result column="forum_id" property="forumId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="is_like" property="isLike"/>
+
+    </resultMap>
+
+
+    <select id="selectForumLikePage" resultMap="forumLikeResultMap">
+        select * from t_forum_like where is_deleted = 0
+    </select>
+    <select id="selectForumLike" resultType="org.springblade.car.entity.ForumLike"
+            parameterType="org.springblade.car.entity.ForumLike">
+        select * from t_forum_like f where is_deleted = 0
+        <if test="forumLike.id != null and forumLike.id !=''">
+            and f.id=#{forumLike.id}
+        </if>
+        <if test="forumLike.forumId != null and forumLike.forumId !=''">
+            and f.forum_id=#{forumLike.forumId}
+        </if>
+        <if test="forumLike.memberId != null ">
+            and f.member_id=#{forumLike.memberId}
+        </if>
+
+    </select>
+
+</mapper>

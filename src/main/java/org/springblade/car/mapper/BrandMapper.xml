@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.BrandMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="brandResultMap" type="org.springblade.car.entity.Brand">
+        <id column="id" property="id"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="brand_pic" property="brandPic"/>
+        <result column="brand_mark" property="brandMark"/>
+        <result column="brand_en" property="brandEn"/>
+        <result column="isrecom" property="isrecom"/>
+        <result column="listorder" property="listorder"/>
+        <result column="open" property="open"/>
+    </resultMap>
+
+
+    <select id="selectBrandPage" resultMap="brandResultMap">
+        select * from t_brand t where is_deleted = 0
+        <if test="brand.id != null and brand.id !=''">
+            and t.id=#{brand.id}
+        </if>
+        <if test="brand.brandName != null and brand.brandName !=''">
+            and t.brand_name like concat(concat('%', #{brand.brandName}), '%')
+        </if>
+        <if test="brand.isrecom != null and brand.isrecom !=''">
+            and t.isrecom=#{brand.isrecom}
+        </if>
+    </select>
+
+</mapper>

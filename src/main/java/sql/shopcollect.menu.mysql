@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1430876122737565703', 1123598815738675201, 'shopcollect', '门店收藏', 'menu', '/hand/shopcollect', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1430876122737565704', '1430876122737565703', 'shopcollect_add', '新增', 'add', '/hand/shopcollect/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1430876122737565705', '1430876122737565703', 'shopcollect_edit', '修改', 'edit', '/hand/shopcollect/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1430876122737565706', '1430876122737565703', 'shopcollect_delete', '删除', 'delete', '/api/second-hand-car/shopcollect/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1430876122737565707', '1430876122737565703', 'shopcollect_view', '查看', 'view', '/hand/shopcollect/view', 'file-text', 4, 2, 2, 1, NULL, 0);

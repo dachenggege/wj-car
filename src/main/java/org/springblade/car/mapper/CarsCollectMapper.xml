@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.CarsCollectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="casCollectResultMap" type="org.springblade.car.entity.CarsCollect">
+        <id column="id" property="id"/>
+        <result column="car_id" property="carId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="is_collect" property="isCollect"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectCarsCollectPage" resultMap="casCollectResultMap">
+        select * from t_cars_collect where is_deleted = 0
+    </select>
+    <select id="selectCarsCollect" parameterType="org.springblade.car.entity.CarsCollect"
+            resultType="org.springblade.car.entity.CarsCollect">
+        select * from t_cars_collect f where is_deleted = 0
+        <if test="casCollect.id != null and casCollect.id !=''">
+            and f.id=#{casCollect.id}
+        </if>
+        <if test="casCollect.carId != null and casCollect.carId !=''">
+            and f.car_id=#{casCollect.carId}
+        </if>
+        <if test="casCollect.memberId != null ">
+            and f.member_id=#{casCollect.memberId}
+        </if>
+    </select>
+
+</mapper>

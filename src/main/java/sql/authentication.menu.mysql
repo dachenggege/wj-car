@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1447833099061501959', 1123598815738675201, 'memberCertification', '认证', 'menu', '/hand/memberCertification', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1447833099061501960', '1447833099061501959', 'authentication_add', '新增', 'add', '/hand/memberCertification/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1447833099061501961', '1447833099061501959', 'authentication_edit', '修改', 'edit', '/hand/memberCertification/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1447833099061501962', '1447833099061501959', 'authentication_delete', '删除', 'delete', '/api/second-hand-car/memberCertification/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1447833099061501963', '1447833099061501959', 'authentication_view', '查看', 'view', '/hand/memberCertification/view', 'file-text', 4, 2, 2, 1, NULL, 0);

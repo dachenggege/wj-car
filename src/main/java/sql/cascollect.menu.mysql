@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1425706942547730439', 1123598815738675201, 'cascollect', '汽车收藏', 'menu', '/hand/cascollect', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1425706942547730440', '1425706942547730439', 'cascollect_add', '新增', 'add', '/hand/cascollect/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1425706942547730441', '1425706942547730439', 'cascollect_edit', '修改', 'edit', '/hand/cascollect/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1425706942547730442', '1425706942547730439', 'cascollect_delete', '删除', 'delete', '/api/second-hand-car/cascollect/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1425706942547730443', '1425706942547730439', 'cascollect_view', '查看', 'view', '/hand/cascollect/view', 'file-text', 4, 2, 2, 1, NULL, 0);

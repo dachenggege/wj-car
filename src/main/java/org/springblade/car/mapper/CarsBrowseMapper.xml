@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.CarsBrowseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="carsBrowseResultMap" type="org.springblade.car.entity.CarsBrowse">
+        <id column="id" property="id"/>
+        <result column="car_id" property="carId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectCarsBrowsePage" resultMap="carsBrowseResultMap">
+        select * from t_cars_browse where is_deleted = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.CarsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="carsResultMap" type="org.springblade.car.entity.Cars">
+        <id column="id" property="id"/>
+        <result column="p_no" property="pno"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="county" property="county"/>
+        <result column="member_id" property="memberId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="series_id" property="seriesId"/>
+        <result column="styles_id" property="stylesId"/>
+        <result column="pallname" property="pallname"/>
+        <result column="pprice" property="pprice"/>
+        <result column="ptrade_price" property="ptradePrice"/>
+        <result column="pafprice" property="pafprice"/>
+        <result column="ppownpayment_price" property="ppownpaymentPrice"/>
+        <result column="pmonth_price" property="pmonthPrice"/>
+        <result column="ppownpayment" property="ppownpayment"/>
+        <result column="ppurtax" property="ppurtax"/>
+        <result column="isconprice" property="isconprice"/>
+        <result column="isdaimai" property="isdaimai"/>
+        <result column="model_id" property="modelId"/>
+        <result column="pgas" property="pgas"/>
+        <result column="pkilometre" property="pkilometre"/>
+        <result column="pcolor" property="pcolor"/>
+        <result column="pcountry" property="pcountry"/>
+        <result column="ptransmission" property="ptransmission"/>
+        <result column="pemission" property="pemission"/>
+        <result column="pfuel" property="pfuel"/>
+        <result column="pguohu" property="pguohu"/>
+        <result column="pontime" property="pontime"/>
+        <result column="pdetails" property="pdetails"/>
+        <result column="pmainpic" property="pmainpic"/>
+        <result column="ppics" property="ppics"/>
+        <result column="phits" property="phits"/>
+        <result column="issell" property="issell"/>
+        <result column="listtime" property="listtime"/>
+        <result column="isrecom" property="isrecom"/>
+        <result column="isshow" property="isshow"/>
+        <result column="ptransfer" property="ptransfer"/>
+        <result column="pinsurance" property="pinsurance"/>
+        <result column="pinspection" property="pinspection"/>
+        <result column="pcaruse" property="pcaruse"/>
+        <result column="pmaintenance" property="pmaintenance"/>
+        <result column="isrepair" property="isrepair"/>
+        <result column="selltime" property="selltime"/>
+        <result column="audit_status" property="auditStatus"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="nopassnotice" property="nopassnotice"/>
+        <result column="isjiangjia" property="isjiangjia"/>
+        <result column="hlconfig" property="hlconfig"/>
+        <result column="hl_pic" property="hlPic"/>
+        <result column="pvin" property="pvin"/>
+        <result column="province_name" property="provinceName"/>
+        <result column="city_name" property="cityName"/>
+        <result column="county_name" property="countyName"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="series_name" property="seriesName"/>
+        <result column="styles_name" property="stylesName"/>
+        <result column="model_name" property="modelName"/>
+
+    </resultMap>
+    <update id="updateCarListTime" parameterType="java.lang.Long">
+         UPDATE t_cars SET listtime= DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') where id=#{id}
+    </update>
+
+
+    <select id="selectCarsCount" resultType="int">
+        select count(1) from t_cars t,t_member m where t.is_deleted = 0  and m.is_deleted=0
+        and t.member_id =m.id
+
+        <if test="cars.id != null and cars.id !=''">
+            and t.id=#{cars.id}
+        </if>
+        <if test="cars.pvin != null and cars.pvin !=''">
+            and t.pvin=#{cars.pvin}
+        </if>
+        <if test="cars.pallname != null and cars.pallname !=''">
+            and t.pallname like concat(concat('%', #{cars.pallname}), '%')
+        </if>
+        <if test="cars.province != null and cars.province !=''">
+            and t.province=#{cars.province}
+        </if>
+        <if test="cars.city != null and cars.city !=''">
+            and t.city=#{cars.city}
+        </if>
+        <if test="cars.county != null and cars.county !=''">
+            and t.county=#{cars.county}
+        </if>
+        <if test="cars.memberId != null ">
+            and t.member_id=#{cars.memberId}
+        </if>
+        <if test="cars.memberIds != null and cars.memberIds != ''">
+            and t.member_id IN
+            <foreach collection="cars.memberIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="cars.brandId != null and cars.brandId !=''">
+            and t.brand_id=#{cars.brandId}
+        </if>
+        <if test="cars.seriesId != null and cars.seriesId !=''">
+            and t.series_id=#{cars.seriesId}
+        </if>
+        <if test="cars.stylesId != null and cars.stylesId !=''">
+            and t.styles_id=#{cars.stylesId}
+        </if>
+        <if test="cars.isconprice != null and cars.isconprice !=''">
+            and t.isconprice=#{cars.isconprice}
+        </if>
+        <if test="cars.isdaimai != null and cars.isdaimai !=''">
+            and t.isdaimai=#{cars.isdaimai}
+        </if>
+        <if test="cars.modelId != null and cars.modelId !=''">
+            and t.model_id=#{cars.modelId}
+        </if>
+        <if test="cars.issell != null and cars.issell !=''">
+            and t.issell=#{cars.issell}
+        </if>
+        <if test="cars.isrecom != null and cars.isrecom !=''">
+            and t.isrecom=#{cars.isrecom}
+        </if>
+        <if test="cars.isshow != null and cars.isshow !=''">
+            and t.isshow=#{cars.isshow}
+        </if>
+        <if test="cars.ptransfer != null and cars.ptransfer !=''">
+            and t.ptransfer=#{cars.ptransfer}
+        </if>
+        <if test="cars.isjiangjia != null and cars.isjiangjia !=''">
+            and t.isjiangjia=#{cars.isjiangjia}
+        </if>
+        <if test="cars.auditStatus != null and cars.auditStatus !=''">
+            and t.audit_status=#{cars.auditStatus}
+        </if>
+        <if test="cars.sprice != null and cars.sprice !=''">
+            and t.pprice &gt; #{cars.sprice}
+        </if>
+        <if test="cars.eprice != null and cars.eprice !=''">
+            and t.pprice &lt; #{cars.eprice}
+        </if>
+        <if test="cars.areas != null and cars.areas != ''">
+            and (t.province IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="cars.noareas != null and cars.noareas != ''">
+            and (t.province NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city  NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county  NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="cars.startCreateTime != null ">
+            and t.create_time &gt; #{cars.startCreateTime}
+        </if>
+        <if test="cars.endCreateTime != null ">
+            and t.create_time &lt; #{cars.endCreateTime}
+        </if>
+    </select>
+
+
+    <select id="selectCarsPage" resultType="org.springblade.car.dto.CarsDTO">
+        select t.*,m.name as memberName,
+        (SELECT COUNT(1) FROM  `t_cars_browse` b WHERE b.`is_deleted`=0 AND b.`car_id`=t.`id`) AS viewCount,
+        (SELECT COUNT(1) FROM  `t_phone_record` r WHERE r.`is_deleted`=0 AND r.`cars_id`=t.`id`) AS callPhoneCount
+         from t_cars t,t_member m where t.is_deleted = 0  and m.is_deleted=0
+        and t.member_id =m.id
+
+        <if test="cars.id != null and cars.id !=''">
+            and t.id=#{cars.id}
+        </if>
+        <if test="cars.pvin != null and cars.pvin !=''">
+            and t.pvin=#{cars.pvin}
+        </if>
+        <if test="cars.pallname != null and cars.pallname !=''">
+            and t.pallname like concat(concat('%', #{cars.pallname}), '%')
+        </if>
+        <if test="cars.province != null and cars.province !=''">
+            and t.province=#{cars.province}
+        </if>
+        <if test="cars.city != null and cars.city !=''">
+            and t.city=#{cars.city}
+        </if>
+        <if test="cars.county != null and cars.county !=''">
+            and t.county=#{cars.county}
+        </if>
+        <if test="cars.memberId != null ">
+            and t.member_id=#{cars.memberId}
+        </if>
+        <if test="cars.memberIds != null and cars.memberIds != ''">
+            and t.member_id IN
+            <foreach collection="cars.memberIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="cars.brandId != null and cars.brandId !=''">
+            and t.brand_id=#{cars.brandId}
+        </if>
+        <if test="cars.seriesId != null and cars.seriesId !=''">
+            and t.series_id=#{cars.seriesId}
+        </if>
+        <if test="cars.stylesId != null and cars.stylesId !=''">
+            and t.styles_id=#{cars.stylesId}
+        </if>
+        <if test="cars.isconprice != null and cars.isconprice !=''">
+            and t.isconprice=#{cars.isconprice}
+        </if>
+        <if test="cars.isdaimai != null and cars.isdaimai !=''">
+            and t.isdaimai=#{cars.isdaimai}
+        </if>
+        <if test="cars.modelId != null and cars.modelId !=''">
+            and t.model_id=#{cars.modelId}
+        </if>
+        <if test="cars.issell != null and cars.issell !=''">
+            and t.issell=#{cars.issell}
+        </if>
+        <if test="cars.isrecom != null and cars.isrecom !=''">
+            and t.isrecom=#{cars.isrecom}
+        </if>
+        <if test="cars.isshow != null and cars.isshow !=''">
+            and t.isshow=#{cars.isshow}
+        </if>
+        <if test="cars.ptransfer != null and cars.ptransfer !=''">
+            and t.ptransfer=#{cars.ptransfer}
+        </if>
+        <if test="cars.isjiangjia != null and cars.isjiangjia !=''">
+            and t.isjiangjia=#{cars.isjiangjia}
+        </if>
+        <if test="cars.auditStatus != null and cars.auditStatus !=''">
+            and t.audit_status=#{cars.auditStatus}
+        </if>
+        <if test="cars.sprice != null and cars.sprice !=''">
+            and t.pprice &gt; #{cars.sprice}
+        </if>
+        <if test="cars.eprice != null and cars.eprice !=''">
+            and t.pprice &lt; #{cars.eprice}
+        </if>
+        <if test="cars.areas != null and cars.areas != ''">
+            and (t.province IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="cars.noareas != null and cars.noareas != ''">
+            and (t.province NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city  NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county  NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="cars.startCreateTime != null ">
+            and t.create_time &gt; #{cars.startCreateTime}
+        </if>
+        <if test="cars.endCreateTime != null ">
+            and t.create_time &lt; #{cars.endCreateTime}
+        </if>
+        <if test="cars.name != null and cars.name !=''">
+            and m.name like concat(concat('%', #{cars.name}), '%')
+        </if>
+        <if test="cars.phone != null and cars.phone !=''">
+            and m.phone=#{cars.phone}
+        </if>
+
+        <if test="cars.sort != null and cars.sort !=''">
+            order by ${cars.sort}
+        </if>
+    </select>
+
+
+    <select id="carCollectPage" resultMap="carsResultMap">
+        SELECT t.*,c.create_time as createTime FROM t_cars t,t_cars_collect c WHERE t.is_deleted = 0
+        AND c.is_deleted = 0 AND t.id=c.car_id
+        AND c.is_collect=1
+        <if test="cars.memberId != null">
+            and c.member_id=#{cars.memberId}
+        </if>
+        <if test="cars.id != null">
+            and t.id=#{cars.id}
+        </if>
+        <if test="cars.pvin != null">
+            and t.pvin=#{cars.pvin}
+        </if>
+        <if test="cars.pallname != null">
+            and t.pallname like concat(concat('%', #{cars.pallname}), '%')
+        </if>
+        <if test="cars.province != null">
+            and t.province=#{cars.province}
+        </if>
+        <if test="cars.city != null">
+            and t.city=#{cars.city}
+        </if>
+        <if test="cars.county != null">
+            and t.county=#{cars.county}
+        </if>
+        <if test="cars.brandId != null">
+            and t.brand_id=#{cars.brandId}
+        </if>
+        <if test="cars.seriesId != null">
+            and t.series_id=#{cars.seriesId}
+        </if>
+        <if test="cars.stylesId != null">
+            and t.styles_id=#{cars.stylesId}
+        </if>
+        <if test="cars.isconprice != null">
+            and t.isconprice=#{cars.isconprice}
+        </if>
+        <if test="cars.isdaimai != null">
+            and t.isdaimai=#{cars.isdaimai}
+        </if>
+        <if test="cars.modelId != null">
+            and t.model_id=#{cars.modelId}
+        </if>
+        <if test="cars.issell != null">
+            and t.issell=#{cars.issell}
+        </if>
+        <if test="cars.isrecom != null">
+            and t.isrecom=#{cars.isrecom}
+        </if>
+        <if test="cars.isshow != null">
+            and t.isshow=#{cars.isshow}
+        </if>
+        <if test="cars.ptransfer != null">
+            and t.ptransfer=#{cars.ptransfer}
+        </if>
+        <if test="cars.isjiangjia != null">
+            and t.isjiangjia=#{cars.isjiangjia}
+        </if>
+        <if test="cars.auditStatus != null">
+            and t.audit_status=#{cars.auditStatus}
+        </if>
+        <if test="cars.sprice != null">
+            and t.pprice &gt; #{cars.sprice}
+        </if>
+        <if test="cars.eprice != null">
+            and t.pprice &lt; #{cars.eprice}
+        </if>
+        <if test="cars.areas != null and cars.areas != ''">
+            and (t.province IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+            order by  c.create_time desc
+
+    </select>
+    <select id="carsBrowsePage" resultMap="carsResultMap">
+        SELECT t.*,c.create_time as createTime FROM t_cars t,t_cars_browse c WHERE t.is_deleted = 0
+        AND c.is_deleted = 0 AND t.id=c.car_id
+        <if test="cars.id != null">
+            and t.id=#{cars.id}
+        </if>
+        <if test="cars.pvin != null">
+            and t.pvin=#{cars.pvin}
+        </if>
+        <if test="cars.pallname != null">
+            and t.pallname like concat(concat('%', #{cars.pallname}), '%')
+        </if>
+        <if test="cars.province != null">
+            and t.province=#{cars.province}
+        </if>
+        <if test="cars.city != null">
+            and t.city=#{cars.city}
+        </if>
+        <if test="cars.county != null">
+            and t.county=#{cars.county}
+        </if>
+        <if test="cars.memberId != null">
+            and c.member_id=#{cars.memberId}
+        </if>
+        <if test="cars.memberIds != null and cars.memberIds != ''">
+            and c.member_id IN
+            <foreach collection="cars.memberIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="cars.brandId != null">
+            and t.brand_id=#{cars.brandId}
+        </if>
+        <if test="cars.seriesId != null">
+            and t.series_id=#{cars.seriesId}
+        </if>
+        <if test="cars.stylesId != null">
+            and t.styles_id=#{cars.stylesId}
+        </if>
+        <if test="cars.isconprice != null">
+            and t.isconprice=#{cars.isconprice}
+        </if>
+        <if test="cars.isdaimai != null">
+            and t.isdaimai=#{cars.isdaimai}
+        </if>
+        <if test="cars.modelId != null">
+            and t.model_id=#{cars.modelId}
+        </if>
+        <if test="cars.issell != null">
+            and t.issell=#{cars.issell}
+        </if>
+        <if test="cars.isrecom != null">
+            and t.isrecom=#{cars.isrecom}
+        </if>
+        <if test="cars.isshow != null">
+            and t.isshow=#{cars.isshow}
+        </if>
+        <if test="cars.ptransfer != null">
+            and t.ptransfer=#{cars.ptransfer}
+        </if>
+        <if test="cars.isjiangjia != null">
+            and t.isjiangjia=#{cars.isjiangjia}
+        </if>
+        <if test="cars.auditStatus != null">
+            and t.audit_status=#{cars.auditStatus}
+        </if>
+        <if test="cars.sprice != null">
+            and t.pprice &gt; #{cars.sprice}
+        </if>
+        <if test="cars.eprice != null">
+            and t.pprice &lt; #{cars.eprice}
+        </if>
+        <if test="cars.areas != null and cars.areas != ''">
+            and (t.province IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        order by  c.create_time desc
+    </select>
+    <select id="carsBeenBrowsePage" resultType="org.springblade.car.dto.carsBeenBrowseDTO">
+        SELECT t.id AS carId,t.`pallname` AS carName,
+        c.create_time AS browserTime,c.`member_id` AS browserId,m.`phone` AS browserPhone,m.`name` AS browserName
+        FROM t_cars t,t_cars_browse c ,t_member m WHERE t.is_deleted = 0
+        AND c.is_deleted = 0  AND m.is_deleted = 0
+        AND t.id=c.car_id AND c.`member_id`=m.id
+        <if test="cars.id != null">
+            and t.id=#{cars.id}
+        </if>
+        <if test="cars.memberId != null">
+            and t.member_id=#{cars.memberId}
+        </if>
+        order by c.create_time desc
+    </select>
+    <select id="carsBeenCallPage" resultType="org.springblade.car.dto.carsBeenCallDTO">
+
+        SELECT t.id AS carId,t.`pallname` AS carName,
+        c.create_time AS callTime,c.`member_id` AS callerId,m.`phone` AS callerPhone,m.`name` AS callerName
+        FROM t_cars t,`t_phone_record` c ,t_member m WHERE t.is_deleted = 0
+        AND c.is_deleted = 0  AND m.is_deleted = 0
+        AND t.id=c.cars_id AND c.`member_id`=m.id
+        <if test="cars.id != null">
+            and t.id=#{cars.id}
+        </if>
+        <if test="cars.memberId != null">
+            and t.member_id=#{cars.memberId}
+        </if>
+        order by c.create_time desc
+
+    </select>
+
+
+</mapper>

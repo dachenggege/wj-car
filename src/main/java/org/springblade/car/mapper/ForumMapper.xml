@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.ForumMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="forumResultMap" type="org.springblade.car.entity.Forum">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="content" property="content"/>
+        <result column="pic" property="pic"/>
+        <result column="member_id" property="memberId"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_dept" property="createDept"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectForumCount" resultType="int">
+        SELECT count(1)
+        FROM t_forum f,t_member m
+        WHERE f.is_deleted = 0 AND m.is_deleted=0
+        AND f.`member_id`=m.id
+        <if test="forum.id != null">
+            and f.id=#{forum.id}
+        </if>
+        <if test="forum.type != null">
+            and f.type=#{forum.type}
+        </if>
+        <if test="forum.memberId != null">
+            and f.member_id=#{forum.memberId}
+        </if>
+        <if test="forum.phone != null">
+            and m.phone=#{forum.phone}
+        </if>
+        <if test="forum.province != null">
+            and m.province=#{forum.province}
+        </if>
+        <if test="forum.city != null">
+            and m.city=#{forum.city}
+        </if>
+        <if test="forum.county != null">
+            and m.county=#{forum.county}
+        </if>
+        <if test="forum.areas != null and forum.areas != ''">
+            and (m.province IN
+            <foreach collection="forum.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city IN
+            <foreach collection="forum.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county IN
+            <foreach collection="forum.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="forum.noareas != null and forum.noareas != ''">
+            and (m.province NOT IN
+            <foreach collection="forum.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city NOT IN
+            <foreach collection="forum.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county NOT IN
+            <foreach collection="forum.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="forum.startCreateTime != null">
+            and f.create_time &gt; #{forum.startCreateTime}
+        </if>
+        <if test="forum.endCreateTime != null">
+            and f.create_time &lt; #{forum.endCreateTime}
+        </if>
+    </select>
+    <select id="selectForumPage" resultType="org.springblade.car.vo.ForumVO">
+        SELECT f.*, m.name, m.nickname ,m.phone ,m.province,m.city,m.county,
+        m.headimgurl
+        <if test="forum.likeMember != null and forum.likeMember !='' ">
+        ,IFNULL((SELECT is_like FROM t_forum_like t WHERE t.forum_id=f.id AND t.member_id=#{forum.likeMember}),FALSE) AS isLike
+
+        </if>
+        FROM t_forum f,t_member m
+        WHERE f.is_deleted = 0 AND m.is_deleted=0
+        AND f.`member_id`=m.id
+        <if test="forum.id != null">
+            and f.id=#{forum.id}
+        </if>
+        <if test="forum.type != null">
+            and f.type=#{forum.type}
+        </if>
+        <if test="forum.memberId != null">
+            and f.member_id=#{forum.memberId}
+        </if>
+        <if test="forum.phone != null">
+            and m.phone=#{forum.phone}
+        </if>
+        <if test="forum.province != null">
+            and m.province=#{forum.province}
+        </if>
+        <if test="forum.city != null">
+            and m.city=#{forum.city}
+        </if>
+        <if test="forum.county != null">
+            and m.county=#{forum.county}
+        </if>
+        <if test="forum.areas != null and forum.areas != ''">
+            and (m.province IN
+            <foreach collection="forum.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city IN
+            <foreach collection="forum.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county IN
+            <foreach collection="forum.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="forum.noareas != null and forum.noareas != ''">
+            and (m.province NOT IN
+            <foreach collection="forum.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.city NOT IN
+            <foreach collection="forum.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or m.county NOT IN
+            <foreach collection="forum.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="forum.startCreateTime != null ">
+            and f.create_time &gt; #{forum.startCreateTime}
+        </if>
+        <if test="forum.endCreateTime != null ">
+            and f.create_time &lt; #{forum.endCreateTime}
+        </if>
+        ORDER BY f.create_time DESC
+    </select>
+
+</mapper>

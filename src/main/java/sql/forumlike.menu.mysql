@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307707274842118', 1123598815738675201, 'forumlike', '帖子点赞', 'menu', '/hand/forumlike', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307707274842119', '1420307707274842118', 'forumlike_add', '新增', 'add', '/hand/forumlike/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307707274842120', '1420307707274842118', 'forumlike_edit', '修改', 'edit', '/hand/forumlike/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307707274842121', '1420307707274842118', 'forumlike_delete', '删除', 'delete', '/api/second-hand-car/forumlike/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1420307707274842122', '1420307707274842118', 'forumlike_view', '查看', 'view', '/hand/forumlike/view', 'file-text', 4, 2, 2, 1, NULL, 0);
