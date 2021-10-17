@@ -17,6 +17,7 @@
 package org.springblade.car.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import org.springblade.car.entity.Member;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,4 +35,16 @@ public class MemberDTO extends Member {
 	private static final long serialVersionUID = 1L;
 	@ApiModelProperty(value = "会员等级及权益")
 	private MemberRights rights;
+
+	@ApiModelProperty(value = "我的关注数量")
+	private Integer focusNum;
+
+	@ApiModelProperty(value = "粉丝数量")
+	private Integer fansNum;
+
+	@ApiModelProperty(value = "我的车源数量")
+	private Integer myCarNum;
+
+	@ApiModelProperty(value = "门店车源数量")
+	private Integer myShopCarNum;
 }

@@ -14,32 +14,23 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.car.mapper;
+package org.springblade.car.vo;
 
-import org.apache.ibatis.annotations.Param;
-import org.springblade.car.Req.MemberCertificationReq;
-import org.springblade.car.entity.MemberCertification;
-import org.springblade.car.vo.MemberCertificationVO;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-
-import java.util.List;
+import org.springblade.car.entity.MemberFans;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import io.swagger.annotations.ApiModel;
 
 /**
- *  Mapper 接口
+ * 视图实体类
  *
  * @author BladeX
- * @since 2021-10-12
+ * @since 2021-10-16
  */
-public interface MemberCertificationMapper extends BaseMapper<MemberCertification> {
-
-	/**
-	 * 自定义分页
-	 *
-	 * @param page
-	 * @param member
-	 * @return
-	 */
-	List<MemberCertificationVO> selectMemberCertificationPage(IPage page,@Param("member") MemberCertificationReq member);
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "MemberFansVO对象", description = "MemberFansVO对象")
+public class MemberFansVO extends MemberFans {
+	private static final long serialVersionUID = 1L;
 
 }

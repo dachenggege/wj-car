@@ -19,56 +19,59 @@ package org.springblade.car.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springblade.core.mp.base.BaseEntity;
 
 /**
- * 支付订单表实体类
+ * 实体类
  *
  * @author BladeX
- * @since 2021-07-22
+ * @since 2021-10-16
  */
 @Data
-@TableName("t_pay_order")
-@ApiModel(value = "PayOrder对象", description = "支付订单表")
-public class PayOrder extends BaseEntity {
+@TableName("t_member_fans")
+@ApiModel(value = "MemberFans对象", description = "MemberFans对象")
+public class MemberFans implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
+	* 主键id
+	*/
+		@ApiModelProperty(value = "主键id")
+		private Long id;
+	/**
 	* 用户id
 	*/
-	@JsonSerialize(using = ToStringSerializer.class)
 		@ApiModelProperty(value = "用户id")
 		private Long memberId;
 	/**
-	* 1会员充值，2保障金
+	* 粉丝id
 	*/
-		@ApiModelProperty(value = "1会员充值，2vin订单查询")
-		private Integer type;
-
+		@ApiModelProperty(value = "粉丝id")
+		private Long fansId;
 	/**
-	* 微信支付订单号
+	* 创建时间
 	*/
-		@ApiModelProperty(value = "微信支付订单号")
-		private String outTradeNo;
+		@ApiModelProperty(value = "创建时间")
+		private LocalDateTime createTime;
 	/**
-	* 支付金额
+	* 修改时间
 	*/
-		@ApiModelProperty(value = "支付金额")
-		private Double payMoney;
+		@ApiModelProperty(value = "修改时间")
+		private LocalDateTime updateTime;
+	/**
+	* 状态
+	*/
+		@ApiModelProperty(value = "状态")
+		private Integer status;
+	/**
+	* 是否删除
+	*/
+		@ApiModelProperty(value = "是否删除")
+		private Integer isDeleted;
 
-	@ApiModelProperty(value = "费用id（字典表id）")
-	private Long dictId;
 
-	@ApiModelProperty(value = "描述")
-	private String remark;
-	@ApiModelProperty(value = "对应会员等级权限")
-	private Integer memberLv;
 }

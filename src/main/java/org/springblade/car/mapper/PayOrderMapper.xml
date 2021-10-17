@@ -7,9 +7,11 @@
         <id column="id" property="id"/>
         <result column="member_id" property="memberId"/>
         <result column="type" property="type"/>
-        <result column="right_id" property="rightId"/>
         <result column="out_trade_no" property="outTradeNo"/>
         <result column="pay_money" property="payMoney"/>
+        <result column="dict_id" property="dictId"/>
+        <result column="remark" property="remark"/>
+        <result column="member_lv" property="memberLv"/>
         <result column="create_user" property="createUser"/>
         <result column="create_dept" property="createDept"/>
         <result column="create_time" property="createTime"/>
@@ -21,9 +23,12 @@
 
 
     <select id="selectPayOrderPage" resultType="org.springblade.car.vo.PayOrderVO">
-        SELECT t.*,m.name AS memberName,m.phone, CASE t.type WHEN 1 THEN '充值会员' WHEN 2 THEN 'VIN订单查询' ELSE '--' END AS  typeName
+        SELECT t.*,m.name AS memberName,m.phone
         FROM t_pay_order t , t_member m WHERE t.is_deleted = 0 AND m.is_deleted = 0
         AND t.member_id=m.id
+        <if test="payOrder.type != null">
+            and t.type=#{payOrder.type}
+        </if>
         <if test="payOrder.phone != null and payOrder.phone !=''">
             and m.phone=#{payOrder.phone}
         </if>

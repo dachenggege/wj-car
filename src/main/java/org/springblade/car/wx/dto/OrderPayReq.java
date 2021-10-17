@@ -54,4 +54,6 @@ public class OrderPayReq {
 	@NotNull
 	private Double payMoney;
 
+	@ApiModelProperty(value = "费用id（字典表id）")
+	private Long dictId;
 }

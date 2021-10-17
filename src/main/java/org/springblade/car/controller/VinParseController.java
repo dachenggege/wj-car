@@ -43,7 +43,7 @@ import org.springblade.core.boot.ctrl.BladeController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/vinparse")
-@Api(value = "", tags = "接口")
+@Api(value = "", tags = "后台VIN查询记录-接口")
 public class VinParseController extends BladeController {
 
 	private final IVinParseService vinParseService;

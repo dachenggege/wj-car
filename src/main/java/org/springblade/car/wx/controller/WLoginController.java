@@ -63,8 +63,8 @@ import java.util.Date;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/login")
-@Api(value = "微信-授权登入", tags = "微信-授权登入接口")
-@ApiSort(1)
+@Api(value = "微信-授权登入", tags = "v2微信-授权登入接口")
+@ApiSort(1001)
 public class WLoginController extends BladeController {
 	private HttpServletRequest request;
 	private final BladeRedis bladeRedis;
@@ -99,8 +99,10 @@ public class WLoginController extends BladeController {
 			Member client = new Member();
 			client.setOpenid(jsonObject.getString("openid"));
 			cl = memberService.getOne(Condition.getQueryWrapper(client));
-			cl.setOpenid(jsonObject.getString("openid"));
+
 			if (Func.isEmpty(cl)) {
+				//没有则注册
+				cl = new Member();
 				if (jsonObject.containsKey("session_key")) {
 					cl.setSessionKey(jsonObject.getString("session_key"));
 				}
@@ -108,24 +110,23 @@ public class WLoginController extends BladeController {
 					cl.setUnionid(jsonObject.getString("unionid"));
 					cl.setSessionKey(jsonObject.getString("session_key"));
 				}
-			}
-			//如果已经注册了，就返回
-			if (Func.isNotEmpty(cl)) {
-				cl.setSessionKey(jsonObject.getString("session_key"));
+				cl.setOpenid(jsonObject.getString("openid"));
+				cl.setId(NumberUtil.getRandomNumber(8, 8));
+				cl.setRoletype(RoleType.VISITOR.id);//游客
 				cl.setLastLogin(new Date());
-				memberService.updateById(cl);
+				cl.setMemberLv(0);
+				memberService.save(cl);
 				bladeRedis.set(cl.getOpenid(),cl);
-				MemberDTO dto = wMemberFactory.getMemberRights(cl);
+				MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 				return R.data(dto);
 			}
-			//没有则注册
-			cl.setId(NumberUtil.getRandomNumber(8, 8));
-			cl.setRoletype(RoleType.VISITOR.id);//游客
+
+			//如果已经注册了，就返回
+			cl.setSessionKey(jsonObject.getString("session_key"));
 			cl.setLastLogin(new Date());
-			cl.setMemberLv(0);
-			memberService.save(cl);
+			memberService.updateById(cl);
 			bladeRedis.set(cl.getOpenid(),cl);
-			MemberDTO dto = wMemberFactory.getMemberRights(cl);
+			MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 			return R.data(dto);
 
 	}
@@ -133,11 +134,14 @@ public class WLoginController extends BladeController {
 	 * 修改
 	 */
 	@GetMapping("/updatePhone")
-	@ApiOperationSupport(order = 3)
+	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "修改用户手机")
 	public R<MemberDTO> update(@ApiParam(value = "加密数据") @RequestParam(value = "encryptedData", required = true) String encryptedData,
 							   @ApiParam(value = "sessionKey") @RequestParam(value = "sessionKey", required = true) String sessionKey,
-							   @ApiParam(value = "vi") @RequestParam(value = "vi", required = true) String vi) {
+							   @ApiParam(value = "vi") @RequestParam(value = "vi", required = true) String vi,
+							   @ApiParam(value = "昵称") @RequestParam(value = "nickname", required = true) String nickname,
+							   @ApiParam(value = "头像") @RequestParam(value = "headimgurl", required = true) String headimgurl
+							   ) {
 		Member cl = wMemberFactory.getMember(request);
 		//解密电话号码
 		AESForWeixinGetPhoneNumber aes = new AESForWeixinGetPhoneNumber(encryptedData,sessionKey,vi);
@@ -145,9 +149,11 @@ public class WLoginController extends BladeController {
 		if (Func.isNotEmpty(info)) {
 			cl.setPhone(info.getPurePhoneNumber());
 		}
+		cl.setNickname(nickname);
+		cl.setHeadimgurl(headimgurl);
 		memberService.updateById(cl);
 		bladeRedis.set(cl.getOpenid(),cl);
-		MemberDTO dto = wMemberFactory.getMemberRights(cl);
+		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
 
@@ -160,7 +166,7 @@ public class WLoginController extends BladeController {
 			@ApiParam(value = "市编码") @RequestParam(value = "city", required = true) String city,
 			@ApiParam(value = "市") @RequestParam(value = "cityName", required = true) String cityName,
 			@ApiParam(value = "区县编码") @RequestParam(value = "county", required = true) String county,
-			@ApiParam(value = "区县") @RequestParam(value = "county", required = true) String countyName) {
+			@ApiParam(value = "区县") @RequestParam(value = "countyName", required = true) String countyName) {
 		Member cl = wMemberFactory.getMember(request);
 		cl.setProvince(province);
 		cl.setProvinceName(provinceName);
@@ -170,7 +176,7 @@ public class WLoginController extends BladeController {
 		cl.setCountyName(countyName);
 		memberService.updateById(cl);
 		bladeRedis.set(cl.getOpenid(),cl);
-		MemberDTO dto = wMemberFactory.getMemberRights(cl);
+		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
 }

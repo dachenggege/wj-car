@@ -76,8 +76,8 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/member")
-@Api(value = "微信-个人中心", tags = "微信-个人中心接口")
-@ApiSort(2)
+@Api(value = "微信-个人中心", tags = "v2微信-个人中心接口")
+@ApiSort(1002)
 public class WMemberController extends BladeController {
 	private HttpServletRequest request;
 	private final BladeRedis bladeRedis;
@@ -95,7 +95,7 @@ public class WMemberController extends BladeController {
 
 	@GetMapping("/getMember")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "获取用户信息")
+	@ApiOperation(value = "获取自己个人信息")
 	public R<MemberDTO> getMember(@ApiParam(value = "用户openid") @RequestParam(value = "openid", required = true) String openid) {
 		Member client = new Member();
 		client.setOpenid(openid);
@@ -106,7 +106,21 @@ public class WMemberController extends BladeController {
 		cl.setLastLogin(new Date());
 		memberService.updateById(cl);
 		bladeRedis.set(cl.getOpenid(),cl);
-		MemberDTO dto = wMemberFactory.getMemberRights(cl);
+		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
+		return R.data(dto);
+	}
+	@GetMapping("/getMemberById")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "获取用户信息")
+	public R<MemberDTO> getMemberById(@ApiParam(value = "用户Id") @RequestParam(value = "memberId", required = true) String memberId) {
+		Member cl = memberService.getById(memberId);
+		if(Func.isEmpty(cl)){
+			throw new ServiceException("为获取到用户信息");
+		}
+		cl.setLastLogin(new Date());
+		memberService.updateById(cl);
+		bladeRedis.set(cl.getOpenid(),cl);
+		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
 	@PostMapping("/submitCertification")
@@ -132,9 +146,10 @@ public class WMemberController extends BladeController {
 		cl.setCarDealer(regist.getCarDealer());
 		cl.setDealerAddress(regist.getDealerAddress());
 		cl.setCertificate(regist.getCertificate());
+		cl.setPersonAuditStatus(1);
 		memberService.updateById(cl);
 		bladeRedis.set(cl.getOpenid(),cl);
-		MemberDTO dto = wMemberFactory.getMemberRights(cl);
+		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
 	@PostMapping("/merchantRegist")
@@ -158,9 +173,10 @@ public class WMemberController extends BladeController {
 		cl.setCompany(regist.getCompany());
 		cl.setCorporate(regist.getCorporate());
 		cl.setCompanyCertificate(regist.getCompanyCertificate());
+		cl.setCompanyAuditStatus(1);
 		memberService.updateById(cl);
 		bladeRedis.set(cl.getOpenid(),cl);
-		MemberDTO dto = wMemberFactory.getMemberRights(cl);
+		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
 

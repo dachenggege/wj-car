@@ -1,0 +1,10 @@
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1449283009078128646', 1123598815738675201, 'memerfans', '我的粉丝和关注', 'menu', '/hand/memerfans', NULL, 1, 1, 0, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1449283009078128647', '1449283009078128646', 'memerfans_add', '新增', 'add', '/hand/memerfans/add', 'plus', 1, 2, 1, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1449283009078128648', '1449283009078128646', 'memerfans_edit', '修改', 'edit', '/hand/memerfans/edit', 'form', 2, 2, 2, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1449283009078128649', '1449283009078128646', 'memerfans_delete', '删除', 'delete', '/api/second-hand-car/memerfans/remove', 'delete', 3, 2, 3, 1, NULL, 0);
+INSERT INTO `blade_menu`(`id`, `parent_id`, `code`, `name`, `alias`, `path`, `source`, `sort`, `category`, `action`, `is_open`, `remark`, `is_deleted`)
+VALUES ('1449283009078128650', '1449283009078128646', 'memerfans_view', '查看', 'view', '/hand/memerfans/view', 'file-text', 4, 2, 2, 1, NULL, 0);

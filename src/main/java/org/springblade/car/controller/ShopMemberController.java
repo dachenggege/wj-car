@@ -46,7 +46,7 @@ import org.springblade.core.boot.ctrl.BladeController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/shopmember")
-@Api(value = "门店成员表", tags = "后台门店管理-门店列表")
+@Api(value = "门店成员表", tags = "后台门店管理-门店成员列表")
 public class ShopMemberController extends BladeController {
 
 	private final IShopMemberService shopMemberService;

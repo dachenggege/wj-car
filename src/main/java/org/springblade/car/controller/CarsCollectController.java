@@ -43,7 +43,7 @@ import org.springblade.core.boot.ctrl.BladeController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/cascollect")
-//@Api(value = "车源收藏", tags = "后台车源管理-车源收藏接口")
+@Api(value = "车源收藏", tags = "后台车源管理-车源收藏接口")
 public class CarsCollectController extends BladeController {
 
 	private final ICarsCollectService casCollectService;
@@ -100,17 +100,6 @@ public class CarsCollectController extends BladeController {
 	public R update(@Valid @RequestBody CarsCollect carsCollect) {
 		return R.status(casCollectService.updateById(carsCollect));
 	}
-
-	/**
-	 * 新增或修改 车源收藏
-	 */
-	@PostMapping("/submit")
-	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "新增或修改", notes = "传入casCollect")
-	public R submit(@Valid @RequestBody CarsCollect carsCollect) {
-		return R.status(casCollectService.saveOrUpdate(carsCollect));
-	}
-
 	
 	/**
 	 * 删除 车源收藏

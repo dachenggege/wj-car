@@ -31,4 +31,5 @@ import lombok.EqualsAndHashCode;
 public class MemberCertificationDTO extends MemberCertification {
 	private static final long serialVersionUID = 1L;
 
+
 }

@@ -14,32 +14,32 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.car.mapper;
+package org.springblade.car.service;
 
-import org.apache.ibatis.annotations.Param;
-import org.springblade.car.Req.MemberCertificationReq;
-import org.springblade.car.entity.MemberCertification;
-import org.springblade.car.vo.MemberCertificationVO;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springblade.car.dto.MemberFansDTO;
+import org.springblade.car.entity.Member;
+import org.springblade.car.entity.MemberFans;
+import org.springblade.car.vo.MemberFansVO;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
-import java.util.List;
-
 /**
- *  Mapper 接口
+ *  服务类
  *
  * @author BladeX
- * @since 2021-10-12
+ * @since 2021-10-16
  */
-public interface MemberCertificationMapper extends BaseMapper<MemberCertification> {
+public interface IMemberFansService extends IService<MemberFans> {
 
 	/**
 	 * 自定义分页
 	 *
 	 * @param page
-	 * @param member
+	 * @param memberFans
 	 * @return
 	 */
-	List<MemberCertificationVO> selectMemberCertificationPage(IPage page,@Param("member") MemberCertificationReq member);
+	//IPage<MemberFansVO> selectMemberFansPage(IPage<MemberFansVO> page, MemberFansVO memberFans);
 
+	IPage<Member> selectMemberFansPage(IPage<Member> page, MemberFans memberFans);
+	IPage<Member> selectMemberFcousPage(IPage<Member> page, MemberFans memberFans);
 }

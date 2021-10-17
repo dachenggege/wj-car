@@ -16,6 +16,7 @@
  */
 package org.springblade.car.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -43,7 +44,8 @@ import org.springblade.core.boot.ctrl.BladeController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/memberrights")
-@Api(value = "会员体系权益表", tags = "会员体系权益表接口")
+@Api(value = "会员体系权益表", tags = "后台-会员体系权益表接口")
+@ApiSort(2004)
 public class MemberRightsController extends BladeController {
 
 	private final IMemberRightsService memberRightsService;
@@ -57,17 +59,6 @@ public class MemberRightsController extends BladeController {
 	public R<MemberRights> detail(MemberRights memberRights) {
 		MemberRights detail = memberRightsService.getOne(Condition.getQueryWrapper(memberRights));
 		return R.data(detail);
-	}
-
-	/**
-	 * 分页 会员体系权益表
-	 */
-	@GetMapping("/list")
-	@ApiOperationSupport(order = 2)
-	@ApiOperation(value = "分页", notes = "传入memberRights")
-	public R<IPage<MemberRights>> list(MemberRights memberRights, Query query) {
-		IPage<MemberRights> pages = memberRightsService.page(Condition.getPage(query), Condition.getQueryWrapper(memberRights));
-		return R.data(pages);
 	}
 
 	/**
@@ -101,17 +92,6 @@ public class MemberRightsController extends BladeController {
 		return R.status(memberRightsService.updateById(memberRights));
 	}
 
-	/**
-	 * 新增或修改 会员体系权益表
-	 */
-	@PostMapping("/submit")
-	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "新增或修改", notes = "传入memberRights")
-	public R submit(@Valid @RequestBody MemberRights memberRights) {
-		return R.status(memberRightsService.saveOrUpdate(memberRights));
-	}
-
-	
 	/**
 	 * 删除 会员体系权益表
 	 */

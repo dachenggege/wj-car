@@ -45,7 +45,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/model")
-@Api(value = "级别表", tags = "后台设置管理-车级别管理")
+@Api(value = "级别表", tags = "后台-车级别管理")
 public class ModelController extends BladeController {
 
 	private final IModelService modelService;

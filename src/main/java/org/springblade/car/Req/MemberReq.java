@@ -17,6 +17,8 @@
 package org.springblade.car.Req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,6 +26,7 @@ import lombok.EqualsAndHashCode;
 import org.springblade.car.entity.Member;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户表视图实体类
@@ -51,5 +54,17 @@ public class MemberReq extends Member {
 	@ApiModelProperty(value = "会员结束开始时间")
 	private Date endExpiryDate;
 
+	@ApiModelProperty(value = "排序字段")
+	private String sort="create_time";
+
+	@ApiModelProperty(value = "升降序")
+	private String mm="desc";
+	private List<Integer> personStatus;
+	private List<Integer> companyStatus;
+
+	private List<String> areas;
+	private List<String> noareas;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long userId;
 
 }

@@ -19,6 +19,7 @@ package org.springblade.car.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -49,7 +50,8 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/homePage")
-@Api(value = "后台首页", tags = "后台首页-后台首页接口")
+@Api(value = "后台首页", tags = "v2后台首页-后台首页接口")
+@ApiSort(2001)
 public class HomePageController extends BladeController {
 
 	private final UserAreaFactory userAreaFactory;

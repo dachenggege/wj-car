@@ -21,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Synchronized;
+import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.CommunityWx;
 import org.springblade.car.entity.Member;
 import org.springblade.car.entity.PayOrder;
@@ -36,6 +37,7 @@ import org.springblade.car.wx.pay.WXNonceStrUtil;
 import org.springblade.car.wx.pay.WXOrderPayVo;
 import org.springblade.car.wx.pay.WXXmlUtil;
 import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.modules.system.entity.Dict;
@@ -62,7 +64,7 @@ import java.util.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/second-hand-car/wx/pay")
-@Api(value = "微信-支付接口", tags = "微信-支付接口")
+@Api(value = "微信-支付接口", tags = "v2微信-支付接口")
 public class WxPayController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;
@@ -71,12 +73,14 @@ public class WxPayController extends BladeController {
 	private IMemberService memberService;
 	private final IDictService dictService;
 
-	@GetMapping("/money")
+	@GetMapping("/memberMoney")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "会员费用", notes = "id=1")
-	public R<DictVO> detail(Long id ) {
-		Dict detail = dictService.getById(id);
-		return R.data(DictWrapper.build().entityVO(detail));
+	@ApiOperation(value = "会员年费费用")
+	public R<List<Dict>> memberMoney() {
+		Dict dict=new Dict();
+		dict.setCode("money");
+		List<Dict> detail = dictService.list(Condition.getQueryWrapper(dict));
+		return R.data(detail);
 	}
 
 
@@ -86,11 +90,28 @@ public class WxPayController extends BladeController {
 	@Transactional
 	@Synchronized
 	public R<Map<String, String>> payment(@Valid @RequestBody OrderPayReq orderPayReq) {
+
 		String openid =request.getHeader("openid");
 		if(Func.isEmpty(openid)){
 			return  R.fail("openid不能为空");
 		}
-		Member cl = wMemberFactory.getMember(request);
+		MemberDTO cl = wMemberFactory.getMember(request);
+		if(Func.isEmpty(cl)){
+			return  R.fail("用户不存在");
+		}
+		if(Func.equals(cl.getRoletype(),1)){
+			return  R.fail("您现在是游客身份，请先注册会员或商家哦");
+		}
+		if(Func.equals(cl.getRoletype(),2) && Func.equals(orderPayReq.getDictId(),103)){
+			return  R.fail("请先注册商家才能充值黑钻会员哦");
+		}
+		if(Func.equals(cl.getRoletype(),2) && Func.equals(orderPayReq.getDictId(),104)){
+			return  R.fail("请先注册商家才能充值黑钻PULS会员哦");
+		}
+		if(Func.equals(cl.getRoletype(),3) && Func.equals(orderPayReq.getDictId(),101)){
+			return  R.fail("您现在是商家身份,不能充值个人银钻会员哦");
+		}
+
 		orderPayReq.setOpenid(openid);
 		orderPayReq.setMemberId(cl.getId());
 		if(Func.isEmpty(openid)){
@@ -98,6 +119,10 @@ public class WxPayController extends BladeController {
 		}
 		if(orderPayReq.getPayMoney()<=0){
 			return  R.fail("支付金额不能小于等于0");
+		}
+
+		if(Func.isEmpty(orderPayReq.getDictId())){
+			return  R.fail("费用id不能为空");
 		}
 
 		CommunityWx Wx=iCommunityWxService.getById(1);

@@ -16,30 +16,30 @@
  */
 package org.springblade.car.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import org.springblade.car.Req.MemberCertificationReq;
-import org.springblade.car.entity.MemberCertification;
-import org.springblade.car.vo.MemberCertificationVO;
+import org.springblade.car.dto.MemberFansDTO;
+import org.springblade.car.entity.Member;
+import org.springblade.car.entity.MemberFans;
+import org.springblade.car.vo.MemberFansVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-
 import java.util.List;
 
 /**
  *  Mapper 接口
  *
  * @author BladeX
- * @since 2021-10-12
+ * @since 2021-10-16
  */
-public interface MemberCertificationMapper extends BaseMapper<MemberCertification> {
+public interface MemberFansMapper extends BaseMapper<MemberFans> {
 
 	/**
 	 * 自定义分页
 	 *
 	 * @param page
-	 * @param member
+	 * @param memferFans
 	 * @return
 	 */
-	List<MemberCertificationVO> selectMemberCertificationPage(IPage page,@Param("member") MemberCertificationReq member);
+	List<Member> selectMemberFansPage(IPage page, MemberFans memferFans);
+	List<Member> selectMemberFcousPage(IPage page, MemberFans memferFans);
 
 }

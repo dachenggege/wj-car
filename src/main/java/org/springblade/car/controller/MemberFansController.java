@@ -24,75 +24,73 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
-import org.springblade.car.Req.MemberReq;
-import org.springblade.car.dto.MemberDTO;
-import org.springblade.car.wx.factory.WMemberFactory;
+import org.springblade.car.dto.MemberFansDTO;
+import org.springblade.car.entity.Member;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springblade.car.entity.Member;
-import org.springblade.car.vo.MemberVO;
-import org.springblade.car.service.IMemberService;
+import org.springblade.car.entity.MemberFans;
+import org.springblade.car.vo.MemberFansVO;
+import org.springblade.car.service.IMemberFansService;
 import org.springblade.core.boot.ctrl.BladeController;
 
 /**
- * 用户表 控制器
+ *  控制器
  *
  * @author BladeX
- * @since 2021-10-13
+ * @since 2021-10-16
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("second-hand-car/member")
-@Api(value = "用户表", tags = "v2后台-人员关联接口")
-@ApiSort(2004)
-public class MemberController extends BladeController {
+@RequestMapping("second-hand-car/memberfans")
+@Api(value = "", tags = "后台-关注粉丝接口")
+@ApiSort(2003)
+public class MemberFansController extends BladeController {
 
-	private final IMemberService memberService;
-	private WMemberFactory WMemberFactory;
+	private final IMemberFansService memberFansService;
+
 	/**
 	 * 详情
 	 */
-	@GetMapping("/memberDetail")
+	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "用户详情", notes = "传入member")
-	public R<MemberDTO> detail(Long id) {
-		MemberDTO detail = WMemberFactory.getMemberByid(id);
+	@ApiOperation(value = "详情", notes = "传入memberFans")
+	public R<MemberFans> detail(MemberFans memberFans) {
+		MemberFans detail = memberFansService.getOne(Condition.getQueryWrapper(memberFans));
 		return R.data(detail);
 	}
 
+
+
 	/**
-	 * 自定义分页 用户表
+	 * 自定义分页
 	 */
-	@GetMapping("/memberPage")
-	@ApiOperationSupport(order = 2)
-	@ApiOperation(value = "用户分页", notes = "传入member")
-	public R<IPage<MemberVO>> page(MemberReq member, Query query) {
-		IPage<MemberVO> pages = memberService.selectMemberPage(Condition.getPage(query), member);
+	@GetMapping("/fansPage")
+	@ApiOperationSupport(order = 3)
+	@ApiOperation(value = "粉丝分页", notes = "传入memberFans")
+	public R<IPage<Member>> fansPage(MemberFansVO memberFans, Query query) {
+		IPage<Member> pages = memberFansService.selectMemberFansPage(Condition.getPage(query), memberFans);
 		return R.data(pages);
 	}
-
-	/**
-	 * 修改 用户表
-	 */
-	@PostMapping("/memberUpdate")
-	@ApiOperationSupport(order = 3)
-	@ApiOperation(value = "修改用户", notes = "传入member")
-	public R update(@Valid @RequestBody Member member) {
-		return R.status(memberService.updateById(member));
-	}
-
-	/**
-	 * 删除 用户表
-	 */
-	@PostMapping("/memberRemove")
+	@GetMapping("/fcousPage")
 	@ApiOperationSupport(order = 4)
-	@ApiOperation(value = "删除用户", notes = "传入ids")
+	@ApiOperation(value = "fcousPage", notes = "传入memberFans")
+	public R<IPage<Member>> page(MemberFansVO memberFans, Query query) {
+		IPage<Member> pages = memberFansService.selectMemberFansPage(Condition.getPage(query), memberFans);
+		return R.data(pages);
+	}
+	
+	/**
+	 * 删除 
+	 */
+	@PostMapping("/remove")
+	@ApiOperationSupport(order = 8)
+	@ApiOperation(value = "删除", notes = "传入ids")
 	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status(memberService.removeByIds(Func.toLongList(ids)));
+		return R.status(memberFansService.removeByIds(Func.toLongList(ids)));
 	}
 
 	

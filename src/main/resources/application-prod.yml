@@ -1,6 +1,6 @@
 #服务器配置
 server:
-  port: 8080
+  port: 8085
   undertow:
     # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
     io-threads: 16
@@ -22,19 +22,19 @@ spring:
     ##redis 单机环境配置
     ##将docker脚本部署的redis服务映射为宿主机ip
     ##生产环境推荐使用阿里云高可用redis服务并设置密码
-    host: 127.0.0.1
-    port: 6379
-    password:
-    database: 0
+    host: 58.250.212.24
+    port: 36379
+    password: Mailian!QAZ
+    database: 2
     ssl: false
     ##redis 集群环境配置
     #cluster:
     #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
     #  commandTimeout: 5000
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/second_hand_car?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://58.250.212.24:33306/wj_car?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: Mailian@2021_2
 
 #第三方登陆
 social:
@@ -50,7 +50,7 @@ blade:
     ##将docker脚本部署的redis服务映射为宿主机ip
     ##生产环境推荐使用阿里云高可用redis服务并设置密码
     address: redis://127.0.0.1:6379
-    password:
+    password: Mailian@2021_2
   #本地文件上传
   file:
     remote-mode: true

@@ -1,24 +1,15 @@
 package org.springblade.car.wx.factory;
 
 import org.springblade.car.dto.MemberDTO;
-import org.springblade.car.entity.Member;
-import org.springblade.car.entity.MemberRights;
-import org.springblade.car.entity.Shop;
-import org.springblade.car.service.IMemberCertificationService;
-import org.springblade.car.service.IMemberRightsService;
-import org.springblade.car.service.IMemberService;
-import org.springblade.car.service.IShopService;
-import org.springblade.car.wx.pay.WXConfig;
+import org.springblade.car.entity.*;
+import org.springblade.car.service.*;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.redis.cache.BladeRedis;
-import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.modules.auth.utils.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +27,12 @@ public class WMemberFactory {
 	private IMemberService memberService;
 	@Autowired
 	private  IMemberRightsService memberRightsService;
+	@Autowired
+	private IMemberFansService memberFansService;
+	@Autowired
+	private ICarsService carsService;
+	@Autowired
+	private  IMemberCertificationService memberCertificationService;
 
 
 	public MemberDTO getMember(HttpServletRequest request) {
@@ -62,6 +59,89 @@ public class WMemberFactory {
 			throw new ServiceException("为获取到用户权益信息");
 		}
 		BeanUtils.copyProperties(cl,memberDTO);
+
+		//会员认证
+		MemberCertification memberCertification=new MemberCertification();
+		memberCertification.setMemberId(cl.getId());
+		memberCertification.setRoletype(cl.getRoletype());
+		MemberCertification certification=memberCertificationService.getOne(Condition.getQueryWrapper(memberCertification));
+		if(Func.isNotEmpty(certification)){
+			memberDTO.setCertificationLv(certification.getLevel());
+		}
+		//粉丝数量
+		MemberFans fans=new MemberFans();
+		fans.setMemberId(cl.getId());
+		int fansNum= memberFansService.count(Condition.getQueryWrapper(fans));
+		//关注数量
+		MemberFans focus=new MemberFans();
+		focus.setFansId(cl.getId());
+		int focusNum= memberFansService.count(Condition.getQueryWrapper(focus));
+
+		//我的车源数量
+		Cars myCar=new Cars();
+		myCar.setMemberId(cl.getId());
+		int mycarNum= carsService.count(Condition.getQueryWrapper(myCar));
+
+		//我的车源数量
+		Cars myShopCar=new Cars();
+		myShopCar.setMemberId(cl.getId());
+		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
+
+		memberDTO.setFansNum(fansNum);
+		memberDTO.setFocusNum(focusNum);
+		memberDTO.setMyCarNum(mycarNum);
+		memberDTO.setMyShopCarNum(myShopcarNum);
+		memberDTO.setRights(rights);
+		return memberDTO;
+	}
+
+	public MemberDTO getMemberByid(Long id) {
+		MemberDTO memberDTO =new MemberDTO();
+		Member cl =memberService.getById(id);
+
+		if (Func.isEmpty(cl)) {
+			throw new ServiceException("为获取到用户信息");
+		}
+		MemberRights qrights =new MemberRights();
+		qrights.setRoletype(cl.getRoletype());
+		qrights.setLevel(cl.getMemberLv());
+		MemberRights rights =memberRightsService.getOne(Condition.getQueryWrapper(qrights));
+		if (Func.isEmpty(rights)) {
+			throw new ServiceException("为获取到用户权益信息");
+		}
+		BeanUtils.copyProperties(cl,memberDTO);
+
+		//会员认证
+		MemberCertification memberCertification=new MemberCertification();
+		memberCertification.setMemberId(cl.getId());
+		memberCertification.setRoletype(cl.getRoletype());
+		MemberCertification certification=memberCertificationService.getOne(Condition.getQueryWrapper(memberCertification));
+		if(Func.isNotEmpty(certification)){
+			memberDTO.setCertificationLv(certification.getLevel());
+		}
+		//粉丝数量
+		MemberFans fans=new MemberFans();
+		fans.setMemberId(cl.getId());
+		int fansNum= memberFansService.count(Condition.getQueryWrapper(fans));
+		//关注数量
+		MemberFans focus=new MemberFans();
+		focus.setFansId(cl.getId());
+		int focusNum= memberFansService.count(Condition.getQueryWrapper(focus));
+
+		//我的车源数量
+		Cars myCar=new Cars();
+		myCar.setMemberId(cl.getId());
+		int mycarNum= carsService.count(Condition.getQueryWrapper(myCar));
+
+		//我的车源数量
+		Cars myShopCar=new Cars();
+		myShopCar.setMemberId(cl.getId());
+		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
+
+		memberDTO.setFansNum(fansNum);
+		memberDTO.setFocusNum(focusNum);
+		memberDTO.setMyCarNum(mycarNum);
+		memberDTO.setMyShopCarNum(myShopcarNum);
 		memberDTO.setRights(rights);
 		return memberDTO;
 	}

@@ -18,6 +18,9 @@ package org.springblade.car.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
@@ -77,5 +80,33 @@ public class MemberCertification implements Serializable {
 		@ApiModelProperty(value = "支付证件")
 		private String receipt;
 
+
+	@ApiModelProperty(value = "审核状态1审核中,2审核通过，3审核不通过")
+	private Integer auditStatus;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ApiModelProperty(value = "审核时间")
+	private Date auditTime;
+
+	@ApiModelProperty(value = "审核不通过原因")
+	private String nopassnotice;
+
+	/**
+	 * 创建时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ApiModelProperty(value = "创建时间")
+	private Date createTime;
+	/**
+	 * 修改时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ApiModelProperty(value = "修改时间")
+	private Date updateTime;
+	/**
+	 * 是否删除
+	 */
+	@ApiModelProperty(value = "是否删除")
+	private Integer isDeleted;
 
 }

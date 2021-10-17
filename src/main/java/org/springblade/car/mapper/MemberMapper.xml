@@ -33,6 +33,7 @@
         <result column="company_audit_time" property="companyAuditTime"/>
         <result column="company_nopassnotice" property="companyNopassnotice"/>
         <result column="member_lv" property="memberLv"/>
+        <result column="certification_lv" property="certificationLv"/>
         <result column="expiry_date" property="expiryDate"/>
         <result column="is_expiry" property="isExpiry"/>
         <result column="vi" property="vi"/>
@@ -45,7 +46,15 @@
 
 
     <select id="selectMemberPage" resultMap="memberResultMap">
-        select * from t_member where is_deleted = 0
+        select t.* from (
+        SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        <if test="member.userId != null">
+            and u.user_id=#{member.userId}
+        </if>
+        union
+        select t.* from t_member t where t.is_deleted = 0
+        ) t where 1=1
+
         <if test="member.id != null">
             and t.id=#{member.id}
         </if>
@@ -75,6 +84,33 @@
         <if test="member.phone != null and member.phone !=''">
             and t.phone=#{member.phone}
         </if>
+        <if test="member.personAuditStatus != null">
+            and t.person_audit_status=#{member.personAuditStatus}
+        </if>
+        <if test="member.personStatus != null">
+            and t.person_audit_status IN
+            <foreach collection="member.personStatus" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="member.companyAuditStatus != null">
+            and t.company_audit_status=#{member.companyAuditStatus}
+        </if>
+
+        <if test="member.companyStatus != null">
+            and t.company_audit_status IN
+            <foreach collection="member.companyStatus" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="member.memberLv != null">
+            and t.member_lv=#{member.memberLv}
+        </if>
+
+        <if test="member.certificationLv != null">
+            and t.certification_lv=#{member.certificationLv}
+        </if>
 
         <if test="member.isExpiry != null ">
             and t.is_expiry=#{member.isExpiry}
@@ -95,10 +131,46 @@
             and t.expiry_date &lt; #{member.endExpiryDate}
         </if>
 
+        <if test="member.areas != null and member.areas != ''">
+            and (t.province IN
+            <foreach collection="member.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city IN
+            <foreach collection="member.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county IN
+            <foreach collection="member.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="member.noareas != null and member.noareas != ''">
+            and (t.province NOT IN
+            <foreach collection="member.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city NOT IN
+            <foreach collection="member.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county NOT IN
+            <foreach collection="member.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+
+
         <if test="member.sort != null and member.sort !=''">
             order by ${member.sort}
         </if>
-
+        <if test="member.mm != null and member.mm !=''">
+            ${member.mm}
+        </if>
     </select>
 
 </mapper>

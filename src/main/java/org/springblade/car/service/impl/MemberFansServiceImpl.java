@@ -16,11 +16,12 @@
  */
 package org.springblade.car.service.impl;
 
-import org.springblade.car.Req.MemberCertificationReq;
-import org.springblade.car.entity.MemberCertification;
-import org.springblade.car.vo.MemberCertificationVO;
-import org.springblade.car.mapper.MemberCertificationMapper;
-import org.springblade.car.service.IMemberCertificationService;
+import org.springblade.car.dto.MemberFansDTO;
+import org.springblade.car.entity.Member;
+import org.springblade.car.entity.MemberFans;
+import org.springblade.car.vo.MemberFansVO;
+import org.springblade.car.mapper.MemberFansMapper;
+import org.springblade.car.service.IMemberFansService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,14 +30,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  *  服务实现类
  *
  * @author BladeX
- * @since 2021-10-12
+ * @since 2021-10-16
  */
 @Service
-public class MemberCertificationServiceImpl extends ServiceImpl<MemberCertificationMapper, MemberCertification> implements IMemberCertificationService {
+public class MemberFansServiceImpl extends ServiceImpl<MemberFansMapper, MemberFans> implements IMemberFansService {
 
 	@Override
-	public IPage<MemberCertificationVO> selectMemberCertificationPage(IPage<MemberCertificationVO> page, MemberCertificationReq authentication) {
-		return page.setRecords(baseMapper.selectMemberCertificationPage(page, authentication));
+	public IPage<Member> selectMemberFansPage(IPage<Member> page, MemberFans memberFans) {
+		return page.setRecords(baseMapper.selectMemberFansPage(page, memberFans));
 	}
-
+	@Override
+	public IPage<Member> selectMemberFcousPage(IPage<Member> page, MemberFans memberFans) {
+		return page.setRecords(baseMapper.selectMemberFcousPage(page, memberFans));
+	}
 }

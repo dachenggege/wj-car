@@ -43,7 +43,7 @@ import org.springblade.core.boot.ctrl.BladeController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/carsbrowse")
-//@Api(value = "车源浏览表", tags = "车源浏览表接口")
+@Api(value = "车源浏览表", tags = "后台-车源浏览表接口")
 public class CarsBrowseController extends BladeController {
 
 	private final ICarsBrowseService carsBrowseService;
@@ -57,17 +57,6 @@ public class CarsBrowseController extends BladeController {
 	public R<CarsBrowse> detail(CarsBrowse carsBrowse) {
 		CarsBrowse detail = carsBrowseService.getOne(Condition.getQueryWrapper(carsBrowse));
 		return R.data(detail);
-	}
-
-	/**
-	 * 分页 车源浏览表
-	 */
-	@GetMapping("/list")
-	@ApiOperationSupport(order = 2)
-	@ApiOperation(value = "分页", notes = "传入carsBrowse")
-	public R<IPage<CarsBrowse>> list(CarsBrowse carsBrowse, Query query) {
-		IPage<CarsBrowse> pages = carsBrowseService.page(Condition.getPage(query), Condition.getQueryWrapper(carsBrowse));
-		return R.data(pages);
 	}
 
 	/**
@@ -101,17 +90,6 @@ public class CarsBrowseController extends BladeController {
 		return R.status(carsBrowseService.updateById(carsBrowse));
 	}
 
-	/**
-	 * 新增或修改 车源浏览表
-	 */
-	@PostMapping("/submit")
-	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "新增或修改", notes = "传入carsBrowse")
-	public R submit(@Valid @RequestBody CarsBrowse carsBrowse) {
-		return R.status(carsBrowseService.saveOrUpdate(carsBrowse));
-	}
-
-	
 	/**
 	 * 删除 车源浏览表
 	 */

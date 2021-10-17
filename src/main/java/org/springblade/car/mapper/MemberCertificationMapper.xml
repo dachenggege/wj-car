@@ -12,11 +12,88 @@
         <result column="idcard" property="idcard"/>
         <result column="certificate" property="certificate"/>
         <result column="receipt" property="receipt"/>
+        <result column="audit_status" property="auditStatus"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="nopassnotice" property="nopassnotice"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
     </resultMap>
 
 
     <select id="selectMemberCertificationPage" resultMap="memberCertificationResultMap">
-        select * from t_member_certification where is_deleted = 0
+        select c.* from (
+        SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        <if test="member.userId != null">
+            and u.user_id=#{member.userId}
+        </if>
+        union
+        select t.* from t_member t where t.is_deleted = 0
+        ) t ,t_member_certification c where t.id=c.member_id
+
+        <if test="member.realName != null and member.realName !=''">
+            and c.real_name=#{member.realName}
+        </if>
+        <if test="member.auditStatus != null">
+            and t.audit_status=#{member.auditStatus}
+        </if>
+        <if test="member.phone != null and member.phone !=''">
+            and t.phone=#{member.phone}
+        </if>
+
+
+        <if test="member.province != null and member.province !=''">
+            and t.province=#{member.province}
+        </if>
+
+        <if test="member.city != null and member.city !=''">
+            and t.city=#{member.city}
+        </if>
+        <if test="member.county != null and member.county !=''">
+            and t.county=#{member.county}
+        </if>
+
+        <if test="member.areas != null and member.areas != ''">
+            and (t.province IN
+            <foreach collection="member.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city IN
+            <foreach collection="member.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county IN
+            <foreach collection="member.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <if test="member.noareas != null and member.noareas != ''">
+            and (t.province NOT IN
+            <foreach collection="member.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city NOT IN
+            <foreach collection="member.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county NOT IN
+            <foreach collection="member.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+
+
+        <if test="member.sort != null and member.sort !=''">
+            order by ${member.sort}
+        </if>
+        <if test="member.mm != null and member.mm !=''">
+            ${member.mm}
+        </if>
+
     </select>
 
 </mapper>

@@ -16,6 +16,7 @@
  */
 package org.springblade.car.service;
 
+import org.springblade.car.Req.MemberCertificationReq;
 import org.springblade.car.entity.MemberCertification;
 import org.springblade.car.vo.MemberCertificationVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -36,6 +37,6 @@ public interface IMemberCertificationService extends IService<MemberCertificatio
 	 * @param authentication
 	 * @return
 	 */
-	IPage<MemberCertificationVO> selectMemberCertificationPage(IPage<MemberCertificationVO> page, MemberCertificationVO authentication);
+	IPage<MemberCertificationVO> selectMemberCertificationPage(IPage<MemberCertificationVO> page, MemberCertificationReq authentication);
 
 }

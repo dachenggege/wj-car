@@ -27,7 +27,10 @@ import org.springblade.car.service.IMemberService;
 import org.springblade.car.service.IPayOrderService;
 import org.springblade.car.wx.pay.WXXmlUtil;
 import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.modules.system.entity.Dict;
+import org.springblade.modules.system.service.IDictService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +56,8 @@ import java.util.Map;
 public class WxPayBaskController extends BladeController {
 	private IPayOrderService PayOrderService;
 	private IMemberService memberService;
+	private final IDictService dictService;
+
 	//状态1待支付，2支付成功，3支付失败
 	public static final Integer PAY_STUTAS_1 =1;//1未支付
 	public static final Integer PAY_STUTAS_2 =2;//2支付成功
@@ -209,7 +214,11 @@ public class WxPayBaskController extends BladeController {
 	public boolean updateMemberRights(PayOrder order){
 		Boolean res=false;
 		Member cl = memberService.getById(order.getMemberId());
-		cl.setMemberLv(order.getRightId());
+		Dict dict=dictService.getById(order.getDictId());
+
+		if(Func.equals(cl.getRoletype(),2) && Func.equals(dict.getId(),103)){
+		}
+		//cl.setMemberLv(order.getRightId());
 		//cl.setAuditStatus(AuditStatus.AUDITING.id);
 		res=memberService.updateById(cl);
 		return res;

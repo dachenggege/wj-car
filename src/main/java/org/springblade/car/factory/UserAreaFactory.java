@@ -1,5 +1,6 @@
 package org.springblade.car.factory;
 
+import org.springblade.car.Req.MemberReq;
 import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.Member;
 import org.springblade.car.entity.Shop;
@@ -30,11 +31,14 @@ public class UserAreaFactory {
 
 	@Autowired
 	private BladeRedis bladeRedis;
-	@Autowired
-	private IMemberService memberService;
-	@Autowired
-	private  IShopService shopService;
 
-
-
+ public MemberReq getUserAreas() {
+	 MemberReq memberReq=new MemberReq();
+	 List<String> areas= bladeRedis.get(CacheNames.AREAS_KEY+ AuthUtil.getUser().getUserId());
+	 List<String> noareas= bladeRedis.get(CacheNames.NO_AREAS_KEY+AuthUtil.getUser().getUserId());
+	 memberReq.setUserId(AuthUtil.getUser().getUserId());
+	 memberReq.setNoareas(noareas);
+	 memberReq.setAreas(areas);
+	 return memberReq;
+ }
 }
