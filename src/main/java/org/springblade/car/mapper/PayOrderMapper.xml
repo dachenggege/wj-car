@@ -12,6 +12,7 @@
         <result column="dict_id" property="dictId"/>
         <result column="remark" property="remark"/>
         <result column="member_lv" property="memberLv"/>
+        <result column="rights_id" property="rightsId"/>
         <result column="create_user" property="createUser"/>
         <result column="create_dept" property="createDept"/>
         <result column="create_time" property="createTime"/>

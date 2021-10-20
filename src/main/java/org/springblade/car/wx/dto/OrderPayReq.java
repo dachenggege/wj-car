@@ -36,15 +36,14 @@ public class OrderPayReq {
 	/**
 	 * 用户id
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "用户id")
 	private Long memberId;
 
 	@ApiModelProperty(value = "微信用户openid")
 	private String openid;
-	/**
-	 * 1会员充值，2保障金
-	 */
-	@ApiModelProperty(value = "1会员充值，2保障金")
+
+	@ApiModelProperty(value = "1会员升级，2会员续费，3VIN查询")
 	@NotNull
 	private Integer type;
 	/**
@@ -54,6 +53,10 @@ public class OrderPayReq {
 	@NotNull
 	private Double payMoney;
 
-	@ApiModelProperty(value = "费用id（字典表id）")
-	private Long dictId;
+	@ApiModelProperty(value = "会员等级")
+	private Integer memberLv;
+
+	@JsonSerialize(using = ToStringSerializer.class)
+	@ApiModelProperty(value = "会员权益id")
+	private Integer rightsId;
 }

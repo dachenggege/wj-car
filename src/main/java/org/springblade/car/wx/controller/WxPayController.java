@@ -24,13 +24,14 @@ import lombok.Synchronized;
 import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.CommunityWx;
 import org.springblade.car.entity.Member;
+import org.springblade.car.entity.MemberRights;
 import org.springblade.car.entity.PayOrder;
-import org.springblade.car.enums.PayStatus;
 import org.springblade.car.service.ICommunityWxService;
+import org.springblade.car.service.IMemberRightsService;
 import org.springblade.car.service.IMemberService;
 import org.springblade.car.service.IPayOrderService;
+import org.springblade.car.wx.dto.MemberRightsPayRep;
 import org.springblade.car.wx.dto.OrderPayReq;
-import org.springblade.car.wx.dto.CarServiceOrderPayReq;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.car.wx.pay.WXHttpConntionUtil;
 import org.springblade.car.wx.pay.WXNonceStrUtil;
@@ -40,10 +41,7 @@ import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.modules.system.entity.Dict;
 import org.springblade.modules.system.service.IDictService;
-import org.springblade.modules.system.vo.DictVO;
-import org.springblade.modules.system.wrapper.DictWrapper;
 import org.springblade.util.DateUtil;
 import org.springblade.util.NumberUtil;
 import org.springframework.beans.BeanUtils;
@@ -72,15 +70,50 @@ public class WxPayController extends BladeController {
 	private ICommunityWxService iCommunityWxService;
 	private IMemberService memberService;
 	private final IDictService dictService;
+	private final IMemberRightsService memberRightsService;
 
 	@GetMapping("/memberMoney")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "会员年费费用")
-	public R<List<Dict>> memberMoney() {
-		Dict dict=new Dict();
-		dict.setCode("money");
-		List<Dict> detail = dictService.list(Condition.getQueryWrapper(dict));
-		return R.data(detail);
+	public R<List<MemberRightsPayRep>> memberMoney() {
+		MemberDTO cl = wMemberFactory.getMember(request);
+
+		Integer memberLv=cl.getMemberLv();
+		Integer roteType=cl.getRoletype();
+		if(Func.equals(roteType,1)){
+			return R.fail("请先注册会员，才能充值哦");
+		}
+
+		MemberRights memberRights=new MemberRights();
+		memberRights.setRoletype(roteType);
+		List<MemberRights> list=memberRightsService.list(Condition.getQueryWrapper(memberRights));
+		List<MemberRightsPayRep> payReqs=new ArrayList<>();
+		for(MemberRights rights:list){
+			MemberRightsPayRep payReq=new MemberRightsPayRep();
+			payReq.setRightsId(rights.getId());
+			payReq.setRoleType(roteType);
+			payReq.setMemberLv(rights.getLevel());
+			payReq.setLevelName(rights.getLevelName());
+			payReq.setPayMoney(rights.getPrice());
+			payReq.setType(1);//("升级");
+
+			//个人会员，银钻，金钻
+			if(Func.equals(rights.getRoletype(),2) && Func.equals(roteType,2) ){
+				if(Func.equals(memberLv,rights.getLevel())){
+					payReq.setType(2);//("续费");
+				}
+				payReqs.add(payReq);
+			}
+			//商家
+			if(Func.equals(rights.getRoletype(),3) && Func.equals(roteType,3) ){
+				if(Func.equals(memberLv,rights.getLevel())){
+					payReq.setType(2);//("续费");
+				}
+				payReqs.add(payReq);
+			}
+		}
+
+		return R.data(payReqs);
 	}
 
 
@@ -96,21 +129,14 @@ public class WxPayController extends BladeController {
 			return  R.fail("openid不能为空");
 		}
 		MemberDTO cl = wMemberFactory.getMember(request);
+
 		if(Func.isEmpty(cl)){
 			return  R.fail("用户不存在");
 		}
 		if(Func.equals(cl.getRoletype(),1)){
 			return  R.fail("您现在是游客身份，请先注册会员或商家哦");
 		}
-		if(Func.equals(cl.getRoletype(),2) && Func.equals(orderPayReq.getDictId(),103)){
-			return  R.fail("请先注册商家才能充值黑钻会员哦");
-		}
-		if(Func.equals(cl.getRoletype(),2) && Func.equals(orderPayReq.getDictId(),104)){
-			return  R.fail("请先注册商家才能充值黑钻PULS会员哦");
-		}
-		if(Func.equals(cl.getRoletype(),3) && Func.equals(orderPayReq.getDictId(),101)){
-			return  R.fail("您现在是商家身份,不能充值个人银钻会员哦");
-		}
+
 
 		orderPayReq.setOpenid(openid);
 		orderPayReq.setMemberId(cl.getId());
@@ -121,8 +147,8 @@ public class WxPayController extends BladeController {
 			return  R.fail("支付金额不能小于等于0");
 		}
 
-		if(Func.isEmpty(orderPayReq.getDictId())){
-			return  R.fail("费用id不能为空");
+		if(Func.isEmpty(orderPayReq.getRightsId())){
+			return  R.fail("会员权益id不能为空");
 		}
 
 		CommunityWx Wx=iCommunityWxService.getById(1);
@@ -136,6 +162,7 @@ public class WxPayController extends BladeController {
 
 		PayOrder pay=new PayOrder();
 		BeanUtils.copyProperties(orderPayReq,pay);
+
 		Long id= NumberUtil.getRandomNum(16);
 		pay.setId(id);
 		pay.setOutTradeNo(id.toString());

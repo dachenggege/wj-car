@@ -214,10 +214,7 @@ public class WxPayBaskController extends BladeController {
 	public boolean updateMemberRights(PayOrder order){
 		Boolean res=false;
 		Member cl = memberService.getById(order.getMemberId());
-		Dict dict=dictService.getById(order.getDictId());
 
-		if(Func.equals(cl.getRoletype(),2) && Func.equals(dict.getId(),103)){
-		}
 		//cl.setMemberLv(order.getRightId());
 		//cl.setAuditStatus(AuditStatus.AUDITING.id);
 		res=memberService.updateById(cl);
