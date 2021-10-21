@@ -130,8 +130,13 @@ public class WxPayController extends BladeController {
 		}
 		MemberDTO cl = wMemberFactory.getMember(request);
 
+		MemberRights rights=memberRightsService.getById(orderPayReq.getRightsId());
+
 		if(Func.isEmpty(cl)){
 			return  R.fail("用户不存在");
+		}
+		if(Func.isEmpty(rights)){
+			return  R.fail("用户权益id不存在");
 		}
 		if(Func.equals(cl.getRoletype(),1)){
 			return  R.fail("您现在是游客身份，请先注册会员或商家哦");
@@ -167,7 +172,7 @@ public class WxPayController extends BladeController {
 		pay.setId(id);
 		pay.setOutTradeNo(id.toString());
 		pay.setStatus(1);
-
+		pay.setRemark(rights.getLevelName());
 		Map<String, String> resMap=WXPay(id.toString(),pay.getPayMoney(),openid,Wx);
 
 		String return_code = resMap.get("return_code");

@@ -52,14 +52,4 @@ public class PayOrderVO extends PayOrder {
 	@ApiModelProperty(value = "用户名称")
 	private String memberName;
 
-	/**
-	 * 1会员充值，2保障金
-	 */
-	@ApiModelProperty(value = "1会员充值,2VIN查询订单")
-	private String typeName;
-
-//	@ApiModelProperty(value = "车名称")
-//	private String ;
-
-
 }
