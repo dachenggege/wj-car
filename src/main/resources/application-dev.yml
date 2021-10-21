@@ -11,19 +11,19 @@ server:
     # 是否分配的直接内存
     direct-buffers: true
   ############ssl#Hhttps############################33
-#  ssl:
-#    enabled: true
-#    key-store: classpath:4798561_yn52.mlcloud.com.cn.pfx
-#    key-store-password: ETInr0Jz
-#    key-store-type: PKCS12
+  ssl:
+    enabled: true
+    key-store: classpath:4798561_yn52.mlcloud.com.cn.pfx
+    key-store-password: ETInr0Jz
+    key-store-type: PKCS12
 #数据源配置
 spring:
   redis:
     ##redis 单机环境配置
     ##将docker脚本部署的redis服务映射为宿主机ip
     ##生产环境推荐使用阿里云高可用redis服务并设置密码
-    host: 58.250.212.24
-    port: 36379
+    host: 127.0.0.1
+    port: 6379
     password: Mailian!QAZ
     database: 2
     ssl: false

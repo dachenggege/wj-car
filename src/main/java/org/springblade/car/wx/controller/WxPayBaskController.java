@@ -20,14 +20,19 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.apache.commons.lang.time.DateUtils;
 import org.springblade.car.entity.Member;
+import org.springblade.car.entity.MemberRights;
 import org.springblade.car.entity.PayOrder;
 import org.springblade.car.enums.PayStatus;
+import org.springblade.car.service.IMemberRightsService;
 import org.springblade.car.service.IMemberService;
 import org.springblade.car.service.IPayOrderService;
 import org.springblade.car.wx.pay.WXXmlUtil;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.modules.system.entity.Dict;
 import org.springblade.modules.system.service.IDictService;
@@ -41,6 +46,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -57,6 +63,7 @@ public class WxPayBaskController extends BladeController {
 	private IPayOrderService PayOrderService;
 	private IMemberService memberService;
 	private final IDictService dictService;
+	private final IMemberRightsService memberRightsService;
 
 	//状态1待支付，2支付成功，3支付失败
 	public static final Integer PAY_STUTAS_1 =1;//1未支付
@@ -214,9 +221,25 @@ public class WxPayBaskController extends BladeController {
 	public boolean updateMemberRights(PayOrder order){
 		Boolean res=false;
 		Member cl = memberService.getById(order.getMemberId());
+		MemberRights memberRights=memberRightsService.getById(order.getRightsId());
+		if(Func.isEmpty(cl) || Func.isEmpty(memberRights)){
+			return false;
+		}
+		//升级
+		if(Func.equals(order.getType(),1)){
+			Date ExpiryDate= DateUtils.addYears(new Date(),1);
+			cl.setExpiryDate(ExpiryDate);
+			cl.setIsExpiry(true);
+			cl.setMemberLv(order.getRightsId());
+		}
+		//续费
+		if(Func.equals(order.getType(),2)){
+			Date ExpiryDate= DateUtils.addYears(cl.getExpiryDate(),1);
+			cl.setExpiryDate(ExpiryDate);
+			cl.setIsExpiry(true);
+			cl.setMemberLv(order.getRightsId());
+		}
 
-		//cl.setMemberLv(order.getRightId());
-		//cl.setAuditStatus(AuditStatus.AUDITING.id);
 		res=memberService.updateById(cl);
 		return res;
 	}
