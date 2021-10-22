@@ -78,4 +78,10 @@ public class MemberRegist {
     @ApiModelProperty(value = "证件照多个用英文逗号分隔")
     @NotNull
     private String certificate;
+
+    @ApiModelProperty(value = "车行经度")
+    private Double lng;
+
+    @ApiModelProperty(value = "车行维度")
+    private Double lat;
 }

@@ -16,6 +16,7 @@
  */
 package org.springblade.car.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springblade.car.entity.Shop;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,5 +31,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ShopDTO extends Shop {
 	private static final long serialVersionUID = 1L;
-
+	@ApiModelProperty(value = "店主名称")
+	private String shopMember;
+	@ApiModelProperty(value = "门店成员数量")
+	private Integer staffNum;
+	@ApiModelProperty(value = "门店车源数量")
+	private Integer shopCarNum;
+	@ApiModelProperty(value = "门店联盟数量")
+	private Integer alliedNum;
+	@ApiModelProperty(value = "联盟车车源数量")
+	private Integer alliedCarNum;
 }

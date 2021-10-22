@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiModelProperty;
 @Data
 @TableName("t_shop_collect")
 @ApiModel(value = "ShopCollect对象", description = "门店收藏表")
-public class ShopCollect implements Serializable {
+public class ShopAllied implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,13 +50,16 @@ public class ShopCollect implements Serializable {
 	/**
 	* 收藏者id
 	*/
-		@ApiModelProperty(value = "收藏者id")
-		private Long memberId;
+		@ApiModelProperty(value = "申请者id")
+		private Long applyMemberId;
+
+		@ApiModelProperty(value = "联盟门店id")
+		private Long alliedShopId;
 	/**
 	* 是否收藏
 	*/
 		@ApiModelProperty(value = "申请0,1已接受,2取消")
-		private int isCollect;
+		private int alliedStatus;
 	/**
 	* 创建人
 	*/

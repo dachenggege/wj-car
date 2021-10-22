@@ -16,6 +16,8 @@
  */
 package org.springblade.car.service;
 
+import org.springblade.car.Req.ShopReq;
+import org.springblade.car.dto.ShopDTO;
 import org.springblade.car.entity.Shop;
 import org.springblade.car.vo.ShopVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -32,8 +34,8 @@ public interface IShopService extends IService<Shop> {
 
 	Integer selectShopCount(ShopVO shop);
 
-	IPage<ShopVO> selectShopPage(IPage<ShopVO> page, ShopVO shop);
-	IPage<ShopVO> selectMyShopPage(IPage<ShopVO> page, ShopVO shop);
+	IPage<ShopDTO> selectShopPage(IPage<ShopDTO> page, ShopReq shop);
+	IPage<ShopDTO> selectMyShopPage(IPage<ShopDTO> page, Long memberId);
 
-	ShopVO getShopDetail(ShopVO shop);
+	ShopDTO getShopDetail(Long shopId);
 }

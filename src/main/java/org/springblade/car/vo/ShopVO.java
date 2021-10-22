@@ -37,26 +37,5 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "ShopVO对象", description = "用户门店表")
 public class ShopVO extends Shop {
-	private static final long serialVersionUID = 1L;
-	private List<String> areas;
-	private List<String> noareas;
-
-	@ApiModelProperty(value = "店主名称")
-	private String shopMember;
-
-	@ApiModelProperty(value = "店成员")
-	private Integer memberNum=1;
-
-	@ApiModelProperty(value = "店车源")
-	private Integer carNum=0;
-
-	@JsonFormat(
-			pattern = "yyyy-MM-dd HH:mm:ss"
-	)
-	private Date startCreateTime;
-	@JsonFormat(
-			pattern = "yyyy-MM-dd HH:mm:ss"
-	)
-	private Date endCreateTime;
 
 }

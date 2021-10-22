@@ -16,18 +16,10 @@
  */
 package org.springblade.car.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
-import org.springblade.car.entity.Shop;
-import org.springblade.car.entity.ShopCollect;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springblade.car.vo.ShopVO;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 门店收藏表数据传输对象实体类
@@ -36,7 +28,7 @@ import java.util.List;
  * @since 2021-08-26
  */
 @Data
-public class ShopCollectDTO{
+public class ShopAlliedDTO {
 
 
 	@ApiModelProperty(value = "申请id")
@@ -53,12 +45,15 @@ public class ShopCollectDTO{
 	private Long shopMemberId;
 	@ApiModelProperty(value = "店主")
 	private String shopMember;
-	private static final long serialVersionUID = 1L;
-	@ApiModelProperty(value = "结盟人id")
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long collecterId;
-	@ApiModelProperty(value = "结盟人名称")
-	private String collecterName;
+
+	@ApiModelProperty(value = "申请者id")
+	private Long applyMemberId;
+
+	@ApiModelProperty(value = "联盟门店id")
+	private Long alliedShopId;
 	@ApiModelProperty(value = "申请0,1已接受,2取消")
-	private int isCollect;
+	private int alliedStatus;
+
+	@ApiModelProperty(value = "门店车源数量")
+	private int shopCarNum;
 }

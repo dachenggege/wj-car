@@ -51,7 +51,15 @@ public class Shop extends BaseEntity {
 	* 手机号码
 	*/
 		@ApiModelProperty(value = "手机号码")
-		private String phone;
+		private String phone1;
+		@ApiModelProperty(value = "手机号码")
+		private String phone2;
+		@ApiModelProperty(value = "手机号码")
+		private String phone3;
+		@ApiModelProperty(value = "手机号码")
+		private String phone4;
+		@ApiModelProperty(value = "手机号码")
+		private String phone5;
 	/**
 	* 门店名称
 	*/
@@ -63,6 +71,11 @@ public class Shop extends BaseEntity {
 		@ApiModelProperty(value = "门店地址")
 		private String shopAddress;
 
+	@ApiModelProperty(value = "门店经度")
+	private Double lng;
+
+	@ApiModelProperty(value = "门店维度")
+	private Double lat;
 	/**
 	* 用户个人资料填写的省份
 	*/

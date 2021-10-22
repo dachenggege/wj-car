@@ -14,35 +14,39 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.car.mapper;
+package org.springblade.car.Req;
 
-import org.apache.ibatis.annotations.Param;
-import org.springblade.car.dto.ShopCollectDTO;
-import org.springblade.car.entity.ShopCollect;
-import org.springblade.car.vo.ShopCollectVO;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springblade.car.vo.ShopVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springblade.car.entity.Shop;
 
+import java.util.Date;
 import java.util.List;
 
 /**
- * 门店收藏表 Mapper 接口
+ * 用户门店表视图实体类
  *
  * @author BladeX
- * @since 2021-08-26
+ * @since 2021-07-22
  */
-public interface ShopCollectMapper extends BaseMapper<ShopCollect> {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "ShopReq对象", description = "用户门店表")
+public class ShopReq extends Shop {
+	private static final long serialVersionUID = 1L;
+	private List<String> areas;
+	private List<String> noareas;
 
-	/**
-	 * 自定义分页
-	 *
-	 * @param page
-	 * @param shopCollect
-	 * @return
-	 */
-	List<ShopVO> selectShopCollectPage(IPage page, @Param("shopCollect") ShopCollectVO shopCollect);
-	List<ShopCollectDTO> selectShopCollectAcceptPage(IPage page, @Param("shopCollect") ShopCollectDTO shopCollect);
-	ShopCollect selectShopCollect(@Param("shopCollect") ShopCollect shopCollect);
+	@JsonFormat(
+			pattern = "yyyy-MM-dd HH:mm:ss"
+	)
+	private Date startCreateTime;
+	@JsonFormat(
+			pattern = "yyyy-MM-dd HH:mm:ss"
+	)
+	private Date endCreateTime;
 
 }

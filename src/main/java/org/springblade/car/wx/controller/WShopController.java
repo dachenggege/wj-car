@@ -22,11 +22,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.springblade.car.controller.ShopMemberController;
-import org.springblade.car.dto.ShopCarReq;
-import org.springblade.car.dto.ShopCollectDTO;
-import org.springblade.car.dto.ShopMemberDTO;
-import org.springblade.car.dto.ShopMemberReq;
+import org.springblade.car.Req.ShopReq;
+import org.springblade.car.dto.*;
 import org.springblade.car.entity.*;
 import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.service.*;
@@ -35,7 +32,6 @@ import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
-import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.util.NumberUtil;
@@ -46,7 +42,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,7 +53,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wshop")
-@Api(value = "用户门店表", tags = "微信-门店接口")
+@Api(value = "用户门店表", tags = "v2微信-门店接口")
 public class WShopController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;
@@ -69,56 +64,72 @@ public class WShopController extends BladeController {
 	private IMemberService memberService;
 
 
+
 	/**
-	 * 详情
+	 * 新增 用户门店表
 	 */
-	@GetMapping("/detail")
+	@PostMapping("/saveShop")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "门店详情", notes = "传入shop")
-	public R<ShopVO> detail(ShopVO shop) {
-		ShopVO detail = shopService.getShopDetail(shop);
-		return R.data(detail);
+	@ApiOperation(value = "新增门店", notes = "传入shop")
+	@Transactional
+	public R saveShop(@Valid @RequestBody Shop shop) {
+		Member cl = wMemberFactory.getMember(request);
+		shop.setId(NumberUtil.getRandomNumber(6,8));
+		shop.setAuditStatus(AuditStatus.AUDITING.id);
+		shop.setPhone1(cl.getPhone());
+		shop.setMemberId(cl.getId());
+		//店主权限
+		ShopMember member=new ShopMember();
+		member.setStaffId(cl.getId());
+		member.setStaffRole(1);
+		member.setShopId(shop.getId());
+		member.setIsPublishCar(true);
+		member.setIsEditCar(true);
+		member.setIsDownCar(true);
+		member.setIsLookAlliedCar(true);
+		member.setIsLookCarBrowse(true);
+		member.setIsLookCarCall(true);
+		member.setIsLookPcostPrice(true);
+		shopMemberService.save(member);
+
+		return R.status(shopService.save(shop));
 	}
 
 
+
 	/**
-	 * 自定义分页 用户门店表
+	 * 详情
 	 */
-	@GetMapping("/page")
-	@ApiOperationSupport(order = 3)
-	@ApiOperation(value = "门店分页", notes = "传入shop")
-	public R<IPage<ShopVO>> page(ShopVO shop, Query query) {
-		IPage<ShopVO> pages = shopService.selectShopPage(Condition.getPage(query), shop);
-		return R.data(pages);
+	@GetMapping("/shopDetail")
+	@ApiOperationSupport(order = 2)
+	@ApiOperation(value = "门店详情")
+	public R<ShopDTO> shopDetail(@ApiParam(value = "门店id", required = true) @RequestParam Long shopId) {
+		ShopDTO detail = shopService.getShopDetail(shopId);
+		return R.data(detail);
 	}
 
 	@GetMapping("/myShopPage")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "我的门店分页", notes = "传入shop")
-	public R<IPage<ShopVO>> myShopPage(ShopVO shop, Query query) {
+	public R<IPage<ShopDTO>> myShopPage(Query query) {
 		Member cl = wMemberFactory.getMember(request);
-		shop.setMemberId(cl.getId());
-		IPage<ShopVO> pages = shopService.selectMyShopPage(Condition.getPage(query), shop);
+		IPage<ShopDTO> pages = shopService.selectMyShopPage(Condition.getPage(query), cl.getId());
 		return R.data(pages);
 	}
 
 	/**
-	 * 新增 用户门店表
+	 * 自定义分页 用户门店表
 	 */
-	@PostMapping("/save")
-	@ApiOperationSupport(order = 4)
-	@ApiOperation(value = "新增门店", notes = "传入shop")
-	@Transactional
-	public R save(@Valid @RequestBody Shop shop) {
-		shop.setId(NumberUtil.getRandomNumber(6,8));
-		shop.setAuditStatus(AuditStatus.AUDITING.id);
-		ShopMember member=new ShopMember();
-		member.setMemberId(shop.getMemberId());
-		member.setShopId(shop.getId());
-		shopMemberService.save(member);
-
-		return R.status(shopService.save(shop));
+	@GetMapping("/shopPage")
+	@ApiOperationSupport(order = 3)
+	@ApiOperation(value = "门店结盟-查询门店分页", notes = "传入shop")
+	public R<IPage<ShopDTO>> page(@ApiParam(value = "门店id", required = true) @RequestParam Long shopId, Query query) {
+		ShopReq shop=new ShopReq();
+		shop.setId(shopId);
+		IPage<ShopDTO> pages = shopService.selectShopPage(Condition.getPage(query), shop);
+		return R.data(pages);
 	}
+
 
 	/**
 	 * 修改 用户门店表
@@ -172,44 +183,34 @@ public class WShopController extends BladeController {
 	}
 
 
-	@GetMapping("/shopCollectPage")
+	@GetMapping("/hadAlliedShopPage")
 	@ApiOperationSupport(order = 9001)
-	@ApiOperation(value = "已结盟门店（isCollect=1 ）的门店分页", notes = "传入shopCollect")
-	public R<IPage<ShopCollectDTO>> shopCollectPage(ShopCollectDTO shopCollect,Query query) {
+	@ApiOperation(value = "已结盟门店的门店分页")
+	public R<IPage<ShopAlliedDTO>> hadAlliedShopPage(@ApiParam(value = "门店id", required = true) @RequestParam Long shopId,Query query) {
 		Member cl = wMemberFactory.getMember(request);
 		shopCollect.setCollecterId(cl.getId());
-		shopCollect.setIsCollect(1);
-		IPage<ShopCollectDTO> pages = shopCollectService.selectShopCollectAcceptPage(Condition.getPage(query), shopCollect);
+		shopCollect.setAlliedStatus(1);
+		IPage<ShopAlliedDTO> pages = shopCollectService.selectShopCollectAcceptPage(Condition.getPage(query), shopCollect);
 		return R.data(pages);
 	}
 
-	@GetMapping("/selectShopCollectAcceptPage")
-	@ApiOperationSupport(order = 9002)
-	@ApiOperation(value = "结盟门店申请列表isCollect=0）的分页", notes = "传入shopCollect")
-	public R<IPage<ShopCollectDTO>> selectShopCollectAcceptPage(ShopCollectDTO shopCollect,Query query) {
-		Member cl = wMemberFactory.getMember(request);
-		shopCollect.setShopMemberId(cl.getId());
-		shopCollect.setIsCollect(0);
-		IPage<ShopCollectDTO> pages = shopCollectService.selectShopCollectAcceptPage(Condition.getPage(query), shopCollect);
-		return R.data(pages);
-	}
 
 	@PostMapping("/shopCollect")
 	@ApiOperationSupport(order = 9003)
-	@ApiOperation(value = "门店结盟（申请结盟isCollect=0,同意结盟isCollect=1，取消结盟isCollect=2）", notes = "shopCollect")
-	public R shopCollect(@Valid @RequestBody ShopCollectDTO shopCollectDTO) {
+	@ApiOperation(value = "申请门店结盟", notes = "shopCollect")
+	public R shopCollect(@Valid @RequestBody ShopAlliedDTO shopAlliedDTO) {
 		Member cl = wMemberFactory.getMember(request);
 		boolean res=false;
-		if(shopCollectDTO.getIsCollect()==0){
-			ShopCollect shopCollect =new ShopCollect();
-			shopCollect.setShopId(shopCollectDTO.getShopId());
-			shopCollect.setMemberId(cl.getId());
-			res=shopCollectService.save(shopCollect);
+		if(shopAlliedDTO.getIsCollect()==0){
+			ShopAllied shopAllied =new ShopAllied();
+			shopAllied.setShopId(shopAlliedDTO.getShopId());
+			shopAllied.setMemberId(cl.getId());
+			res=shopCollectService.save(shopAllied);
 		}
 		else{
-			ShopCollect shopCollect =shopCollectService.getById(shopCollectDTO.getId());
-			shopCollect.setIsCollect(shopCollectDTO.getIsCollect());
-			res=shopCollectService.updateById(shopCollect);
+			ShopAllied shopAllied =shopCollectService.getById(shopAlliedDTO.getId());
+			shopAllied.setIsCollect(shopAlliedDTO.getIsCollect());
+			res=shopCollectService.updateById(shopAllied);
 		}
 
 

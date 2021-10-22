@@ -6,9 +6,16 @@
     <resultMap id="shopResultMap" type="org.springblade.car.entity.Shop">
         <id column="id" property="id"/>
         <result column="member_id" property="memberId"/>
-        <result column="phone" property="phone"/>
+        <result column="phone1" property="phone1"/>
+        <result column="phone2" property="phone2"/>
+        <result column="phone2" property="phone2"/>
+        <result column="phone3" property="phone3"/>
+        <result column="phone4" property="phone4"/>
+        <result column="phone5" property="phone5"/>
         <result column="shop_name" property="shopName"/>
         <result column="shop_address" property="shopAddress"/>
+        <result column="lng" property="lng"/>
+        <result column="lat" property="lat"/>
         <result column="province" property="province"/>
         <result column="city" property="city"/>
         <result column="county" property="county"/>
@@ -90,10 +97,11 @@
         </if>
     </select>
 
-    <select id="selectShopPage" resultType="org.springblade.car.vo.ShopVO">
+    <select id="selectShopPage" resultType="org.springblade.car.dto.ShopDTO">
         SELECT t.*,m.name AS shopMember ,
-        (SELECT COUNT(1) FROM t_shop_member WHERE is_deleted = 0 and shop_id=t.id) AS memberNum,
-        (SELECT COUNT(1) FROM t_cars WHERE is_deleted = 0 and member_id=t.member_id) AS carNum
+        (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS staffNum,
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
+        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum
         FROM t_shop t , t_member m WHERE t.is_deleted = 0 AND m.is_deleted = 0
         AND t.member_id=m.id
         <if test="shop.id != null and shop.id !=''">
@@ -152,47 +160,31 @@
     </select>
 
 
-    <select id="selectMyShopPage" resultType="org.springblade.car.vo.ShopVO">
-        select t.*,
-        ( SELECT name FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) as shopMember ,
-        ( select count(1) from t_shop_member where is_deleted = 0 and shop_id = t.id ) as memberNum ,
-        ( select count(1) from t_cars where is_deleted = 0 and member_id = t.member_id ) as carNum
-        from t_shop t, t_shop_member s, t_member b
-        WHERE t.is_deleted = 0 AND b.is_deleted = 0
-        and t.id=s.`shop_id`
-        AND s.member_id=b.id
-        <if test="shop.id != null and shop.id !=''">
-            and t.id=#{shop.id}
-        </if>
-        <if test="shop.auditStatus != null and shop.auditStatus !=''">
-            and t.audit_status=#{shop.auditStatus}
-        </if>
-        <if test="shop.memberId != null ">
-            and s.member_id=#{shop.memberId}
-        </if>
-        <if test="shop.shopName != null and shop.shopName !=''">
-            and t.shop_name like concat(concat('%', #{shop.shopName}), '%')
-        </if>
-        <if test="shop.province != null and shop.province !=''">
-            and t.province=#{shop.province}
-        </if>
-        <if test="shop.city != null and shop.city !=''">
-            and t.city=#{shop.city}
-        </if>
-        <if test="shop.county != null and shop.county !=''">
-            and t.county=#{shop.county}
+    <select id="selectMyShopPage" resultType="org.springblade.car.dto.ShopDTO" parameterType="Long">
+        SELECT t.*,
+        (SELECT NAME FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) AS shopMember ,
+        (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS staffNum,
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
+        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum
+        FROM t_shop t, t_shop_member s
+        WHERE t.is_deleted = 0 AND s.is_deleted = 0
+        AND t.id=s.`shop_id`
+        <if test="memberId != null">
+            and s.staff_id=#{memberId}
         </if>
 
     </select>
-    <select id="getShopDetail" resultType="org.springblade.car.vo.ShopVO"
-            parameterType="org.springblade.car.vo.ShopVO">
-        SELECT t.*,b.name AS shopMember ,
-        (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS memberNum,
-        (SELECT COUNT(1) FROM t_cars WHERE member_id=t.member_id) AS carNum
-        FROM t_shop t , t_member b WHERE t.is_deleted = 0 AND b.is_deleted = 0
+    <select id="getShopDetail" resultType="org.springblade.car.dto.ShopDTO"
+            parameterType="Long">
+        SELECT t.*,
+        (SELECT NAME FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) AS shopMember ,
+        (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS staffNum,
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
+        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum
+        FROM t_shop t WHERE t.is_deleted = 0
         AND t.member_id=b.id
-    <if test="shop.id != null and shop.id !=''">
-        and t.id=#{shop.id}
+    <if test="shopId != null">
+        and t.id=#{shopId}
     </if>
 
     </select>

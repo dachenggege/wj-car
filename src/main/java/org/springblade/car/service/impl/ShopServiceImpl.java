@@ -16,6 +16,8 @@
  */
 package org.springblade.car.service.impl;
 
+import org.springblade.car.Req.ShopReq;
+import org.springblade.car.dto.ShopDTO;
 import org.springblade.car.entity.Shop;
 import org.springblade.car.vo.ShopVO;
 import org.springblade.car.mapper.ShopMapper;
@@ -37,14 +39,14 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 		return baseMapper.selectShopCount(shop);
 	}
 	@Override
-	public IPage<ShopVO> selectShopPage(IPage<ShopVO> page, ShopVO shop) {
+	public IPage<ShopDTO> selectShopPage(IPage<ShopDTO> page, ShopReq shop) {
 		return page.setRecords(baseMapper.selectShopPage(page, shop));
 	}
-	public IPage<ShopVO> selectMyShopPage(IPage<ShopVO> page, ShopVO shop) {
-		return page.setRecords(baseMapper.selectMyShopPage(page, shop));
+	public IPage<ShopDTO> selectMyShopPage(IPage<ShopDTO> page, Long memberId) {
+		return page.setRecords(baseMapper.selectMyShopPage(page, memberId));
 	}
 
-	public ShopVO getShopDetail(ShopVO shop){
-		return baseMapper.getShopDetail(shop);
+	public ShopDTO getShopDetail(Long shopId){
+		return baseMapper.getShopDetail(shopId);
 	}
 }

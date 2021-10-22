@@ -129,6 +129,14 @@ public class Member implements Serializable {
 	*/
 		@ApiModelProperty(value = "车行地址")
 		private String dealerAddress;
+
+
+	@ApiModelProperty(value = "车行经度")
+	private Double lng;
+
+	@ApiModelProperty(value = "车行维度")
+	private Double lat;
+
 	/**
 	* 证件照多个用英文逗号分隔
 	*/

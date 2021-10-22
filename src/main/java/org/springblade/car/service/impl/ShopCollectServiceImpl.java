@@ -16,11 +16,10 @@
  */
 package org.springblade.car.service.impl;
 
-import org.apache.ibatis.annotations.Param;
-import org.springblade.car.dto.ShopCollectDTO;
-import org.springblade.car.entity.ShopCollect;
-import org.springblade.car.vo.ShopCollectVO;
-import org.springblade.car.mapper.ShopCollectMapper;
+import org.springblade.car.dto.ShopAlliedDTO;
+import org.springblade.car.entity.ShopAllied;
+import org.springblade.car.vo.ShopAlliedVO;
+import org.springblade.car.mapper.ShopAlliedMapper;
 import org.springblade.car.service.IShopCollectService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.car.vo.ShopVO;
@@ -34,17 +33,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @since 2021-08-26
  */
 @Service
-public class ShopCollectServiceImpl extends ServiceImpl<ShopCollectMapper, ShopCollect> implements IShopCollectService {
+public class ShopCollectServiceImpl extends ServiceImpl<ShopAlliedMapper, ShopAllied> implements IShopCollectService {
 
 	@Override
-	public IPage<ShopVO> selectShopCollectPage(IPage<ShopVO> page, ShopCollectVO shopCollect) {
+	public IPage<ShopVO> selectShopCollectPage(IPage<ShopVO> page, ShopAlliedVO shopCollect) {
 		return page.setRecords(baseMapper.selectShopCollectPage(page, shopCollect));
 	}
-	public IPage<ShopCollectDTO> selectShopCollectAcceptPage(IPage<ShopCollectDTO> page, ShopCollectDTO shopCollect) {
+	public IPage<ShopAlliedDTO> selectShopCollectAcceptPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect) {
 		return page.setRecords(baseMapper.selectShopCollectAcceptPage(page, shopCollect));
 	}
-	public ShopCollect selectShopCollect(ShopCollect shopCollect){
-		return baseMapper.selectShopCollect(shopCollect);
+	public ShopAllied selectShopCollect(ShopAllied shopAllied){
+		return baseMapper.selectShopCollect(shopAllied);
 	}
 
 }

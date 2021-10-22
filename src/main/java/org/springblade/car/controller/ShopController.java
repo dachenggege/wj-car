@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
 import org.springblade.car.dto.ShopCarReq;
+import org.springblade.car.dto.ShopDTO;
 import org.springblade.car.entity.Member;
 import org.springblade.car.entity.ShopMember;
 import org.springblade.car.enums.AuditStatus;
@@ -80,8 +81,8 @@ public class ShopController extends BladeController {
 	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "门店详情", notes = "传入shop")
-	public R<ShopVO> detail(ShopVO shop) {
-		ShopVO detail = shopService.getShopDetail(shop);
+	public R<ShopDTO> detail(Long shopId) {
+		ShopDTO detail = shopService.getShopDetail(shopId);
 		return R.data(detail);
 
 	}
@@ -169,7 +170,7 @@ public class ShopController extends BladeController {
 		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
 		List<Long> memberIds=new ArrayList<>();
 		for(ShopMember m:list){
-			memberIds.add(m.getMemberId());
+			memberIds.add(m.getStaffId());
 		}
 		CarsVO cars=new CarsVO();
 		BeanUtils.copyProperties(shopCarReq,cars);

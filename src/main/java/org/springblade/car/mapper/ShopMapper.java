@@ -17,6 +17,8 @@
 package org.springblade.car.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.springblade.car.Req.ShopReq;
+import org.springblade.car.dto.ShopDTO;
 import org.springblade.car.entity.Shop;
 import org.springblade.car.vo.ShopVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -39,7 +41,7 @@ public interface ShopMapper extends BaseMapper<Shop> {
 	 * @param shop
 	 * @return
 	 */
-	List<ShopVO> selectShopPage(IPage page, @Param("shop") ShopVO shop);
-	List<ShopVO> selectMyShopPage(IPage page, @Param("shop") ShopVO shop);
-	ShopVO getShopDetail(@Param("shop") ShopVO shop);
+	List<ShopDTO> selectShopPage(IPage page, @Param("shop") ShopReq shop);
+	List<ShopDTO> selectMyShopPage(IPage page, @Param("memberId") Long memberId);
+	ShopDTO getShopDetail(@Param("id") Long id);
 }

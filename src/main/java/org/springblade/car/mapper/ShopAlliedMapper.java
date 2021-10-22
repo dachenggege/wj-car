@@ -14,23 +14,35 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.car.vo;
+package org.springblade.car.mapper;
 
-import org.springblade.car.entity.ShopCollect;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import io.swagger.annotations.ApiModel;
+import org.apache.ibatis.annotations.Param;
+import org.springblade.car.dto.ShopAlliedDTO;
+import org.springblade.car.entity.ShopAllied;
+import org.springblade.car.vo.ShopAlliedVO;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springblade.car.vo.ShopVO;
+
+import java.util.List;
 
 /**
- * 门店收藏表视图实体类
+ * 门店收藏表 Mapper 接口
  *
  * @author BladeX
  * @since 2021-08-26
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "ShopCollectVO对象", description = "门店收藏表")
-public class ShopCollectVO extends ShopCollect {
-	private static final long serialVersionUID = 1L;
+public interface ShopAlliedMapper extends BaseMapper<ShopAllied> {
+
+	/**
+	 * 自定义分页
+	 *
+	 * @param page
+	 * @param shopCollect
+	 * @return
+	 */
+	List<ShopVO> selectShopCollectPage(IPage page, @Param("shopCollect") ShopAlliedVO shopCollect);
+	List<ShopAlliedDTO> selectShopCollectAcceptPage(IPage page, @Param("shopCollect") ShopAlliedDTO shopCollect);
+	ShopAllied selectShopCollect(@Param("shopCollect") ShopAllied shopAllied);
 
 }

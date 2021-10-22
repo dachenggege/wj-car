@@ -14,31 +14,23 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.car.service;
+package org.springblade.car.vo;
 
-import org.springblade.car.dto.ShopAlliedDTO;
 import org.springblade.car.entity.ShopAllied;
-import org.springblade.car.vo.ShopAlliedVO;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springblade.car.vo.ShopVO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import io.swagger.annotations.ApiModel;
 
 /**
- * 门店收藏表 服务类
+ * 门店收藏表视图实体类
  *
  * @author BladeX
  * @since 2021-08-26
  */
-public interface IShopCollectService extends IService<ShopAllied> {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "ShopCollectVO对象", description = "门店收藏表")
+public class ShopAlliedVO extends ShopAllied {
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 自定义分页
-	 *
-	 * @param page
-	 * @param shopCollect
-	 * @return
-	 */
-	IPage<ShopVO> selectShopCollectPage(IPage<ShopVO> page, ShopAlliedVO shopCollect);
-	IPage<ShopAlliedDTO> selectShopCollectAcceptPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
-	ShopAllied selectShopCollect(ShopAllied shopAllied);
 }

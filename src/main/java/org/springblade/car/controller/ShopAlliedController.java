@@ -16,13 +16,13 @@
  */
 package org.springblade.car.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
+import org.springblade.car.entity.ShopAllied;
 import org.springblade.car.vo.ShopVO;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -30,8 +30,7 @@ import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springblade.car.entity.ShopCollect;
-import org.springblade.car.vo.ShopCollectVO;
+import org.springblade.car.vo.ShopAlliedVO;
 import org.springblade.car.service.IShopCollectService;
 import org.springblade.core.boot.ctrl.BladeController;
 
@@ -45,7 +44,7 @@ import org.springblade.core.boot.ctrl.BladeController;
 @AllArgsConstructor
 @RequestMapping("second-hand-car/shopcollect")
 //@Api(value = "门店收藏表", tags = "门店收藏表接口")
-public class ShopCollectController extends BladeController {
+public class ShopAlliedController extends BladeController {
 
 	private final IShopCollectService shopCollectService;
 
@@ -55,8 +54,8 @@ public class ShopCollectController extends BladeController {
 	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "详情", notes = "传入shopCollect")
-	public R<ShopCollect> detail(ShopCollect shopCollect) {
-		ShopCollect detail = shopCollectService.getOne(Condition.getQueryWrapper(shopCollect));
+	public R<ShopAllied> detail(ShopAllied shopAllied) {
+		ShopAllied detail = shopCollectService.getOne(Condition.getQueryWrapper(shopAllied));
 		return R.data(detail);
 	}
 
@@ -66,8 +65,8 @@ public class ShopCollectController extends BladeController {
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "分页", notes = "传入shopCollect")
-	public R<IPage<ShopCollect>> list(ShopCollect shopCollect, Query query) {
-		IPage<ShopCollect> pages = shopCollectService.page(Condition.getPage(query), Condition.getQueryWrapper(shopCollect));
+	public R<IPage<ShopAllied>> list(ShopAllied shopAllied, Query query) {
+		IPage<ShopAllied> pages = shopCollectService.page(Condition.getPage(query), Condition.getQueryWrapper(shopAllied));
 		return R.data(pages);
 	}
 
@@ -77,7 +76,7 @@ public class ShopCollectController extends BladeController {
 	@GetMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "分页", notes = "传入shopCollect")
-	public R<IPage<ShopVO>> page(ShopCollectVO shopCollect, Query query) {
+	public R<IPage<ShopVO>> page(ShopAlliedVO shopCollect, Query query) {
 		IPage<ShopVO> pages = shopCollectService.selectShopCollectPage(Condition.getPage(query), shopCollect);
 		return R.data(pages);
 	}
@@ -88,8 +87,8 @@ public class ShopCollectController extends BladeController {
 	@PostMapping("/save")
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "新增", notes = "传入shopCollect")
-	public R save(@Valid @RequestBody ShopCollect shopCollect) {
-		return R.status(shopCollectService.save(shopCollect));
+	public R save(@Valid @RequestBody ShopAllied shopAllied) {
+		return R.status(shopCollectService.save(shopAllied));
 	}
 
 	/**
@@ -98,8 +97,8 @@ public class ShopCollectController extends BladeController {
 	@PostMapping("/update")
 	@ApiOperationSupport(order = 5)
 	@ApiOperation(value = "修改", notes = "传入shopCollect")
-	public R update(@Valid @RequestBody ShopCollect shopCollect) {
-		return R.status(shopCollectService.updateById(shopCollect));
+	public R update(@Valid @RequestBody ShopAllied shopAllied) {
+		return R.status(shopCollectService.updateById(shopAllied));
 	}
 
 	/**
@@ -108,8 +107,8 @@ public class ShopCollectController extends BladeController {
 	@PostMapping("/submit")
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "新增或修改", notes = "传入shopCollect")
-	public R submit(@Valid @RequestBody ShopCollect shopCollect) {
-		return R.status(shopCollectService.saveOrUpdate(shopCollect));
+	public R submit(@Valid @RequestBody ShopAllied shopAllied) {
+		return R.status(shopCollectService.saveOrUpdate(shopAllied));
 	}
 
 	

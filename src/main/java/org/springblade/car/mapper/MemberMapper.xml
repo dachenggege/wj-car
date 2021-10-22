@@ -22,6 +22,8 @@
         <result column="phone" property="phone"/>
         <result column="car_dealer" property="carDealer"/>
         <result column="dealer_address" property="dealerAddress"/>
+        <result column="lng" property="lng"/>
+        <result column="lat" property="lat"/>
         <result column="certificate" property="certificate"/>
         <result column="person_audit_status" property="personAuditStatus"/>
         <result column="person_audit_time" property="personAuditTime"/>
