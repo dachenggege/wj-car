@@ -18,52 +18,51 @@
         <result column="is_deleted" property="isDeleted"/>
     </resultMap>
 
-
-    <select id="selectShopCollectPage" resultType="org.springblade.car.vo.ShopVO" >
-        select t.* from t_shop t ,t_shop_collect c where t.is_deleted = 0 and c.is_deleted = 0
-        and t.id=c.shop_id
-        <if test="shopAllied.memberId != null ">
-            and c.member_id=#{shopAllied.memberId}
-        </if>
-        <if test="shopAllied.isCollect != null">
-            and c.is_collect=#{shopAllied.isCollect}
-        </if>
-    </select>
-
-    <select id="selectShopCollectAcceptPage" resultType="org.springblade.car.dto.ShopAlliedDTO" >
+    <!--已结盟 -->
+    <select id="hadAlliedShopPage" resultType="org.springblade.car.dto.ShopAlliedDTO" >
         SELECT c.id ,t.id AS shopId,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
         (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
-        c.member_id AS collecterId,c.is_collect AS isCollect,
-        (SELECT NAME FROM t_member m WHERE c.member_id=m.id) AS collecterName
-        FROM t_shop t ,t_shop_collect c WHERE t.is_deleted = 0 AND c.is_deleted = 0
-        AND t.id=c.shop_id
+        c.apply_member_id AS applyMemberId,allied_shop_id AS alliedShopId,
+        allied_status AS alliedStatus,
+        t.shop_img AS shopImg,t.area_name AS areaName,t.shop_address AS shopAddress,
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
+        FROM t_shop t ,`t_shop_allied` c WHERE t.is_deleted = 0 AND c.is_deleted = 0
+        AND (t.id=c.shop_id OR t.id=c.allied_shop_id)
         <if test="shopAllied.id != null ">
             and c.id=#{shopAllied.id}
         </if>
-        <if test="shopAllied.shopMemberId != null ">
-            and t.member_id=#{shopAllied.shopMemberId}
-        </if>
-        <if test="shopAllied.collecterId != null ">
-            and c.member_id=#{shopAllied.collecterId}
-        </if>
-        <if test="shopAllied.isCollect != null">
-            and c.is_collect=#{shopAllied.isCollect}
+        <if test="shopAllied.alliedStatus != null">
+            and c.allied_status=#{shopAllied.alliedStatus}
         </if>
     </select>
 
-    <select id="selectShopCollect" resultType="org.springblade.car.entity.ShopAllied"
-            parameterType="org.springblade.car.entity.ShopAllied">
-        select * from t_shop_collect t where t.is_deleted = 0
-        <if test="shopAllied.id != null and shopAllied.id !=''">
-            and t.id=#{shopAllied.id}
+    <!--申请结盟 -->
+    <select id="applyAlliedShopPage" resultType="org.springblade.car.dto.ShopAlliedDTO" >
+        SELECT c.id ,t.id AS shopId,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
+        (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
+        c.apply_member_id AS applyMemberId,allied_shop_id AS alliedShopId,
+        allied_status AS alliedStatus,
+        t.shop_img AS shopImg,t.area_name AS areaName,t.shop_address AS shopAddress,
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
+        FROM t_shop t ,`t_shop_allied` c WHERE t.is_deleted = 0 AND c.is_deleted = 0
+        AND t.id=c.allied_shop_id
+        <if test="shopAllied.alliedShopId != null ">
+            and c.allied_shop_id=#{shopAllied.alliedShopId}
         </if>
-        <if test="shopAllied.isCollect != null">
-            and t.is_collect=#{shopAllied.isCollect}
+        <if test="shopAllied.alliedStatus != null">
+            and c.allied_status=#{shopAllied.alliedStatus}
         </if>
-        <if test="shopAllied.memberId != null ">
-            and t.member_id=#{shopAllied.memberId}
-        </if>
-
     </select>
-
+    <!--查询门店 -->
+    <select id="selectShopAlliedPage" resultType="org.springblade.car.dto.SelectShopAlliedDTO" >
+        SELECT t.id,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
+        (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
+        t.shop_img AS shopImg,t.area_name AS areaName,t.shop_address AS shopAddress,
+        ( SELECT allied_status FROM t_shop_allied c WHERE (t.id=c.shop_id OR t.id=c.allied_shop_id))  AS alliedStatus,
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
+        FROM t_shop t  WHERE t.is_deleted = 0
+        <if test="shopAllied.shopName != null ">
+            AND t.shop_name like concat(concat('%', #{shopAllied.shopName}), '%')
+        </if>
+    </select>
 </mapper>

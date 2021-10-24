@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,22 +76,24 @@ public class WorkbenchController {
                            @ApiParam(value = "状态") @RequestParam(value = "personAuditStatus", required = true) int personAuditStatus,
                            @ApiParam(value = "原因") @RequestParam(value = "personNopassnotice", required = false) String personNopassnotice) {
         // 会员审核状态1审核中,2审核通过，3审核不通过
-        Member member=memberService.getById(id);
-        if(Func.isEmpty(member)){
+        Member cl=memberService.getById(id);
+        if(Func.isEmpty(cl)){
             return R.fail("用户ID不存在");
         }
         //通过
         if(Func.equals(personAuditStatus,2)){
-            member.setRoletype(2);
-            member.setPersonAuditStatus(personAuditStatus);
+            cl.setRoletype(2);
+            cl.setPersonAuditStatus(personAuditStatus);
+            cl.setPersonAuditTime(new Date());
         }
         //不通过
         if(Func.equals(personAuditStatus,3)){
-            member.setPersonAuditStatus(personAuditStatus);
-            member.setPersonNopassnotice(personNopassnotice);
+            cl.setPersonAuditStatus(personAuditStatus);
+            cl.setPersonNopassnotice(personNopassnotice);
+            cl.setPersonAuditTime(new Date());
         }
-
-        return R.status(memberService.updateById(member));
+        bladeRedis.set(cl.getOpenid(),cl);
+        return R.status(memberService.updateById(cl));
     }
 
     @GetMapping("/merchantAuditPage")
@@ -115,33 +118,35 @@ public class WorkbenchController {
                     @ApiParam(value = "状态") @RequestParam(value = "companyAuditStatus", required = true) int companyAuditStatus,
                     @ApiParam(value = "原因") @RequestParam(value = "companyNopassnotice", required = false) String companyNopassnotice) {
        // 商家会员审核状态1审核中,2审核通过，3审核不通过
-        Member member=memberService.getById(id);
-        if(Func.isEmpty(member)){
+        Member cl=memberService.getById(id);
+        if(Func.isEmpty(cl)){
             return R.fail("商家ID不存在");
         }
         //通过
         if(Func.equals(companyAuditStatus,2)){
-            member.setRoletype(3);
-            member.setCompanyAuditStatus(companyAuditStatus);
+            cl.setRoletype(3);
+            cl.setCompanyAuditStatus(companyAuditStatus);
+            cl.setCompanyAuditTime(new Date());
         }
         //不通过
         if(Func.equals(companyAuditStatus,3)){
-            member.setCompanyAuditStatus(companyAuditStatus);
-            member.setCompanyNopassnotice(companyNopassnotice);
+            cl.setCompanyAuditStatus(companyAuditStatus);
+            cl.setCompanyNopassnotice(companyNopassnotice);
+            cl.setCompanyAuditTime(new Date());
         }
-
-        return R.status(memberService.updateById(member));
+        bladeRedis.set(cl.getOpenid(),cl);
+        return R.status(memberService.updateById(cl));
     }
 
     @GetMapping("/certificationPage")
     @ApiOperationSupport(order = 5)
     @ApiOperation(value = "认证审核分页", notes = "certification")
-    public R<IPage<MemberCertificationVO>> certificationPage(MemberCertificationReq authentication, Query query) {
+    public R<IPage<MemberCertificationDTO>> certificationPage(MemberCertificationReq authentication, Query query) {
         MemberReq memberReq=userAreaFactory.getUserAreas();
         authentication.setAreas(memberReq.getAreas());
         authentication.setNoareas(memberReq.getNoareas());
         authentication.setUserId(memberReq.getUserId());
-        IPage<MemberCertificationVO> pages = memberCertificationService.selectMemberCertificationPage(Condition.getPage(query), authentication);
+        IPage<MemberCertificationDTO> pages = memberCertificationService.selectMemberCertificationPage(Condition.getPage(query), authentication);
         return R.data(pages);
     }
     /**
@@ -150,9 +155,42 @@ public class WorkbenchController {
     @GetMapping("/authenticationDetail")
     @ApiOperationSupport(order = 6)
     @ApiOperation(value = "认证详情", notes = "传入authentication")
-    public R<MemberCertification> authenticationDetail(MemberCertification memberCertification) {
-        MemberCertification detail = memberCertificationService.getOne(Condition.getQueryWrapper(memberCertification));
+    public R<MemberCertificationDTO> authenticationDetail(Long id) {
+        MemberCertificationDTO detail = memberCertificationService.getAuthenticationDetail(id);
         return R.data(detail);
+    }
+    @GetMapping("/authenticationAudit")
+    @ApiOperationSupport(order = 9)
+    @ApiOperation(value = "认证审核")
+    public R authenticationAudit(@ApiParam(value = "认证id") @RequestParam(value = "id", required = true) Long id,
+                           @ApiParam(value = "状态") @RequestParam(value = "auditStatus", required = true) int auditStatus,
+                           @ApiParam(value = "原因") @RequestParam(value = "nopassnotice", required = false) String nopassnotice) {
+
+        MemberCertification memberCertification= memberCertificationService.getById(id);
+        if(Func.isEmpty(memberCertification)){
+            return R.fail("审核信息不存在");
+        }
+
+        //审核状态1审核中,2审核通过，3审核不通过
+        Member cl=memberService.getById(memberCertification.getMemberId());
+        if(Func.isEmpty(cl)){
+            return R.fail("用户不存在");
+        }
+        //通过
+        if(Func.equals(auditStatus,2)){
+            cl.setCertificationLv(memberCertification.getLevel());
+            memberCertification.setAuditStatus(auditStatus);
+            memberCertification.setAuditTime(new Date());
+            memberService.updateById(cl);
+        }
+        //不通过
+        if(Func.equals(auditStatus,3)){
+            memberCertification.setAuditStatus(auditStatus);
+            memberCertification.setNopassnotice(nopassnotice);
+            memberCertification.setAuditTime(new Date());
+        }
+        bladeRedis.set(cl.getOpenid(),cl);
+        return R.status(memberCertificationService.updateById(memberCertification));
     }
 
 }

@@ -17,6 +17,7 @@
 package org.springblade.car.wx.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -63,6 +64,7 @@ import java.util.*;
 @AllArgsConstructor
 @RequestMapping("/second-hand-car/wx/pay")
 @Api(value = "微信-支付接口", tags = "v2微信-支付接口")
+@ApiSort(1005)
 public class WxPayController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;

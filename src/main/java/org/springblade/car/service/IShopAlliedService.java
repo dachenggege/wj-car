@@ -29,16 +29,10 @@ import org.springblade.car.vo.ShopVO;
  * @author BladeX
  * @since 2021-08-26
  */
-public interface IShopCollectService extends IService<ShopAllied> {
+public interface IShopAlliedService extends IService<ShopAllied> {
 
-	/**
-	 * 自定义分页
-	 *
-	 * @param page
-	 * @param shopCollect
-	 * @return
-	 */
-	IPage<ShopVO> selectShopCollectPage(IPage<ShopVO> page, ShopAlliedVO shopCollect);
-	IPage<ShopAlliedDTO> selectShopCollectAcceptPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
-	ShopAllied selectShopCollect(ShopAllied shopAllied);
+	IPage<ShopAlliedDTO> hadAlliedShopPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
+	IPage<ShopAlliedDTO> applyAlliedShopPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
+	IPage<ShopAlliedDTO> selectShopAlliedPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
+	//ShopAllied selectShopCollect(ShopAllied shopAllied);
 }

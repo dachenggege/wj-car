@@ -28,15 +28,12 @@ import lombok.Data;
  * @since 2021-08-26
  */
 @Data
-public class ShopAlliedDTO {
+public class SelectShopAlliedDTO {
 
 
-	@ApiModelProperty(value = "结盟id")
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long id;
 	@ApiModelProperty(value = "门店id")
 	@JsonSerialize(using = ToStringSerializer.class)
-	private Long shopId;
+	private Long id;
 	@ApiModelProperty(value = "门店名称")
 	private String shopName;
 
@@ -46,11 +43,7 @@ public class ShopAlliedDTO {
 	@ApiModelProperty(value = "店主")
 	private String shopMember;
 
-	@ApiModelProperty(value = "申请者id")
-	private Long applyMemberId;
 
-	@ApiModelProperty(value = "联盟门店id")
-	private Long alliedShopId;
 	@ApiModelProperty(value = "申请0,1已接受,2取消")
 	private int alliedStatus;
 

@@ -18,6 +18,7 @@ package org.springblade.car.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springblade.car.Req.MemberCertificationReq;
+import org.springblade.car.dto.MemberCertificationDTO;
 import org.springblade.car.entity.MemberCertification;
 import org.springblade.car.vo.MemberCertificationVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -40,6 +41,7 @@ public interface MemberCertificationMapper extends BaseMapper<MemberCertificatio
 	 * @param member
 	 * @return
 	 */
-	List<MemberCertificationVO> selectMemberCertificationPage(IPage page,@Param("member") MemberCertificationReq member);
+	List<MemberCertificationDTO> selectMemberCertificationPage(IPage page, @Param("member") MemberCertificationReq member);
+	MemberCertificationDTO getAuthenticationDetail(@Param("id") Long id);
 
 }

@@ -33,16 +33,8 @@ import java.util.List;
  * @since 2021-08-26
  */
 public interface ShopAlliedMapper extends BaseMapper<ShopAllied> {
-
-	/**
-	 * 自定义分页
-	 *
-	 * @param page
-	 * @param shopCollect
-	 * @return
-	 */
-	List<ShopVO> selectShopCollectPage(IPage page, @Param("shopCollect") ShopAlliedVO shopCollect);
-	List<ShopAlliedDTO> selectShopCollectAcceptPage(IPage page, @Param("shopCollect") ShopAlliedDTO shopCollect);
-	ShopAllied selectShopCollect(@Param("shopCollect") ShopAllied shopAllied);
+	List<ShopAlliedDTO> hadAlliedShopPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
+	List<ShopAlliedDTO> applyAlliedShopPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
+	List<ShopAlliedDTO> selectShopAlliedPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
 
 }

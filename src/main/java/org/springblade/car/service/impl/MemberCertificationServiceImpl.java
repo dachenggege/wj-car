@@ -17,6 +17,7 @@
 package org.springblade.car.service.impl;
 
 import org.springblade.car.Req.MemberCertificationReq;
+import org.springblade.car.dto.MemberCertificationDTO;
 import org.springblade.car.entity.MemberCertification;
 import org.springblade.car.vo.MemberCertificationVO;
 import org.springblade.car.mapper.MemberCertificationMapper;
@@ -35,8 +36,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 public class MemberCertificationServiceImpl extends ServiceImpl<MemberCertificationMapper, MemberCertification> implements IMemberCertificationService {
 
 	@Override
-	public IPage<MemberCertificationVO> selectMemberCertificationPage(IPage<MemberCertificationVO> page, MemberCertificationReq authentication) {
+	public IPage<MemberCertificationDTO> selectMemberCertificationPage(IPage<MemberCertificationDTO> page, MemberCertificationReq authentication) {
 		return page.setRecords(baseMapper.selectMemberCertificationPage(page, authentication));
 	}
-
+	public MemberCertificationDTO getAuthenticationDetail(Long id){
+		return baseMapper.getAuthenticationDetail(id);
+	}
 }

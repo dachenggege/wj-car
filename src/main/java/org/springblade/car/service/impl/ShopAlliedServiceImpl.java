@@ -20,7 +20,7 @@ import org.springblade.car.dto.ShopAlliedDTO;
 import org.springblade.car.entity.ShopAllied;
 import org.springblade.car.vo.ShopAlliedVO;
 import org.springblade.car.mapper.ShopAlliedMapper;
-import org.springblade.car.service.IShopCollectService;
+import org.springblade.car.service.IShopAlliedService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.car.vo.ShopVO;
 import org.springframework.stereotype.Service;
@@ -33,17 +33,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @since 2021-08-26
  */
 @Service
-public class ShopCollectServiceImpl extends ServiceImpl<ShopAlliedMapper, ShopAllied> implements IShopCollectService {
+public class ShopAlliedServiceImpl extends ServiceImpl<ShopAlliedMapper, ShopAllied> implements IShopAlliedService {
 
-	@Override
-	public IPage<ShopVO> selectShopCollectPage(IPage<ShopVO> page, ShopAlliedVO shopCollect) {
-		return page.setRecords(baseMapper.selectShopCollectPage(page, shopCollect));
+	public IPage<ShopAlliedDTO> hadAlliedShopPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect) {
+		return page.setRecords(baseMapper.hadAlliedShopPage(page, shopCollect));
 	}
-	public IPage<ShopAlliedDTO> selectShopCollectAcceptPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect) {
-		return page.setRecords(baseMapper.selectShopCollectAcceptPage(page, shopCollect));
+	public IPage<ShopAlliedDTO> applyAlliedShopPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect) {
+		return page.setRecords(baseMapper.applyAlliedShopPage(page, shopCollect));
 	}
-	public ShopAllied selectShopCollect(ShopAllied shopAllied){
-		return baseMapper.selectShopCollect(shopAllied);
+	public IPage<ShopAlliedDTO> selectShopAlliedPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect) {
+		return page.setRecords(baseMapper.selectShopAlliedPage(page, shopCollect));
 	}
 
 }

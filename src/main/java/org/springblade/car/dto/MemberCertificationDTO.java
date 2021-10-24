@@ -16,6 +16,7 @@
  */
 package org.springblade.car.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springblade.car.entity.MemberCertification;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,53 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MemberCertificationDTO extends MemberCertification {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 用户个人资料填写的省份
+	 */
+	@ApiModelProperty(value = "用户个人资料填写的省份")
+	private String province;
+	/**
+	 * 省
+	 */
+	@ApiModelProperty(value = "省")
+	private String provinceName;
+	/**
+	 * 用户个人资料填写的城市
+	 */
+	@ApiModelProperty(value = "用户个人资料填写的城市")
+	private String city;
+	/**
+	 * 市
+	 */
+	@ApiModelProperty(value = "市")
+	private String cityName;
+	/**
+	 * 区县
+	 */
+	@ApiModelProperty(value = "区县")
+	private String county;
+	/**
+	 * 区县
+	 */
+	@ApiModelProperty(value = "区县")
+	private String countyName;
+	/**
+	 * 手机号码
+	 */
+	@ApiModelProperty(value = "手机号码")
+	private String phone;
+	/**
+	 * 车行名称
+	 */
+	@ApiModelProperty(value = "车行名称")
+	private String carDealer;
+	/**
+	 * 车行地址
+	 */
+	@ApiModelProperty(value = "车行地址")
+	private String dealerAddress;
+
 
 
 }

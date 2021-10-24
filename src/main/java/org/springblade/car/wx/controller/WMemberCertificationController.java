@@ -23,9 +23,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import org.springblade.car.entity.Member;
 import org.springblade.car.entity.MemberCertification;
 import org.springblade.car.service.IMemberCertificationService;
 import org.springblade.car.vo.MemberCertificationVO;
+import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -33,6 +35,7 @@ import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -47,7 +50,8 @@ import javax.validation.Valid;
 @Api(value = "", tags = "v2微信-会员认证接口")
 @ApiSort(1003)
 public class WMemberCertificationController extends BladeController {
-
+	private HttpServletRequest request;
+	private WMemberFactory wMemberFactory;
 	private final IMemberCertificationService memberCertificationService;
 
 	/**
@@ -68,9 +72,25 @@ public class WMemberCertificationController extends BladeController {
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "新增或修改", notes = "传入authentication")
 	public R submit(@Valid @RequestBody MemberCertification memberCertification) {
-		//高级认证需要支付完成相对应的支付
-		if(Func.equals(memberCertification.getLevel(),2)){
-			
+		Member cl = wMemberFactory.getMember(request);
+
+		//游客认证 不能高级认证
+		if(Func.equals(memberCertification.getRoletype(),1)){
+			if(memberCertification.getLevel()>1){
+				return fail("游客要成为会员或商家才能高级认证哦");
+			}
+		}
+		//个人认证 高级认证需要支付完成相对应的支付
+		if(Func.equals(memberCertification.getRoletype(),2) && Func.equals(memberCertification.getLevel(),2)){
+			if(cl.getMemberLv()<1){
+				return fail("个人高级认证需要升级为会员哦");
+			}
+		}
+		//商家认证 高级认证需要支付完成相对应的支付
+		if(Func.equals(memberCertification.getRoletype(),3) && Func.equals(memberCertification.getLevel(),2)){
+			if(cl.getMemberLv()<2){
+				return fail("商家高级认证需要升级为商家会员哦");
+			}
 		}
 		return R.status(memberCertificationService.saveOrUpdate(memberCertification));
 	}

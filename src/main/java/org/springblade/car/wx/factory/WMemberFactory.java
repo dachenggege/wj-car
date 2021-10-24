@@ -47,6 +47,7 @@ public class WMemberFactory {
 		Member client = new Member();
 		client.setOpenid(openid);
 		 cl = memberService.getOne(Condition.getQueryWrapper(client));
+			bladeRedis.set(cl.getOpenid(),cl);
 		}
 		if (Func.isEmpty(cl)) {
 			throw new ServiceException("为获取到用户信息");

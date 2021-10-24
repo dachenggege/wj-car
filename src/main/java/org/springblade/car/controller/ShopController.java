@@ -23,6 +23,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
+import org.springblade.car.Req.ShopReq;
 import org.springblade.car.dto.ShopCarReq;
 import org.springblade.car.dto.ShopDTO;
 import org.springblade.car.entity.Member;
@@ -65,7 +66,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/shop")
-@Api(value = "用户门店表", tags = "后台门店管理-门店列表")
+@Api(value = "用户门店表", tags = "v2后台门店管理-门店列表")
 public class ShopController extends BladeController {
 
 	private final IShopService shopService;
@@ -104,12 +105,12 @@ public class ShopController extends BladeController {
 	@GetMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "门店分页", notes = "传入shop")
-	public R<IPage<ShopVO>> page(ShopVO shop, Query query) {
+	public R<IPage<ShopDTO>> page(ShopReq shop, Query query) {
 
 //		MemberVO member=userAreaFactory.getMemberVO();
 //		shop.setAreas(member.getAreas());
 //		shop.setNoareas(member.getNoareas());
-		IPage<ShopVO> pages = shopService.selectShopPage(Condition.getPage(query), shop);
+		IPage<ShopDTO> pages = shopService.selectShopPage(Condition.getPage(query), shop);
 		return R.data(pages);
 	}
 

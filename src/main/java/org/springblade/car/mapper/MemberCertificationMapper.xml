@@ -21,8 +21,10 @@
     </resultMap>
 
 
-    <select id="selectMemberCertificationPage" resultMap="memberCertificationResultMap">
-        select c.* from (
+    <select id="selectMemberCertificationPage" resultType="org.springblade.car.dto.MemberCertificationDTO">
+        select t.province, t.province_name,t.city,t.city_name,t.county,t.county_name,
+        t.phone,t.car_dealer,t.dealer_address,
+        c.* from (
         SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
         <if test="member.userId != null">
             and u.user_id=#{member.userId}
@@ -94,6 +96,13 @@
             ${member.mm}
         </if>
 
+    </select>
+    <select id="getAuthenticationDetail" resultType="org.springblade.car.dto.MemberCertificationDTO"
+            parameterType="java.lang.Long">
+         select t.province, t.province_name,t.city,t.city_name,t.county,t.county_name,
+        t.phone,t.car_dealer,t.dealer_address,
+        c.* from t_member t ,t_member_certification c where t.id=c.member_id
+        and c.id=${id}
     </select>
 
 </mapper>
