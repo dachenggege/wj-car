@@ -16,6 +16,7 @@
  */
 package org.springblade.car.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springblade.car.entity.MemberRights;
 import org.springblade.car.vo.MemberRightsVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -37,6 +38,7 @@ public interface MemberRightsMapper extends BaseMapper<MemberRights> {
 	 * @param memberRights
 	 * @return
 	 */
-	List<MemberRightsVO> selectMemberRightsPage(IPage page, MemberRightsVO memberRights);
+	List<MemberRightsVO> selectMemberRightsPage(IPage page, @Param("memberRights") MemberRightsVO memberRights);
+	List<MemberRightsVO> selectMemberRightsPage(@Param("memberRights") MemberRightsVO memberRights);
 
 }

@@ -31,6 +31,7 @@ import org.springblade.car.service.ICommunityWxService;
 import org.springblade.car.service.IMemberRightsService;
 import org.springblade.car.service.IMemberService;
 import org.springblade.car.service.IPayOrderService;
+import org.springblade.car.vo.MemberRightsVO;
 import org.springblade.car.wx.dto.MemberRightsPayRep;
 import org.springblade.car.wx.dto.OrderPayReq;
 import org.springblade.car.wx.factory.WMemberFactory;
@@ -86,9 +87,10 @@ public class WxPayController extends BladeController {
 			return R.fail("请先注册会员，才能充值哦");
 		}
 
-		MemberRights memberRights=new MemberRights();
+		MemberRightsVO memberRights=new MemberRightsVO();
 		memberRights.setRoletype(roteType);
-		List<MemberRights> list=memberRightsService.list(Condition.getQueryWrapper(memberRights));
+		memberRights.setStatus(1);
+		List<MemberRightsVO> list=memberRightsService.selectMemberRightsList(memberRights);
 		List<MemberRightsPayRep> payReqs=new ArrayList<>();
 		for(MemberRights rights:list){
 			MemberRightsPayRep payReq=new MemberRightsPayRep();

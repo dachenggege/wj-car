@@ -33,6 +33,8 @@ public class WMemberFactory {
 	private ICarsService carsService;
 	@Autowired
 	private  IMemberCertificationService memberCertificationService;
+	@Autowired
+	private  IShopService shopService;
 
 
 	public MemberDTO getMember(HttpServletRequest request) {
@@ -88,10 +90,17 @@ public class WMemberFactory {
 		myShopCar.setMemberId(cl.getId());
 		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
 
+		//门店数
+		Shop queryshop =new  Shop();
+		queryshop.setMemberId(cl.getId());
+		Integer shopCount= shopService.count(Condition.getQueryWrapper(queryshop));
+
+
 		memberDTO.setFansNum(fansNum);
 		memberDTO.setFocusNum(focusNum);
 		memberDTO.setMyCarNum(mycarNum);
 		memberDTO.setMyShopCarNum(myShopcarNum);
+		memberDTO.setMyShopNum(shopCount);
 		memberDTO.setRights(rights);
 		return memberDTO;
 	}

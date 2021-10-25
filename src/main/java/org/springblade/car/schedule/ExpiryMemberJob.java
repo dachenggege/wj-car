@@ -6,6 +6,7 @@ import org.springblade.car.enums.PayStatus;
 import org.springblade.car.enums.RoleType;
 import org.springblade.car.service.IMemberService;
 import org.springblade.car.vo.MemberVO;
+import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class ExpiryMemberJob {
 
 	@Autowired
 	private IMemberService memberService;
+	@Autowired
+	private BladeRedis bladeRedis;
 
 
 	//到期会员处理
@@ -39,9 +42,10 @@ public class ExpiryMemberJob {
 			Member entity=new Member();
 			for(Member member:memberList){
 				BeanUtils.copyProperties(member,entity);
-				entity.setMemberLv(1);//到期会员
+				entity.setMemberLv(0);//到期会员
 				entity.setIsExpiry(true);
 				list.add(entity);
+				bladeRedis.set(entity.getOpenid(),entity);
 			}
 			memberService.updateBatchById(list);
 		}

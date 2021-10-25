@@ -29,6 +29,7 @@ import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,7 @@ public class MemberController extends BladeController {
 
 	private final IMemberService memberService;
 	private WMemberFactory WMemberFactory;
+	private BladeRedis bladeRedis;
 	/**
 	 * 详情
 	 */
@@ -82,6 +84,7 @@ public class MemberController extends BladeController {
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "修改用户", notes = "传入member")
 	public R update(@Valid @RequestBody Member member) {
+		bladeRedis.set(member.getOpenid(),member);
 		return R.status(memberService.updateById(member));
 	}
 

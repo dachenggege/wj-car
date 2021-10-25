@@ -31,6 +31,7 @@ import org.springblade.car.service.IMemberService;
 import org.springblade.car.service.IPayOrderService;
 import org.springblade.car.wx.pay.WXXmlUtil;
 import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
@@ -62,7 +63,7 @@ import java.util.Map;
 public class WxPayBaskController extends BladeController {
 	private IPayOrderService PayOrderService;
 	private IMemberService memberService;
-	private final IDictService dictService;
+	private BladeRedis bladeRedis;
 	private final IMemberRightsService memberRightsService;
 
 	//状态1待支付，2支付成功，3支付失败
@@ -229,18 +230,19 @@ public class WxPayBaskController extends BladeController {
 		if(Func.equals(order.getType(),1)){
 			Date ExpiryDate= DateUtils.addYears(new Date(),1);
 			cl.setExpiryDate(ExpiryDate);
-			cl.setIsExpiry(true);
-			cl.setMemberLv(order.getRightsId());
+			cl.setIsExpiry(false);
+			cl.setMemberLv(order.getMemberLv());
 		}
 		//续费
 		if(Func.equals(order.getType(),2)){
 			Date ExpiryDate= DateUtils.addYears(cl.getExpiryDate(),1);
 			cl.setExpiryDate(ExpiryDate);
-			cl.setIsExpiry(true);
-			cl.setMemberLv(order.getRightsId());
+			cl.setIsExpiry(false);
+			cl.setMemberLv(order.getMemberLv());
 		}
 
 		res=memberService.updateById(cl);
+		bladeRedis.set(cl.getOpenid(),cl);
 		return res;
 	}
 

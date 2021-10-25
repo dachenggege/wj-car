@@ -21,6 +21,8 @@ import org.springblade.car.vo.MemberRightsVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  * 会员体系权益表 服务类
  *
@@ -37,5 +39,5 @@ public interface IMemberRightsService extends IService<MemberRights> {
 	 * @return
 	 */
 	IPage<MemberRightsVO> selectMemberRightsPage(IPage<MemberRightsVO> page, MemberRightsVO memberRights);
-
+	public List<MemberRightsVO> selectMemberRightsList(MemberRightsVO memberRights);
 }

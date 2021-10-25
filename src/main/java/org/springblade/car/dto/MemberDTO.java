@@ -47,4 +47,10 @@ public class MemberDTO extends Member {
 
 	@ApiModelProperty(value = "门店车源数量")
 	private Integer myShopCarNum;
+
+	@ApiModelProperty(value = "我创建的门店数")
+	private Integer myShopNum;
+
+	@ApiModelProperty(value = "我加入的门店数")
+	private Integer myJoinShopNum;
 }

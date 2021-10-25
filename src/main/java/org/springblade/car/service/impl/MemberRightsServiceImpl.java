@@ -24,6 +24,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  * 会员体系权益表 服务实现类
  *
@@ -37,5 +39,7 @@ public class MemberRightsServiceImpl extends ServiceImpl<MemberRightsMapper, Mem
 	public IPage<MemberRightsVO> selectMemberRightsPage(IPage<MemberRightsVO> page, MemberRightsVO memberRights) {
 		return page.setRecords(baseMapper.selectMemberRightsPage(page, memberRights));
 	}
-
+	public List<MemberRightsVO> selectMemberRightsList(MemberRightsVO memberRights) {
+		return baseMapper.selectMemberRightsPage(memberRights);
+	}
 }

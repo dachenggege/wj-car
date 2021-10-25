@@ -172,8 +172,8 @@
         <if test="memberId != null">
             and s.staff_id=#{memberId}
         </if>
-
     </select>
+
     <select id="getShopDetail" resultType="org.springblade.car.dto.ShopDTO"
             parameterType="Long">
         SELECT t.*,

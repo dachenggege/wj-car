@@ -77,7 +77,15 @@ public class WShopController extends BladeController {
 	@ApiOperation(value = "新增门店", notes = "传入shop")
 	@Transactional
 	public R saveShop(@Valid @RequestBody Shop shop) {
-		Member cl = wMemberFactory.getMember(request);
+		MemberDTO cl = wMemberFactory.getMember(request);
+		//判断是否有创建门店的权限
+		MemberRights  rights=  cl.getRights();
+		if(!rights.getIsCreateShop()){
+			return R.fail("对不起您没有创建门店的权限");
+		}
+		if(rights.getCreateShopNum()<=cl.getMyShopNum()){
+			return R.fail("对不起您不能创建更多的门店了");
+		}
 		shop.setId(NumberUtil.getRandomNumber(6,8));
 		shop.setAuditStatus(AuditStatus.AUDITING.id);
 		shop.setPhone1(cl.getPhone());

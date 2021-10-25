@@ -37,7 +37,20 @@
 
 
     <select id="selectMemberRightsPage" resultMap="memberRightsResultMap">
-        select * from t_member_rights where is_deleted = 0
+        select * from t_member_rights t where is_deleted = 0
+        <if test="memberRights.id != null">
+            and t.id=#{memberRights.id}
+        </if>
+        <if test="memberRights.levelName != null">
+            and t.level_name=#{memberRights.levelName}
+        </if>
+        <if test="memberRights.roletype != null">
+            and t.roletype=#{memberRights.roletype}
+        </if>
+        <if test="memberRights.status != null">
+            and t.status=#{memberRights.status}
+        </if>
+        ORDER BY t.roletype ,t.level
     </select>
 
 </mapper>
