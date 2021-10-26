@@ -125,6 +125,7 @@ public class WMemberFactory {
 		MemberCertification memberCertification=new MemberCertification();
 		memberCertification.setMemberId(cl.getId());
 		memberCertification.setRoletype(cl.getRoletype());
+		memberCertification.setAuditStatus(2);
 		MemberCertification certification=memberCertificationService.getOne(Condition.getQueryWrapper(memberCertification));
 		if(Func.isNotEmpty(certification)){
 			memberDTO.setCertificationLv(certification.getLevel());
