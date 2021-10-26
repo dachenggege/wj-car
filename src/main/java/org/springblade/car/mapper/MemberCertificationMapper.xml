@@ -37,7 +37,7 @@
             and c.real_name=#{member.realName}
         </if>
         <if test="member.auditStatus != null">
-            and t.audit_status=#{member.auditStatus}
+            and c.audit_status=#{member.auditStatus}
         </if>
         <if test="member.phone != null and member.phone !=''">
             and t.phone=#{member.phone}
