@@ -49,4 +49,6 @@ public interface CarsMapper extends BaseMapper<Cars> {
 
 	//刷新上新时间
 	Boolean updateCarListTime(@Param("id") Long id);
+	Boolean downShopCar(@Param("id") Long id);
+	Boolean upShopCar(@Param("id") Long id);
 }

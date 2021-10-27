@@ -134,6 +134,9 @@ public class WMemberController extends BladeController {
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "注册会员")
 	public R<MemberDTO> memberRegist(@Valid MemberRegist regist) {
+		if(Func.isEmpty(regist.getName())){
+			return R.fail("真实姓名不能为空");
+		}
 		Member cl = wMemberFactory.getMember(request);
 		cl.setProvince(regist.getProvince());
 		cl.setProvinceName(regist.getProvinceName());

@@ -18,6 +18,7 @@ package org.springblade.car.service.impl;
 
 import org.springblade.car.dto.ShopMemberDTO;
 import org.springblade.car.dto.ShopMemberReq;
+import org.springblade.car.dto.ShopMemberRoleRightDTO;
 import org.springblade.car.entity.ShopMember;
 import org.springblade.car.entity.ShopMemberRoleRight;
 import org.springblade.car.vo.MemberVO;
@@ -46,5 +47,7 @@ public class ShopMemberServiceImpl extends ServiceImpl<ShopMemberMapper, ShopMem
 	public List<ShopMemberRoleRight> selectShopMemberRoleRight(){
 		return baseMapper.selectShopMemberRoleRight();
 	}
-
+	public ShopMemberRoleRightDTO getShopMemberRight(Long memberId){
+		return baseMapper.getShopMemberRight(memberId);
+	}
 }

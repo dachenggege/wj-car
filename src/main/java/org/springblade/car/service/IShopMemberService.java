@@ -18,6 +18,7 @@ package org.springblade.car.service;
 
 import org.springblade.car.dto.ShopMemberDTO;
 import org.springblade.car.dto.ShopMemberReq;
+import org.springblade.car.dto.ShopMemberRoleRightDTO;
 import org.springblade.car.entity.ShopMember;
 import org.springblade.car.entity.ShopMemberRoleRight;
 import org.springblade.car.vo.MemberVO;
@@ -45,4 +46,5 @@ public interface IShopMemberService extends IService<ShopMember> {
 	IPage<ShopMemberDTO> selectShopMemberPage(IPage<ShopMemberDTO> page, ShopMemberReq shopMember);
 
 	List<ShopMemberRoleRight> selectShopMemberRoleRight();
+	ShopMemberRoleRightDTO getShopMemberRight(Long memberId);
 }

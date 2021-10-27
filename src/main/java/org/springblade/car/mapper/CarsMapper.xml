@@ -67,6 +67,12 @@
     <update id="updateCarListTime" parameterType="java.lang.Long">
          UPDATE t_cars SET listtime= DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') where id=#{id}
     </update>
+    <update id="upShopCar" parameterType="java.lang.Long">
+         UPDATE t_cars SET status=1 where id=#{id}
+    </update>
+    <update id="downShopCar" parameterType="java.lang.Long">
+         UPDATE t_cars SET status=0 where id=#{id}
+    </update>
 
 
     <select id="selectCarsCount" resultType="int">

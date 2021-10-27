@@ -23,6 +23,7 @@ import org.springblade.car.vo.CarsVO;
 import org.springblade.car.mapper.CarsMapper;
 import org.springblade.car.service.ICarsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
@@ -61,5 +62,11 @@ public class CarsServiceImpl extends ServiceImpl<CarsMapper, Cars> implements IC
 	//刷新上新时间
 	public Boolean updateCarListTime(Long id){
 		return baseMapper.updateCarListTime(id);
+	}
+	public Boolean upDownShopCar(Long id,Integer status){
+		if(Func.equals(status,0)){
+			return baseMapper.downShopCar(id);
+		}
+		return baseMapper.upShopCar(id);
 	}
 }

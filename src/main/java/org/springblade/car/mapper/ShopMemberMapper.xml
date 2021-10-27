@@ -20,7 +20,8 @@
 
     <select id="selectShopMemberPage" resultType="org.springblade.car.dto.ShopMemberDTO">
         select roletype,session_key,openid,nickname,sex,province,city,county,headimgurl,unionid,pure_phone_number,NAME,phone,isshop,last_login
-        ,m.id as id ,m.member_id as memberId ,m.shop_id as shopId from t_member t,t_shop_member m where t.is_deleted = 0 and m.is_deleted=0
+        ,m.id as id ,m.member_id as memberId ,m.shop_id as shopId
+        from t_member t,t_shop_member m where t.is_deleted = 0 and m.is_deleted=0
         and t.id=m.member_id
         <if test="member.shopId != null and member.shopId !=''">
             and m.shop_id=#{member.shopId}
@@ -48,6 +49,14 @@
     </select>
 
     <select id="selectShopMemberRoleRight" resultType="org.springblade.car.entity.ShopMemberRoleRight">
-        select * from t_shop_member_role where is_deleted = 0
+        select * from t_shop_member_role where is_deleted = 0 and id !=1
+    </select>
+    <select id="getShopMemberRight" resultType="org.springblade.car.dto.ShopMemberRoleRightDTO"
+            parameterType="java.lang.Long">
+        select r.*,t.id as memberId
+        from t_shop_member t,t_shop_member_role s
+        where t.is_deleted=0 and s.is_deleted=0
+        and t.staffRole=s.id
+        and t.id=#{memberId}
     </select>
 </mapper>

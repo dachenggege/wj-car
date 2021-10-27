@@ -52,5 +52,8 @@ public interface ICarsService extends IService<Cars> {
 
 	//刷新上新时间
 	Boolean updateCarListTime(Long id);
+	//上架下架车源
+	Boolean upDownShopCar(Long id,Integer status);
+
 
 }

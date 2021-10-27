@@ -37,5 +37,35 @@ public class ShopMemberRoleRightDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 
+	@ApiModelProperty(value = "用户ID")
+	private Long memberId;
+	/**
+	 * 主键id
+	 */
+	@ApiModelProperty(value = "主键角色id")
+	private Long id;
+
+	@ApiModelProperty(value = "角色名称")
+	private String roleName;
+
+	@ApiModelProperty(value = "是否可添加删除店员")
+	private Boolean isEditStaff;
+	@ApiModelProperty(value = "是否可编辑门店号码")
+	private Boolean isEditShopPhone;
+	@ApiModelProperty(value = "是否可发布车源")
+	private Boolean isPublishCar;
+	@ApiModelProperty(value = "是否可编辑车源")
+	private Boolean isEditCar;
+	@ApiModelProperty(value = "是否可下架车源")
+	private Boolean isDownCar;
+	@ApiModelProperty(value = "是否可查看成本价")
+	private Boolean isLookPcostPrice;
+	@ApiModelProperty(value = "是否可查看车源咨询电话记录")
+	private Boolean isLookCarCall;
+	@ApiModelProperty(value = "是否可查看车源浏览记录")
+	private Boolean isLookCarBrowse;
+	@ApiModelProperty(value = "是否可查找联盟车源")
+	private Boolean isLookAlliedCar;
+
 
 }
