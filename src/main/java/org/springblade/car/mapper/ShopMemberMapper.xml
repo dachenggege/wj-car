@@ -8,14 +8,6 @@
         <result column="shop_id" property="shopId"/>
         <result column="staff_id" property="staffId"/>
         <result column="staff_role" property="staffRole"/>
-        <result column="is_edit_staff" property="isEditStaff"/>
-        <result column="is_publish_car" property="isPublishCar"/>
-        <result column="is_edit_car" property="isEditCar"/>
-        <result column="is_down_car" property="isDownCar"/>
-        <result column="is_look_pcost_price" property="isLookPcostPrice"/>
-        <result column="is_look_car_call" property="isLookCarCall"/>
-        <result column="is_look_car_browse" property="isLookCarBrowse"/>
-        <result column="is_look_allied_car" property="isLookAlliedCar"/>
 
         <result column="create_user" property="createUser"/>
         <result column="create_dept" property="createDept"/>
@@ -53,5 +45,9 @@
             and t.phone=#{member.phone}
         </if>
 
+    </select>
+
+    <select id="selectShopMemberRoleRight" resultType="org.springblade.car.entity.ShopMemberRoleRight">
+        select * from t_shop_member_role where is_deleted = 0
     </select>
 </mapper>

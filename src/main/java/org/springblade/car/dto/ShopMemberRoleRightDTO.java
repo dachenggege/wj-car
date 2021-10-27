@@ -14,35 +14,28 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.car.service;
+package org.springblade.car.dto;
 
-import org.springblade.car.dto.ShopMemberDTO;
-import org.springblade.car.dto.ShopMemberReq;
-import org.springblade.car.entity.ShopMember;
-import org.springblade.car.entity.ShopMemberRoleRight;
-import org.springblade.car.vo.MemberVO;
-import org.springblade.car.vo.ShopMemberVO;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
-import java.util.List;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
- * 门店成员表 服务类
+ * 门店成员表实体类
  *
  * @author BladeX
  * @since 2021-08-26
  */
-public interface IShopMemberService extends IService<ShopMember> {
+@Data
+@ApiModel(value = "门店成员及权益限", description = "门店成员及权益限")
+public class ShopMemberRoleRightDTO implements Serializable {
 
-	/**
-	 * 自定义分页
-	 *
-	 * @param page
-	 * @param shopMember
-	 * @return
-	 */
-	IPage<ShopMemberDTO> selectShopMemberPage(IPage<ShopMemberDTO> page, ShopMemberReq shopMember);
+	private static final long serialVersionUID = 1L;
 
-	List<ShopMemberRoleRight> selectShopMemberRoleRight();
+
+
 }

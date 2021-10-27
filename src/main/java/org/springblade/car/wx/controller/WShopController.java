@@ -22,10 +22,8 @@ import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
-import org.flowable.common.engine.impl.de.odysseus.el.misc.BooleanOperations;
-import org.springblade.car.Req.ShopReq;
+import org.springblade.car.Req.ShopPhoneReq;
 import org.springblade.car.dto.*;
 import org.springblade.car.entity.*;
 import org.springblade.car.enums.AuditStatus;
@@ -95,13 +93,6 @@ public class WShopController extends BladeController {
 		member.setStaffId(cl.getId());
 		member.setStaffRole(1);
 		member.setShopId(shop.getId());
-		member.setIsPublishCar(true);
-		member.setIsEditCar(true);
-		member.setIsDownCar(true);
-		member.setIsLookAlliedCar(true);
-		member.setIsLookCarBrowse(true);
-		member.setIsLookCarCall(true);
-		member.setIsLookPcostPrice(true);
 		shopMemberService.save(member);
 
 		return R.status(shopService.save(shop));
@@ -129,14 +120,26 @@ public class WShopController extends BladeController {
 		return R.data(pages);
 	}
 
-	/**
-	 * 修改 用户门店表
-	 */
-	@PostMapping("/update")
+
+	@PostMapping("/updateShopPhone")
 	@ApiOperationSupport(order = 4)
-	@ApiOperation(value = "修改门店", notes = "传入shop")
-	public R update(@Valid @RequestBody Shop shop) {
-		shop.setAuditStatus(AuditStatus.AUDITING.id);
+	@ApiOperation(value = "修改门店手机")
+	public R update(@Valid @RequestBody ShopPhoneReq shopPhoneReq) {
+		Member cl = wMemberFactory.getMember(request);
+		Shop shop= shopService.getById(shopPhoneReq.getId());
+		if(Func.isNotEmpty(shop)){
+			if(!Func.equals(cl.getId(),shop.getMemberId())){
+				return R.fail("您没有权限删除门店");
+			}
+		}
+		if(Func.isEmpty(shop)){
+			return R.fail("门店不存在");
+		}
+		shop.setPhone1(shopPhoneReq.getPhone1());
+		shop.setPhone2(shopPhoneReq.getPhone2());
+		shop.setPhone3(shopPhoneReq.getPhone3());
+		shop.setPhone4(shopPhoneReq.getPhone4());
+		shop.setPhone5(shopPhoneReq.getPhone5());
 		return R.status(shopService.updateById(shop));
 	}
 
@@ -146,8 +149,15 @@ public class WShopController extends BladeController {
 	@PostMapping("/removeShop")
 	@ApiOperationSupport(order = 5)
 	@ApiOperation(value = "删除门店", notes = "传入ids")
-	public R removeShop(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status(shopService.removeByIds(Func.toLongList(ids)));
+	public R removeShop(@ApiParam(value = "主键集合", required = true) @RequestParam String id) {
+		Member cl = wMemberFactory.getMember(request);
+		Shop shop= shopService.getById(id);
+		if(Func.isNotEmpty(shop)){
+			if(!Func.equals(cl.getId(),shop.getMemberId())){
+				return R.fail("您没有权限删除门店");
+			}
+		}
+		return R.status(shopService.removeByIds(Func.toLongList(id)));
 	}
 
 	/**
@@ -156,10 +166,20 @@ public class WShopController extends BladeController {
 	@GetMapping("/shopMemberPage")
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "门店成员分页", notes = "传入shopMember对象")
-	public R<IPage<ShopMemberDTO>> page(ShopMemberReq shopMember, Query query) {
+	public R<IPage<ShopMemberDTO>> shopMemberPage(ShopMemberReq shopMember, Query query) {
 		IPage<ShopMemberDTO> pages = shopMemberService.selectShopMemberPage(Condition.getPage(query), shopMember);
 		return R.data(pages);
 	}
+
+
+	@GetMapping("/shopMemberRoleRight")
+	@ApiOperationSupport(order = 6)
+	@ApiOperation(value = "门店成员角色及权限")
+	public R<List<ShopMemberRoleRight>> shopMemberRight() {
+		List<ShopMemberRoleRight> shopMemberRight = shopMemberService.selectShopMemberRoleRight();
+		return R.data(shopMemberRight);
+	}
+
 
 	/**
 	 * 新增 门店成员表

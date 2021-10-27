@@ -20,6 +20,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springblade.car.dto.ShopMemberDTO;
 import org.springblade.car.dto.ShopMemberReq;
 import org.springblade.car.entity.ShopMember;
+import org.springblade.car.entity.ShopMemberRoleRight;
 import org.springblade.car.vo.MemberVO;
 import org.springblade.car.vo.ShopMemberVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -42,5 +43,5 @@ public interface ShopMemberMapper extends BaseMapper<ShopMember> {
 	 * @return
 	 */
 	List<ShopMemberDTO> selectShopMemberPage(IPage page, @Param("member") ShopMemberReq member);
-
+	List<ShopMemberRoleRight> selectShopMemberRoleRight();
 }
