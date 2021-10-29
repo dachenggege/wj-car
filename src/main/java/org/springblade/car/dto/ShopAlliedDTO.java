@@ -51,7 +51,7 @@ public class ShopAlliedDTO {
 
 	@ApiModelProperty(value = "联盟门店id")
 	private Long alliedShopId;
-	@ApiModelProperty(value = "申请0,1已接受,2取消")
+	@ApiModelProperty(value = "联盟状态0未申请，1已申请，2已结盟，3取消（拒绝）")
 	private int alliedStatus;
 
 	@ApiModelProperty(value = "门店车源数量")

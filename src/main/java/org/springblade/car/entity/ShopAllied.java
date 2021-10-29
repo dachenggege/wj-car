@@ -58,7 +58,7 @@ public class ShopAllied implements Serializable {
 	/**
 	* 是否收藏
 	*/
-		@ApiModelProperty(value = "申请0,1已接受,2取消")
+		@ApiModelProperty(value = "联盟状态0未申请，1已申请，2已结盟，3取消（拒绝）")
 		private int alliedStatus;
 	/**
 	* 创建人

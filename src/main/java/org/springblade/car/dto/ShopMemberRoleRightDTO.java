@@ -66,6 +66,8 @@ public class ShopMemberRoleRightDTO implements Serializable {
 	private Boolean isLookCarBrowse;
 	@ApiModelProperty(value = "是否可查找联盟车源")
 	private Boolean isLookAlliedCar;
+	@ApiModelProperty(value = "是否可申请取消门店联盟")
+	private Boolean isEditShopAllied;
 
 
 }

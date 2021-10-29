@@ -261,14 +261,14 @@ public class WShopController extends BladeController {
 	@ApiOperationSupport(order = 14)
 	@ApiOperation(value = "上架下架门店车源")
 	public R upDownShopCar(@ApiParam(value = "车源id", required = true) @RequestParam Long carId,
-						   @ApiParam(value = "车源id", required = true) @RequestParam Integer status) {
+						   @ApiParam(value = "状态", required = true) @RequestParam Integer status) {
 		Member cl = wMemberFactory.getMember(request);
 		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
 		if(Func.isEmpty(roleRightDTO)){
-			R.fail("您没有权限添下架门店车源哦");
+			R.fail("您没有权限操作哦");
 		}
 		if(!roleRightDTO.getIsDownCar()){
-			R.fail("您没有权限添下架门店车源哦");
+			R.fail("您没有权限操作哦");
 		}
 		return R.status(carsService.upDownShopCar(carId,status));
 	}
@@ -280,7 +280,6 @@ public class WShopController extends BladeController {
 													 Query query) {
 		ShopAlliedDTO shopAlliedDTO=new ShopAlliedDTO();
 		shopAlliedDTO.setShopId(shopId);
-		shopAlliedDTO.setAlliedStatus(1);
 		IPage<ShopAlliedDTO> pages = shopAlliedService.hadAlliedShopPage(Condition.getPage(query), shopAlliedDTO);
 		return R.data(pages);
 	}
@@ -292,7 +291,6 @@ public class WShopController extends BladeController {
 		//别人申请我的门店来结盟
 		ShopAlliedDTO shopAlliedDTO=new ShopAlliedDTO();
 		shopAlliedDTO.setAlliedShopId(shopId);
-		shopAlliedDTO.setAlliedStatus(0);
 		IPage<ShopAlliedDTO> pages = shopAlliedService.applyAlliedShopPage(Condition.getPage(query), shopAlliedDTO);
 		return R.data(pages);
 	}
@@ -300,27 +298,59 @@ public class WShopController extends BladeController {
 	 * 自定义分页 用户门店表
 	 */
 	@GetMapping("/selectShopAlliedPage")
-	@ApiOperationSupport(order = 3)
+	@ApiOperationSupport(order = 9003)
 	@ApiOperation(value = "门店结盟-查询门店分页", notes = "传入shop")
-	public R<IPage<ShopAlliedDTO>> selectShopAlliedPage(@ApiParam(value = "门店名称", required = true) @RequestParam String shopName, Query query) {
+	public R<IPage<ShopAlliedDTO>> selectShopAlliedPage(@ApiParam(value = "我的门店id", required = true) @RequestParam Long shopId,
+														@ApiParam(value = "门店名称", required = false) @RequestParam String shopName,
+														Query query) {
 		ShopAlliedDTO shopAlliedDTO=new ShopAlliedDTO();
+		shopAlliedDTO.setShopId(shopId);
 		shopAlliedDTO.setShopName(shopName);
 		IPage<ShopAlliedDTO> pages = shopAlliedService.selectShopAlliedPage(Condition.getPage(query), shopAlliedDTO);
 		return R.data(pages);
 	}
 
 	@PostMapping("/applyAllied")
-	@ApiOperationSupport(order = 9003)
-	@ApiOperation(value = "申请门店结盟", notes = "shopCollect")
+	@ApiOperationSupport(order = 9004)
+	@ApiOperation(value = "申请门店结盟", notes = "shopAllied")
 	public R applyAllied(@Valid @RequestBody ShopAllied shopAllied) {
 		Member cl = wMemberFactory.getMember(request);
+
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+		if(Func.isEmpty(roleRightDTO)){
+			R.fail("您没有权限申请门店结盟的权限哦");
+		}
+		if(!roleRightDTO.getIsEditShopAllied()){
+			R.fail("您没有权限申请门店结盟的权限哦");
+		}
+
+
 		shopAllied.setApplyMemberId(cl.getId());
 		Boolean res=shopAlliedService.save(shopAllied);
 		return R.status(res);
 	}
-
+	@GetMapping("/updateShopalliedStatus")
+	@ApiOperationSupport(order = 9005)
+	@ApiOperation(value = "修改门店结盟状态")
+	public R updateShopalliedStatus(@ApiParam(value = "结盟id", required = true) @RequestParam Long id,
+						   @ApiParam(value = "状态", required = true) @RequestParam Integer alliedStatus) {
+		Member cl = wMemberFactory.getMember(request);
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+		if(Func.isEmpty(roleRightDTO)){
+			R.fail("您没有权限操作哦");
+		}
+		if(!roleRightDTO.getIsEditShopAllied()){
+			R.fail("您没有权限操作哦");
+		}
+		ShopAllied shopAllied =shopAlliedService.getById(id);
+		if(Func.isEmpty(shopAllied)){
+			R.fail("结盟id不存在");
+		}
+		shopAllied.setAlliedStatus(alliedStatus);
+		return R.status(shopAlliedService.updateById(shopAllied));
+	}
 	@GetMapping("/shopCollectCarpage")
-	@ApiOperationSupport(order = 9004)
+	@ApiOperationSupport(order = 9006)
 	@ApiOperation(value = "联盟车源分页", notes = "传入shopCarReq")
 	public R<IPage<CarsVO>> shopCollectCarpage(ShopCarReq shopCarReq, Query query) {
 		Member cl = wMemberFactory.getMember(request);

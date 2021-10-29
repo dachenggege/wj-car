@@ -114,8 +114,8 @@ public class WHomePageController extends BladeController {
 	}
 
 	@GetMapping("/styleslist")
-	@ApiOperationSupport(order = 2)
-	@ApiOperation(value = "列表", notes = "传入styles")
+	@ApiOperationSupport(order = 5)
+	@ApiOperation(value = "车型列表", notes = "传入styles")
 	public R<List<Styles>> styleslist(Styles styles) {
 		List<Styles> pages = stylesService.list(Condition.getQueryWrapper(styles));
 		return R.data(pages);
@@ -125,7 +125,7 @@ public class WHomePageController extends BladeController {
 	 * 自定义分页 车源表
 	 */
 	@GetMapping("/carpage")
-	@ApiOperationSupport(order = 5)
+	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "车源分页", notes = "传入cars")
 	public R<IPage<CarsVO>> page(CarsVO cars, Query query) {
 		if(Func.isNotEmpty(cars.getSort())){
@@ -138,105 +138,4 @@ public class WHomePageController extends BladeController {
 		return R.data(pages);
 	}
 
-
-	/**
-	 * 新增 车源表
-	 */
-	@PostMapping("/saveCar")
-	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "发布车辆", notes = "传入cars")
-	public R saveCar(@Valid @RequestBody Cars cars) {
-		wVinServeFactory.isCheckVin(cars.getPvin());
-
-		Member cl = wMemberFactory.getMember(request);
-		cars.setAuditStatus(AuditStatus.AUDITING.id);
-		if(Func.isEmpty(cars.getPafprice())){
-			throw new ServiceException("零售价不能为空");
-		}
-		if(Func.isEmpty(cars.getPtradePrice())){
-			throw new ServiceException("批发价不能为空");
-		}
-		if(Func.isEmpty(cars.getPafprice())){
-			throw new ServiceException("内部价不能为空");
-		}
-
-		cars.setMemberId(cl.getId());
-		cars.setListtime(DateUtil.format(new Date(),DateUtil.PATTERN_DATETIME));
-		if(Func.isEmpty(cars.getId())) {
-			cars.setId(NumberUtil.getRandomNumber(1, 10));
-		}
-		else{
-			return R.status(carsService.updateById(cars));
-		}
-		return R.status(carsService.save(cars));
-	}
-
-	/**
-	 * 车源详情
-	 */
-	@GetMapping("/carDetail")
-	@ApiOperationSupport(order = 7)
-	@ApiOperation(value = "车源详情", notes = "传入cars")
-	public R<CarsDTO> carDetail(Long carId,Long memberId) {
-		if(Func.isEmpty(memberId)){
-			Member cl = wMemberFactory.getMember(request);
-			memberId=cl.getId();
-		}
-
-		CarsDTO carDetail=new CarsDTO();
-		Cars detail = carsService.getById(carId);
-		if(Func.isEmpty(detail)){
-			throw new ServiceException("为获取到车源信息");
-		}
-		Member member= memberService.getById(detail.getMemberId());
-		BeanUtils.copyProperties(detail,carDetail);
-
-		if(Func.isNotEmpty(member)){
-			carDetail.setPhone(member.getPhone());
-			carDetail.setMemberName(member.getName());
-		}
-		CarsCollect carsCollect=new CarsCollect();
-		carsCollect.setCarId(carId);
-		carsCollect.setMemberId(memberId);
-		CarsCollect entity=casCollectService.selectCarsCollect(carsCollect);
-		if (Func.isNotEmpty(entity)){
-			carDetail.setIsCollect(entity.getIsCollect());
-		}
-		//添加浏览记录
-		CarsBrowse carsBrowse=new CarsBrowse();
-		carsBrowse.setMemberId(memberId);
-		carsBrowse.setCarId(carId);
-		List<CarsBrowse> list =carsBrowseService.list(Condition.getQueryWrapper(carsBrowse));
-		if(Func.isEmpty(list)){
-			carsBrowseService.save(carsBrowse);
-		}else{
-			for(CarsBrowse cb:list){
-				cb.setUpdateTime(LocalDateTime.now());
-			}
-			carsBrowseService.updateBatchById(list);
-		}
-
-
-		return R.data(carDetail);
-	}
-	/**
-	 *
-	 */
-	@PostMapping("/carCollect")
-	@ApiOperationSupport(order = 8)
-	@ApiOperation(value = "车源收藏", notes = "传入carsCollect")
-	public R collect(@Valid @RequestBody CarsCollect carsCollect) {
-		Member cl = wMemberFactory.getMember(request);
-		carsCollect.setMemberId(cl.getId());
-		CarsCollect entity=casCollectService.selectCarsCollect(carsCollect);
-		Boolean res=false;
-		if(Func.isEmpty(entity)){
-			res=casCollectService.save(carsCollect);
-		}else {
-			entity.setIsCollect(carsCollect.getIsCollect());
-			res=casCollectService.updateById(entity);
-		}
-
-		return R.status(res);
-	}
 }

@@ -33,7 +33,7 @@ import org.springblade.core.mp.base.BaseEntity;
  */
 @Data
 @TableName("t_styles")
-@ApiModel(value = "Styles对象", description = "车系表")
+@ApiModel(value = "Styles对象", description = "车型表")
 public class Styles extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;

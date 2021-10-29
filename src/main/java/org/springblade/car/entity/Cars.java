@@ -49,6 +49,22 @@ public class Cars extends BaseEntity {
 	*/
 		@ApiModelProperty(value = "编号")
 		private String pno;
+
+	@ApiModelProperty(value = "车源所属1个人，2门店")
+	private Integer vest;
+	/**
+	 * 会员id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	@ApiModelProperty(value = "会员id")
+	private Long memberId;
+
+	/**
+	 * 会员id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	@ApiModelProperty(value = "门店id")
+	private Long shopId;
 	/**
 	* 省份id
 	*/
@@ -64,12 +80,7 @@ public class Cars extends BaseEntity {
 	*/
 		@ApiModelProperty(value = "区县id")
 		private String county;
-	/**
-	* 会员id
-	*/
-	@JsonSerialize(using = ToStringSerializer.class)
-		@ApiModelProperty(value = "会员id")
-		private Long memberId;
+
 	/**
 	* 品牌id
 	*/
@@ -89,20 +100,6 @@ public class Cars extends BaseEntity {
 		@ApiModelProperty(value = "车型id(对应t_styles表id)")
 		private Long stylesId;
 
-	@ApiModelProperty(value = "省名称")
-	private String	provinceName;
-	@ApiModelProperty(value = "市名称")
-	private String	cityName;
-	@ApiModelProperty(value = "区县名称")
-	private String	countyName;
-	@ApiModelProperty(value = "品牌名字")
-	private String	brandName;
-	@ApiModelProperty(value = "车系名字")
-	private String	seriesName;
-	@ApiModelProperty(value = "车型名字")
-	private String	stylesName;
-	@ApiModelProperty(value = "车级别名字")
-	private String	modelName;
 	/**
 	* 车辆全称
 	*/
@@ -121,38 +118,16 @@ public class Cars extends BaseEntity {
 	/**
 	* 亲情价
 	*/
-		@ApiModelProperty(value = "亲情价")
+		@ApiModelProperty(value = "内部价")
 		private BigDecimal pafprice;
-	/**
-	* 最低首付
-	*/
-		@ApiModelProperty(value = "最低首付")
-		private BigDecimal ppownpaymentPrice;
-	/**
-	* 月供
-	*/
-		@ApiModelProperty(value = "月供")
-		private Integer pmonthPrice;
-	/**
-	* 分期
-	*/
-		@ApiModelProperty(value = "分期")
-		private String ppownpayment;
-	/**
-	* 购置税
-	*/
-		@ApiModelProperty(value = "购置税")
-		private BigDecimal ppurtax;
-	/**
-	* 是否包含过户费
-	*/
-		@ApiModelProperty(value = "是否包含过户费")
-		private Boolean isconprice;
-	/**
-	* 代卖
-	*/
-		@ApiModelProperty(value = "代卖")
-		private Boolean isdaimai;
+
+		@ApiModelProperty(value = "成本价")
+		private BigDecimal pcostprice;
+
+		@ApiModelProperty(value = "收车时间")
+		private Date purchaseTime;
+
+
 	/**
 	* 级别id
 	*/
@@ -222,7 +197,7 @@ public class Cars extends BaseEntity {
 	/**
 	* 点击数
 	*/
-		@ApiModelProperty(value = "点击数")
+		@ApiModelProperty(value = "点击浏览数")
 		private Integer phits;
 	/**
 	* 是否出售
@@ -313,4 +288,19 @@ public class Cars extends BaseEntity {
 	@ApiModelProperty(value = "车架号")
 	private String pvin;
 
+
+	@ApiModelProperty(value = "省名称")
+	private String	provinceName;
+	@ApiModelProperty(value = "市名称")
+	private String	cityName;
+	@ApiModelProperty(value = "区县名称")
+	private String	countyName;
+	@ApiModelProperty(value = "品牌名字")
+	private String	brandName;
+	@ApiModelProperty(value = "车系名字")
+	private String	seriesName;
+	@ApiModelProperty(value = "车型名字")
+	private String	stylesName;
+	@ApiModelProperty(value = "车级别名字")
+	private String	modelName;
 }

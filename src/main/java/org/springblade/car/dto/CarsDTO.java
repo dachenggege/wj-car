@@ -37,8 +37,20 @@ public class CarsDTO extends  Cars{
 	@ApiModelProperty(value = "手机号码")
 	private String phone;
 
-	@ApiModelProperty(value = "所主名字")
+	@ApiModelProperty(value = "发布者名字")
 	private String memberName;
+
+	@ApiModelProperty(value = "门店名字")
+	private String shopName;
+
+	@ApiModelProperty(value = "门店地址")
+	private String shopAddress;
+
+	@ApiModelProperty(value = "门店经度")
+	private Double lng;
+
+	@ApiModelProperty(value = "门店维度")
+	private Double lat;
 
 	//以下和数据库没有关联
 
