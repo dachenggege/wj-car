@@ -83,11 +83,6 @@ public class ShopMemberDTO extends ShopMember {
 	@ApiModelProperty(value = "只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段")
 	private String unionid;
 	/**
-	 * 微信绑定手机号码
-	 */
-	@ApiModelProperty(value = "微信绑定手机号码")
-	private String purePhoneNumber;
-	/**
 	 * 真实姓名
 	 */
 	@ApiModelProperty(value = "真实姓名")

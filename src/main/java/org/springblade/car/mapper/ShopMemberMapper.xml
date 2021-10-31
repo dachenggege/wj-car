@@ -19,11 +19,11 @@
     </resultMap>
 
     <select id="selectShopMemberPage" resultType="org.springblade.car.dto.ShopMemberDTO">
-        select roletype,session_key,openid,nickname,sex,province,city,county,headimgurl,unionid,pure_phone_number,NAME,phone,isshop,last_login
-        ,m.id as id ,m.member_id as memberId ,m.shop_id as shopId
-        from t_member t,t_shop_member m where t.is_deleted = 0 and m.is_deleted=0
-        and t.id=m.member_id
-        <if test="member.shopId != null and member.shopId !=''">
+        SELECT roletype,session_key,openid,nickname,sex,province,city,county,headimgurl,unionid,NAME,phone,last_login
+        ,m.id AS id ,m.staff_id ,m.shop_id AS shopId
+        FROM t_member t,t_shop_member m WHERE t.is_deleted = 0 AND m.is_deleted=0
+        AND t.id=m.staff_id
+        <if test="member.shopId != null">
             and m.shop_id=#{member.shopId}
         </if>
         <if test="member.memberId != null ">
@@ -48,6 +48,14 @@
 
     </select>
 
+    <select id="queryShopMemberPage" resultType="org.springblade.car.dto.ShopMemberRep"  parameterType="java.util.HashMap" >
+        SELECT t.*,
+        (SELECT count(1) FROM `t_shop_member` m WHERE m.staff_id=t.id and m.shop_id =#{shopId} ) AS isStaff
+        FROM t_member t  WHERE t.`is_deleted`=0
+        <if test="phone != null">
+            and t.phone=#{phone}
+        </if>
+    </select>
     <select id="selectShopMemberRoleRight" resultType="org.springblade.car.entity.ShopMemberRoleRight">
         select * from t_shop_member_role where is_deleted = 0 and id !=1
     </select>

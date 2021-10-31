@@ -17,6 +17,7 @@
 package org.springblade.car.service.impl;
 
 import org.springblade.car.dto.ShopMemberDTO;
+import org.springblade.car.dto.ShopMemberRep;
 import org.springblade.car.dto.ShopMemberReq;
 import org.springblade.car.dto.ShopMemberRoleRightDTO;
 import org.springblade.car.entity.ShopMember;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 门店成员表 服务实现类
@@ -43,6 +45,10 @@ public class ShopMemberServiceImpl extends ServiceImpl<ShopMemberMapper, ShopMem
 	@Override
 	public IPage<ShopMemberDTO> selectShopMemberPage(IPage<ShopMemberDTO> page, ShopMemberReq shopMember) {
 		return page.setRecords(baseMapper.selectShopMemberPage(page, shopMember));
+	}
+	@Override
+	public List<ShopMemberRep> queryShopMemberPage(Map<String,Object> map) {
+		return  baseMapper.queryShopMemberPage(map);
 	}
 	public List<ShopMemberRoleRight> selectShopMemberRoleRight(){
 		return baseMapper.selectShopMemberRoleRight();

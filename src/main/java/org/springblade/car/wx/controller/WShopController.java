@@ -31,6 +31,7 @@ import org.springblade.car.service.*;
 import org.springblade.car.vo.*;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -42,8 +43,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 用户门店表 控制器
@@ -179,8 +179,17 @@ public class WShopController extends BladeController {
 		List<ShopMemberRoleRight> shopMemberRight = shopMemberService.selectShopMemberRoleRight();
 		return R.data(shopMemberRight);
 	}
-
-
+	@GetMapping("/getMemberByPhone")
+	@ApiOperationSupport(order = 7)
+	@ApiOperation(value = "根据电话获取会员信息")
+	public R<List<ShopMemberRep>> getMember(@ApiParam(value = "门店Id") @RequestParam(value = "shopId", required = true) Long shopId,
+									 @ApiParam(value = "用户电话") @RequestParam(value = "phone", required = false) String phone) {
+		Map<String,Object> map=new HashMap<>();
+		map.put("shopId",shopId);
+		map.put("phone",phone);
+		List<ShopMemberRep> list = shopMemberService.queryShopMemberPage(map);
+		return R.data(list);
+	}
 	/**
 	 * 新增 门店成员表
 	 */

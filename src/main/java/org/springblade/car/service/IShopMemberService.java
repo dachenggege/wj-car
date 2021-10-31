@@ -17,6 +17,7 @@
 package org.springblade.car.service;
 
 import org.springblade.car.dto.ShopMemberDTO;
+import org.springblade.car.dto.ShopMemberRep;
 import org.springblade.car.dto.ShopMemberReq;
 import org.springblade.car.dto.ShopMemberRoleRightDTO;
 import org.springblade.car.entity.ShopMember;
@@ -27,6 +28,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 门店成员表 服务类
@@ -44,7 +46,7 @@ public interface IShopMemberService extends IService<ShopMember> {
 	 * @return
 	 */
 	IPage<ShopMemberDTO> selectShopMemberPage(IPage<ShopMemberDTO> page, ShopMemberReq shopMember);
-
+	List<ShopMemberRep> queryShopMemberPage(Map<String,Object> map);
 	List<ShopMemberRoleRight> selectShopMemberRoleRight();
 	ShopMemberRoleRightDTO getShopMemberRight(Long memberId);
 }

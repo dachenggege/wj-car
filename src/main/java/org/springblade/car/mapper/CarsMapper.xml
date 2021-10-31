@@ -116,7 +116,7 @@
         <if test="cars.stylesId != null and cars.stylesId !=''">
             and t.styles_id=#{cars.stylesId}
         </if>
-        <if test="cars.isconprice != null and cars.isconprice !=''">
+        <if test="cars.isconprice != null">
             and t.isconprice=#{cars.isconprice}
         </if>
         <if test="cars.isdaimai != null and cars.isdaimai !=''">
@@ -143,10 +143,10 @@
         <if test="cars.auditStatus != null and cars.auditStatus !=''">
             and t.audit_status=#{cars.auditStatus}
         </if>
-        <if test="cars.sprice != null and cars.sprice !=''">
+        <if test="cars.sprice != null">
             and t.pprice &gt; #{cars.sprice}
         </if>
-        <if test="cars.eprice != null and cars.eprice !=''">
+        <if test="cars.eprice != null">
             and t.pprice &lt; #{cars.eprice}
         </if>
         <if test="cars.areas != null and cars.areas != ''">
@@ -232,7 +232,7 @@
         <if test="cars.stylesId != null and cars.stylesId !=''">
             and t.styles_id=#{cars.stylesId}
         </if>
-        <if test="cars.isconprice != null and cars.isconprice !=''">
+        <if test="cars.isconprice != null">
             and t.isconprice=#{cars.isconprice}
         </if>
         <if test="cars.isdaimai != null and cars.isdaimai !=''">
@@ -259,10 +259,10 @@
         <if test="cars.auditStatus != null and cars.auditStatus !=''">
             and t.audit_status=#{cars.auditStatus}
         </if>
-        <if test="cars.sprice != null and cars.sprice !=''">
+        <if test="cars.sprice != null">
             and t.pprice &gt; #{cars.sprice}
         </if>
-        <if test="cars.eprice != null and cars.eprice !=''">
+        <if test="cars.eprice != null">
             and t.pprice &lt; #{cars.eprice}
         </if>
         <if test="cars.areas != null and cars.areas != ''">

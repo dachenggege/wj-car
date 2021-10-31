@@ -18,6 +18,7 @@ package org.springblade.car.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springblade.car.dto.ShopMemberDTO;
+import org.springblade.car.dto.ShopMemberRep;
 import org.springblade.car.dto.ShopMemberReq;
 import org.springblade.car.dto.ShopMemberRoleRightDTO;
 import org.springblade.car.entity.ShopMember;
@@ -27,6 +28,7 @@ import org.springblade.car.vo.ShopMemberVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 门店成员表 Mapper 接口
@@ -44,6 +46,7 @@ public interface ShopMemberMapper extends BaseMapper<ShopMember> {
 	 * @return
 	 */
 	List<ShopMemberDTO> selectShopMemberPage(IPage page, @Param("member") ShopMemberReq member);
+	List<ShopMemberRep> queryShopMemberPage(Map<String,Object> map);
 	List<ShopMemberRoleRight> selectShopMemberRoleRight();
 	ShopMemberRoleRightDTO getShopMemberRight(Long memberId);
 }
