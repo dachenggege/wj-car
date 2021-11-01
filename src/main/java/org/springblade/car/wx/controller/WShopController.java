@@ -312,9 +312,11 @@ public class WShopController extends BladeController {
 	public R<IPage<ShopAlliedDTO>> selectShopAlliedPage(@ApiParam(value = "我的门店id", required = true) @RequestParam Long shopId,
 														@ApiParam(value = "门店名称", required = false) @RequestParam String shopName,
 														Query query) {
+		Member cl = wMemberFactory.getMember(request);
 		ShopAlliedDTO shopAlliedDTO=new ShopAlliedDTO();
 		shopAlliedDTO.setShopId(shopId);
 		shopAlliedDTO.setShopName(shopName);
+		shopAlliedDTO.setShopMemberId(cl.getId());
 		IPage<ShopAlliedDTO> pages = shopAlliedService.selectShopAlliedPage(Condition.getPage(query), shopAlliedDTO);
 		return R.data(pages);
 	}

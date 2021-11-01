@@ -58,6 +58,7 @@
         ( SELECT allied_status FROM t_shop_allied c WHERE (c.shop_id=#{shopAllied.shopId} OR c.allied_shop_id=#{shopAllied.shopId}))  AS alliedStatus,
         (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
         FROM t_shop t  WHERE t.is_deleted = 0 and t.audit_status=2
+        and t.id !=#{shopAllied.shopMemberId}
         <if test="shopAllied.shopName != null ">
             AND t.shop_name like concat(concat('%', #{shopAllied.shopName}), '%')
         </if>

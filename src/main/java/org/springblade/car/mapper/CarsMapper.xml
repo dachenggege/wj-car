@@ -6,10 +6,12 @@
     <resultMap id="carsResultMap" type="org.springblade.car.entity.Cars">
         <id column="id" property="id"/>
         <result column="p_no" property="pno"/>
+        <result column="vest" property="vest"/>
+        <result column="member_id" property="memberId"/>
+        <result column="shop_id" property="shopId"/>
         <result column="province" property="province"/>
         <result column="city" property="city"/>
         <result column="county" property="county"/>
-        <result column="member_id" property="memberId"/>
         <result column="brand_id" property="brandId"/>
         <result column="series_id" property="seriesId"/>
         <result column="styles_id" property="stylesId"/>
@@ -17,12 +19,8 @@
         <result column="pprice" property="pprice"/>
         <result column="ptrade_price" property="ptradePrice"/>
         <result column="pafprice" property="pafprice"/>
-        <result column="ppownpayment_price" property="ppownpaymentPrice"/>
-        <result column="pmonth_price" property="pmonthPrice"/>
-        <result column="ppownpayment" property="ppownpayment"/>
-        <result column="ppurtax" property="ppurtax"/>
-        <result column="isconprice" property="isconprice"/>
-        <result column="isdaimai" property="isdaimai"/>
+        <result column="pcostprice" property="pcostprice"/>
+        <result column="purchase_time" property="purchaseTime"/>
         <result column="model_id" property="modelId"/>
         <result column="pgas" property="pgas"/>
         <result column="pkilometre" property="pkilometre"/>
@@ -115,12 +113,6 @@
         </if>
         <if test="cars.stylesId != null and cars.stylesId !=''">
             and t.styles_id=#{cars.stylesId}
-        </if>
-        <if test="cars.isconprice != null">
-            and t.isconprice=#{cars.isconprice}
-        </if>
-        <if test="cars.isdaimai != null and cars.isdaimai !=''">
-            and t.isdaimai=#{cars.isdaimai}
         </if>
         <if test="cars.modelId != null and cars.modelId !=''">
             and t.model_id=#{cars.modelId}
@@ -232,12 +224,6 @@
         <if test="cars.stylesId != null and cars.stylesId !=''">
             and t.styles_id=#{cars.stylesId}
         </if>
-        <if test="cars.isconprice != null">
-            and t.isconprice=#{cars.isconprice}
-        </if>
-        <if test="cars.isdaimai != null and cars.isdaimai !=''">
-            and t.isdaimai=#{cars.isdaimai}
-        </if>
         <if test="cars.modelId != null and cars.modelId !=''">
             and t.model_id=#{cars.modelId}
         </if>
@@ -348,12 +334,6 @@
         <if test="cars.stylesId != null">
             and t.styles_id=#{cars.stylesId}
         </if>
-        <if test="cars.isconprice != null">
-            and t.isconprice=#{cars.isconprice}
-        </if>
-        <if test="cars.isdaimai != null">
-            and t.isdaimai=#{cars.isdaimai}
-        </if>
         <if test="cars.modelId != null">
             and t.model_id=#{cars.modelId}
         </if>
@@ -439,12 +419,6 @@
         </if>
         <if test="cars.stylesId != null">
             and t.styles_id=#{cars.stylesId}
-        </if>
-        <if test="cars.isconprice != null">
-            and t.isconprice=#{cars.isconprice}
-        </if>
-        <if test="cars.isdaimai != null">
-            and t.isdaimai=#{cars.isdaimai}
         </if>
         <if test="cars.modelId != null">
             and t.model_id=#{cars.modelId}

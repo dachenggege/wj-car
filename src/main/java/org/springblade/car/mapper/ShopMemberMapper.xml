@@ -61,10 +61,10 @@
     </select>
     <select id="getShopMemberRight" resultType="org.springblade.car.dto.ShopMemberRoleRightDTO"
             parameterType="java.lang.Long">
-        select r.*,t.id as memberId
-        from t_shop_member t,t_shop_member_role s
-        where t.is_deleted=0 and s.is_deleted=0
-        and t.staffRole=s.id
-        and t.id=#{memberId}
+       SELECT s.*,t.id AS memberId
+            FROM t_shop_member t,t_shop_member_role s
+            WHERE t.is_deleted=0 AND s.is_deleted=0
+            AND t.staff_role=s.id
+            AND t.staff_id=#{memberId}
     </select>
 </mapper>
