@@ -167,6 +167,9 @@ public class WShopController extends BladeController {
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "门店成员分页", notes = "传入shopMember对象")
 	public R<IPage<ShopMemberDTO>> shopMemberPage(ShopMemberReq shopMember, Query query) {
+		if(Func.isEmpty(shopMember.getShopId())){
+			R.fail("门店ID不能为空哦");
+		}
 		IPage<ShopMemberDTO> pages = shopMemberService.selectShopMemberPage(Condition.getPage(query), shopMember);
 		return R.data(pages);
 	}
@@ -198,7 +201,10 @@ public class WShopController extends BladeController {
 	@ApiOperation(value = "新增门店成员", notes = "传入shopMember")
 	public R saveShopMember(@Valid @RequestBody ShopMember shopMember) {
 		Member cl = wMemberFactory.getMember(request);
-		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopMember.getShopId());
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限添加店员哦");
 		}
@@ -213,9 +219,14 @@ public class WShopController extends BladeController {
 	@PostMapping("/removeShopMember")
 	@ApiOperationSupport(order = 8)
 	@ApiOperation(value = "删除门店成员", notes = "传入ids")
-	public R removeShopMember(@ApiParam(value = "主键集合", required = true) @RequestParam String id) {
+	public R removeShopMember(@ApiParam(value = "主键集合", required = true) @RequestParam String id,
+							  @ApiParam(value = "门店id", required = true) @RequestParam Long shopId) {
 		Member cl = wMemberFactory.getMember(request);
-		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopId);
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限删除店员哦");
 		}
@@ -254,9 +265,14 @@ public class WShopController extends BladeController {
 	@PostMapping("/removeShopCar")
 	@ApiOperationSupport(order = 13)
 	@ApiOperation(value = "删除门店车源", notes = "传入ids")
-	public R removeShopCar(@ApiParam(value = "主键集合", required = true) @RequestParam String id) {
+	public R removeShopCar(@ApiParam(value = "主键集合", required = true) @RequestParam String id,
+						   @ApiParam(value = "门店id", required = true) @RequestParam Long shopId) {
 		Member cl = wMemberFactory.getMember(request);
-		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopId);
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限删除门店车源哦");
 		}
@@ -270,9 +286,14 @@ public class WShopController extends BladeController {
 	@ApiOperationSupport(order = 14)
 	@ApiOperation(value = "上架下架门店车源")
 	public R upDownShopCar(@ApiParam(value = "车源id", required = true) @RequestParam Long carId,
-						   @ApiParam(value = "状态", required = true) @RequestParam Integer status) {
+						   @ApiParam(value = "状态", required = true) @RequestParam Integer status,
+						   @ApiParam(value = "门店id", required = true) @RequestParam Long shopId) {
 		Member cl = wMemberFactory.getMember(request);
-		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopId);
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限操作哦");
 		}
@@ -327,7 +348,11 @@ public class WShopController extends BladeController {
 	public R applyAllied(@Valid @RequestBody ShopAllied shopAllied) {
 		Member cl = wMemberFactory.getMember(request);
 
-		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopAllied.getShopId());
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限申请门店结盟的权限哦");
 		}
@@ -344,9 +369,14 @@ public class WShopController extends BladeController {
 	@ApiOperationSupport(order = 9005)
 	@ApiOperation(value = "修改门店结盟状态")
 	public R updateShopalliedStatus(@ApiParam(value = "结盟id", required = true) @RequestParam Long id,
+									@ApiParam(value = "门店id", required = true) @RequestParam Long shopId,
 						   @ApiParam(value = "状态", required = true) @RequestParam Integer alliedStatus) {
 		Member cl = wMemberFactory.getMember(request);
-		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopId);
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限操作哦");
 		}
@@ -365,7 +395,11 @@ public class WShopController extends BladeController {
 	@ApiOperation(value = "联盟车源分页", notes = "传入shopCarReq")
 	public R<IPage<CarsVO>> shopCollectCarpage(ShopCarReq shopCarReq, Query query) {
 		Member cl = wMemberFactory.getMember(request);
-		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(cl.getId());
+
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopCarReq.getShopId());
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限查看联盟车源哦");
 		}

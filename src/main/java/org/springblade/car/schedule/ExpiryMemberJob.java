@@ -35,7 +35,7 @@ public class ExpiryMemberJob {
 	public void run() {
 		MemberReq query =new MemberReq();
 		query.setIsExpiry(false);
-		query.setStartExpiryDate(new Date());
+		query.setEndExpiryDate(new Date());
 		List<MemberVO> memberList = memberService.selectMemberList(query);
 		List<Member> list =new ArrayList<>();
 		if(Func.isNotEmpty(memberList)){
