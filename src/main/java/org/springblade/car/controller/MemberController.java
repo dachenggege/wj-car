@@ -26,6 +26,7 @@ import javax.validation.Valid;
 
 import org.springblade.car.Req.MemberReq;
 import org.springblade.car.dto.MemberDTO;
+import org.springblade.car.factory.UserAreaFactory;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -51,7 +52,7 @@ import org.springblade.core.boot.ctrl.BladeController;
 @Api(value = "用户表", tags = "v2后台-人员关联接口")
 @ApiSort(2004)
 public class MemberController extends BladeController {
-
+	private UserAreaFactory userAreaFactory;
 	private final IMemberService memberService;
 	private WMemberFactory WMemberFactory;
 	private BladeRedis bladeRedis;
@@ -73,6 +74,10 @@ public class MemberController extends BladeController {
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "用户分页", notes = "传入member")
 	public R<IPage<MemberVO>> page(MemberReq member, Query query) {
+		MemberReq memberReq=userAreaFactory.getUserAreas();
+		member.setAreas(memberReq.getAreas());
+		member.setNoareas(memberReq.getNoareas());
+		member.setUserId(memberReq.getUserId());
 		IPage<MemberVO> pages = memberService.selectMemberPage(Condition.getPage(query), member);
 		return R.data(pages);
 	}

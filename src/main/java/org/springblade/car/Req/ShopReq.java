@@ -17,6 +17,8 @@
 package org.springblade.car.Req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -37,8 +39,6 @@ import java.util.List;
 @ApiModel(value = "ShopReq对象", description = "用户门店表")
 public class ShopReq extends Shop {
 	private static final long serialVersionUID = 1L;
-	private List<String> areas;
-	private List<String> noareas;
 
 	@JsonFormat(
 			pattern = "yyyy-MM-dd HH:mm:ss"
@@ -49,4 +49,9 @@ public class ShopReq extends Shop {
 	)
 	private Date endCreateTime;
 
+
+	private List<String> areas;
+	private List<String> noareas;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long userId;
 }

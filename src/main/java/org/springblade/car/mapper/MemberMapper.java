@@ -18,6 +18,7 @@ package org.springblade.car.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springblade.car.Req.MemberReq;
+import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.Member;
 import org.springblade.car.vo.MemberVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -39,5 +40,5 @@ public interface MemberMapper extends BaseMapper<Member> {
 	 * @param member
 	 * @return
 	 */
-	List<MemberVO> selectMemberPage(IPage page,@Param("member") MemberReq member);
+	List<MemberVO> selectMemberPage(IPage page, @Param("member") MemberReq member);
 }

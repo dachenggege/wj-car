@@ -17,6 +17,7 @@
 package org.springblade.car.service.impl;
 
 import org.springblade.car.Req.MemberReq;
+import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.Member;
 import org.springblade.car.vo.MemberVO;
 import org.springblade.car.mapper.MemberMapper;

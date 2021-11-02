@@ -23,6 +23,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
+import org.springblade.car.Req.MemberReq;
 import org.springblade.car.Req.ShopReq;
 import org.springblade.car.dto.ShopCarReq;
 import org.springblade.car.dto.ShopDTO;
@@ -107,9 +108,10 @@ public class ShopController extends BladeController {
 	@ApiOperation(value = "门店分页", notes = "传入shop")
 	public R<IPage<ShopDTO>> page(ShopReq shop, Query query) {
 
-//		MemberVO member=userAreaFactory.getMemberVO();
-//		shop.setAreas(member.getAreas());
-//		shop.setNoareas(member.getNoareas());
+		MemberReq memberReq=userAreaFactory.getUserAreas();
+		shop.setAreas(memberReq.getAreas());
+		shop.setNoareas(memberReq.getNoareas());
+		shop.setUserId(memberReq.getUserId());
 		IPage<ShopDTO> pages = shopService.selectShopPage(Condition.getPage(query), shop);
 		return R.data(pages);
 	}
