@@ -82,7 +82,7 @@ public class WShopController extends BladeController {
 			return R.fail("对不起您没有创建门店的权限");
 		}
 		if(rights.getCreateShopNum()<=cl.getMyShopNum()){
-			return R.fail("对不起您不能创建更多的门店了");
+			return R.fail("对不起您会员等级只能传建"+rights.getCreateShopNum()+"个门店哦");
 		}
 		shop.setId(NumberUtil.getRandomNumber(6,8));
 		shop.setAuditStatus(AuditStatus.AUDITING.id);
@@ -200,7 +200,7 @@ public class WShopController extends BladeController {
 	@ApiOperationSupport(order = 7)
 	@ApiOperation(value = "新增门店成员", notes = "传入shopMember")
 	public R saveShopMember(@Valid @RequestBody ShopMember shopMember) {
-		Member cl = wMemberFactory.getMember(request);
+		MemberDTO cl = wMemberFactory.getMember(request);
 		Map<String,Object> map=new HashMap<>();
 		map.put("staff_id",cl.getId());
 		map.put("shop_id",shopMember.getShopId());
@@ -211,7 +211,47 @@ public class WShopController extends BladeController {
 		if(!roleRightDTO.getIsEditStaff()){
 			R.fail("您没有权限添加店员哦");
 		}
+		//
+		MemberRights  rights=  cl.getRights();
+		ShopMember sm=new ShopMember();
+		sm.setShopId(shopMember.getShopId());
+		Integer mm= shopMemberService.count();
+		if(rights.getShopMemberNum()<=mm){
+			return R.fail("对不起您的会员等级门店只能添加"+rights.getShopMemberNum()+"个店员哦");
+		}
+		//店员权益
+		MemberDTO Staff = wMemberFactory.getMemberByid(shopMember.getStaffId());
+		MemberRights  Staffrights=  Staff.getRights();
+		if(Func.isEmpty(Staff)){
+			R.fail("该会员权益有问题，请检查");
+		}
+		if(Staff.getMyJoinShopNum()<=Staffrights.getJoinShopNum()){
+			return R.fail("对不起该会员加入门店的上限为"+rights.getJoinShopNum()+"个");
+		}
+
 		return R.status(shopMemberService.save(shopMember));
+	}
+
+	@PostMapping("/updateShopMember")
+	@ApiOperationSupport(order = 7)
+	@ApiOperation(value = "修改门店成员", notes = "传入shopMember")
+	public R updateShopMember(@Valid @RequestBody ShopMember shopMember) {
+		if(Func.isEmpty(shopMember.getId())){
+			R.fail("门店店员主键id不能为空哦");
+		}
+
+		Member cl = wMemberFactory.getMember(request);
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopMember.getShopId());
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
+		if(Func.isEmpty(roleRightDTO)){
+			R.fail("您没有权限修改店员哦");
+		}
+		if(!roleRightDTO.getIsEditStaff()){
+			R.fail("您没有权限修改店员哦");
+		}
+		return R.status(shopMemberService.updateById(shopMember));
 	}
 	/**
 	 * 删除 门店成员表

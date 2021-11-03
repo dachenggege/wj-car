@@ -148,11 +148,16 @@ public class WMemberFactory {
 		Cars myShopCar=new Cars();
 		myShopCar.setMemberId(cl.getId());
 		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
+		//门店数
+		Shop queryshop =new  Shop();
+		queryshop.setMemberId(cl.getId());
+		Integer shopCount= shopService.count(Condition.getQueryWrapper(queryshop));
 
 		memberDTO.setFansNum(fansNum);
 		memberDTO.setFocusNum(focusNum);
 		memberDTO.setMyCarNum(mycarNum);
 		memberDTO.setMyShopCarNum(myShopcarNum);
+		memberDTO.setMyShopNum(shopCount);
 		memberDTO.setRights(rights);
 		return memberDTO;
 	}

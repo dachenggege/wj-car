@@ -25,16 +25,14 @@ import javax.validation.Valid;
 
 import org.springblade.car.Req.MemberReq;
 import org.springblade.car.Req.ShopReq;
-import org.springblade.car.dto.ShopCarReq;
-import org.springblade.car.dto.ShopDTO;
+import org.springblade.car.dto.*;
 import org.springblade.car.entity.Member;
 import org.springblade.car.entity.ShopMember;
+import org.springblade.car.entity.ShopMemberRoleRight;
 import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.enums.RoleType;
 import org.springblade.car.factory.UserAreaFactory;
-import org.springblade.car.service.ICarsService;
-import org.springblade.car.service.IMemberService;
-import org.springblade.car.service.IShopMemberService;
+import org.springblade.car.service.*;
 import org.springblade.car.vo.CarsVO;
 import org.springblade.car.vo.MemberVO;
 import org.springblade.common.cache.CacheNames;
@@ -51,7 +49,6 @@ import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.car.entity.Shop;
 import org.springblade.car.vo.ShopVO;
-import org.springblade.car.service.IShopService;
 import org.springblade.core.boot.ctrl.BladeController;
 
 import java.util.ArrayList;
@@ -75,7 +72,7 @@ public class ShopController extends BladeController {
 	private  final ICarsService carsService;
 	private final IMemberService memberService;
 	private final UserAreaFactory userAreaFactory;
-
+	private final IShopAlliedService shopAlliedService;
 
 	/**
 	 * 详情
@@ -88,17 +85,6 @@ public class ShopController extends BladeController {
 		return R.data(detail);
 
 	}
-
-//	/**
-//	 * 用户门店表
-//	 */
-//	@GetMapping("/list")
-//	@ApiOperationSupport(order = 2)
-//	@ApiOperation(value = "门店列表", notes = "传入shop")
-//	public R<List<Shop>> list(Shop shop) {
-//		List<Shop> list = shopService.list(Condition.getQueryWrapper(shop));
-//		return R.data(list);
-//	}
 
 	/**
 	 * 自定义分页 用户门店表
@@ -115,22 +101,6 @@ public class ShopController extends BladeController {
 		IPage<ShopDTO> pages = shopService.selectShopPage(Condition.getPage(query), shop);
 		return R.data(pages);
 	}
-
-	/**
-	 * 新增 用户门店表
-	 */
-//	@PostMapping("/save")
-//	@ApiOperationSupport(order = 4)
-//	@ApiOperation(value = "新增门店", notes = "传入shop")
-//	public R save(@Valid @RequestBody Shop shop) {
-//		shop.setId(NumberUtil.getRandomNumber(6,8));
-//		shop.setAuditStatus(AuditStatus.AUDITING.id);
-//		ShopMember member=new ShopMember();
-//		member.setMemberId(shop.getMemberId());
-//		member.setShopId(shop.getId());
-//		shopMemberService.save(member);
-//		return R.status(shopService.save(shop));
-//	}
 
 	/**
 	 * 修改 用户门店表
@@ -161,11 +131,43 @@ public class ShopController extends BladeController {
 		return R.status(shopService.removeByIds(Func.toLongList(ids)));
 	}
 
-	/**
-	 * 自定义分页 车源表
-	 */
-	@GetMapping("/shopCarPage")
+
+
+
+	@GetMapping("/shopMemberPage")
+	@ApiOperationSupport(order = 11)
+	@ApiOperation(value = "门店成员分页", notes = "传入shopMember对象")
+	public R<IPage<ShopMemberDTO>> shopMemberPage(ShopMemberReq shopMember, Query query) {
+		if (Func.isEmpty(shopMember.getShopId())) {
+			R.fail("门店ID不能为空哦");
+		}
+		IPage<ShopMemberDTO> pages = shopMemberService.selectShopMemberPage(Condition.getPage(query), shopMember);
+		return R.data(pages);
+	}
+	@GetMapping("/shopMemberRoleRight")
 	@ApiOperationSupport(order = 12)
+	@ApiOperation(value = "门店成员角色及权限")
+	public R<List<ShopMemberRoleRight>> shopMemberRight() {
+		List<ShopMemberRoleRight> shopMemberRight = shopMemberService.selectShopMemberRoleRight();
+		return R.data(shopMemberRight);
+	}
+
+
+	/**
+	 * 删除 门店成员表
+	 */
+	@PostMapping("/removeShopMember")
+	@ApiOperationSupport(order = 13)
+	@ApiOperation(value = "删除门店成员", notes = "传入ids")
+	public R removeShopMember(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+		return R.status(shopMemberService.removeByIds(Func.toLongList(ids)));
+	}
+
+		/**
+         * 自定义分页 车源表
+         */
+	@GetMapping("/shopCarPage")
+	@ApiOperationSupport(order = 21)
 	@ApiOperation(value = "门店车源分页", notes = "传入shopCarReq")
 	public R<IPage<CarsVO>> shopCarpage(ShopCarReq shopCarReq, Query query) {
 		ShopMember shopMember=new ShopMember();
@@ -179,6 +181,17 @@ public class ShopController extends BladeController {
 		BeanUtils.copyProperties(shopCarReq,cars);
 		cars.setMemberIds(memberIds);
 		IPage<CarsVO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		return R.data(pages);
+	}
+
+	@GetMapping("/hadAlliedShopPage")
+	@ApiOperationSupport(order = 31)
+	@ApiOperation(value = "门店结盟分页")
+	public R<IPage<ShopAlliedDTO>> hadAlliedShopPage(@ApiParam(value = "门店id", required = true) @RequestParam Long shopId,
+													 Query query) {
+		ShopAlliedDTO shopAlliedDTO=new ShopAlliedDTO();
+		shopAlliedDTO.setShopId(shopId);
+		IPage<ShopAlliedDTO> pages = shopAlliedService.hadAlliedShopPage(Condition.getPage(query), shopAlliedDTO);
 		return R.data(pages);
 	}
 

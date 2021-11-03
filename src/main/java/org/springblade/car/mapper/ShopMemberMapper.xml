@@ -52,6 +52,7 @@
         SELECT t.*,
         (SELECT count(1) FROM `t_shop_member` m WHERE m.staff_id=t.id and m.shop_id =#{shopId} ) AS isStaff
         FROM t_member t  WHERE t.`is_deleted`=0
+        and t.roletype in (2,3)
         <if test="phone != null">
             and t.phone=#{phone}
         </if>

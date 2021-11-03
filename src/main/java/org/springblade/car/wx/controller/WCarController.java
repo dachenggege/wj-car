@@ -72,6 +72,12 @@ public class WCarController extends BladeController {
 	private IMemberService memberService;
 	private WVinServeFactory wVinServeFactory;
 
+
+
+
+
+
+
 	@PostMapping("/saveCar")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "发布车辆", notes = "传入cars")
@@ -110,14 +116,11 @@ public class WCarController extends BladeController {
 	 * 车源详情
 	 */
 	@GetMapping("/carDetail")
-	@ApiOperationSupport(order = 7)
+	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "车源详情", notes = "传入cars")
-	public R<CarsDTO> carDetail(Long carId,Long memberId) {
-		if(Func.isEmpty(memberId)){
-			Member cl = wMemberFactory.getMember(request);
-			memberId=cl.getId();
-		}
-
+	public R<CarsDTO> carDetail(Long carId) {
+		Member cl = wMemberFactory.getMember(request);
+		Long memberId=cl.getId();
 		CarsDTO carDetail=new CarsDTO();
 		Cars detail = carsService.getById(carId);
 		if(Func.isEmpty(detail)){

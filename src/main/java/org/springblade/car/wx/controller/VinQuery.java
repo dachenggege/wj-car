@@ -40,13 +40,6 @@ public class VinQuery {
             e.printStackTrace();
         }
     }
-
-
-
-    public static void main(String[] args) {
-
-    }
-
     /**
      *
      * @param strUrl 请求地址
