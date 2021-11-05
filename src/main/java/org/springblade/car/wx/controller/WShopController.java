@@ -75,7 +75,7 @@ public class WShopController extends BladeController {
 	@ApiOperation(value = "新增门店", notes = "传入shop")
 	@Transactional
 	public R saveShop(@Valid @RequestBody Shop shop) {
-		MemberDTO cl = wMemberFactory.getMember(request);
+		MemberDTO cl = wMemberFactory.getMemberDTO(request);
 		//判断是否有创建门店的权限
 		MemberRights  rights=  cl.getRights();
 		if(!rights.getIsCreateShop()){
@@ -174,11 +174,37 @@ public class WShopController extends BladeController {
 		return R.data(pages);
 	}
 
-
 	@GetMapping("/shopMemberRoleRight")
 	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "门店成员角色及权限")
-	public R<List<ShopMemberRoleRight>> shopMemberRight() {
+	@ApiOperation(value = "我在门店成员里的权限")
+	public R<ShopMemberRoleRightRep> shopMemberRight(
+			@ApiParam(value = "门店id", required = true) @RequestParam Long shop_id) {
+		Member cl = wMemberFactory.getMember(request);
+//		ShopMember shopMember=new ShopMember();
+//		shopMember.setShopId(shop_id);
+//		shopMember.setStaffId(cl.getId());
+//		ShopMember shopMemberRole = shopMemberService.getOne(Condition.getQueryWrapper(shopMember));
+//		if(Func.isEmpty(shopMemberRole)){
+//			return R.fail("您是不该门店的店员哦");
+//		}
+		Map<String,Object> map=new HashMap<>();
+		map.put("shop_id",shop_id);
+		map.put("staff_id",cl.getId());
+		ShopMemberRoleRightDTO shopMemberRight = shopMemberService.getShopMemberRight(map);
+		if(Func.isEmpty(shopMemberRight)){
+			return R.fail("您是不该门店的店员哦");
+		}
+		ShopMemberRoleRightRep roleRightRep=new ShopMemberRoleRightRep();
+		BeanUtils.copyProperties(shopMemberRight,roleRightRep);
+		roleRightRep.setName(cl.getName());
+		roleRightRep.setPhone(cl.getPhone());
+		return R.data(roleRightRep);
+	}
+
+	@GetMapping("/shopMemberRightList")
+	@ApiOperationSupport(order = 6)
+	@ApiOperation(value = "门店成员角色及权限列表")
+	public R<List<ShopMemberRoleRight>> shopMemberRightList() {
 		List<ShopMemberRoleRight> shopMemberRight = shopMemberService.selectShopMemberRoleRight();
 		return R.data(shopMemberRight);
 	}
@@ -200,7 +226,7 @@ public class WShopController extends BladeController {
 	@ApiOperationSupport(order = 7)
 	@ApiOperation(value = "新增门店成员", notes = "传入shopMember")
 	public R saveShopMember(@Valid @RequestBody ShopMember shopMember) {
-		MemberDTO cl = wMemberFactory.getMember(request);
+		MemberDTO cl = wMemberFactory.getMemberDTO(request);
 		Map<String,Object> map=new HashMap<>();
 		map.put("staff_id",cl.getId());
 		map.put("shop_id",shopMember.getShopId());

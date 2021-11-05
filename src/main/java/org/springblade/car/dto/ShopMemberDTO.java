@@ -35,6 +35,10 @@ import java.util.Date;
 public class ShopMemberDTO extends ShopMember {
 	private static final long serialVersionUID = 1L;
 
+	@ApiModelProperty(value = "店员角色名称")
+	private String staffRoleName;
+
+
 	/**
 	 * 用户角色1游客2会员
 	 */

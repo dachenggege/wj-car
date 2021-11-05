@@ -20,7 +20,8 @@
 
     <select id="selectShopMemberPage" resultType="org.springblade.car.dto.ShopMemberDTO">
         SELECT roletype,session_key,openid,nickname,sex,province,city,county,headimgurl,unionid,NAME,phone,last_login
-        ,m.id AS id ,m.staff_id ,m.shop_id AS shopId
+        ,m.id AS id ,m.staff_id ,m.shop_id AS shopId,m.staff_role,
+        (SELECT role_name FROM t_shop_member_role r WHERE r.id=m.staff_role AND r.is_deleted = 0) staffRoleName
         FROM t_member t,t_shop_member m WHERE t.is_deleted = 0 AND m.is_deleted=0
         AND t.id=m.staff_id
         <if test="member.shopId != null">
@@ -62,7 +63,7 @@
     </select>
     <select id="getShopMemberRight" resultType="org.springblade.car.dto.ShopMemberRoleRightDTO"
             parameterType="java.util.Map">
-       SELECT s.*,t.id AS memberId
+       SELECT s.*,t.staff_id AS memberId
             FROM t_shop_member t,t_shop_member_role s
             WHERE t.is_deleted=0 AND s.is_deleted=0
             AND t.staff_role=s.id

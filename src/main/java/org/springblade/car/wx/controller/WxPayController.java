@@ -79,7 +79,7 @@ public class WxPayController extends BladeController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "会员年费费用")
 	public R<List<MemberRightsPayRep>> memberMoney() {
-		MemberDTO cl = wMemberFactory.getMember(request);
+		MemberDTO cl = wMemberFactory.getMemberDTO(request);
 
 		Integer memberLv=cl.getMemberLv();
 		Integer roteType=cl.getRoletype();
@@ -132,7 +132,7 @@ public class WxPayController extends BladeController {
 		if(Func.isEmpty(openid)){
 			return  R.fail("openid不能为空");
 		}
-		MemberDTO cl = wMemberFactory.getMember(request);
+		MemberDTO cl = wMemberFactory.getMemberDTO(request);
 
 		MemberRights rights=memberRightsService.getById(orderPayReq.getRightsId());
 

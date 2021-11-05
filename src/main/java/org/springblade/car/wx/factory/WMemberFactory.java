@@ -37,7 +37,25 @@ public class WMemberFactory {
 	private  IShopService shopService;
 
 
-	public MemberDTO getMember(HttpServletRequest request) {
+
+	public Member getMember(HttpServletRequest request) {
+		MemberDTO memberDTO = new MemberDTO();
+		Member cl = new Member();
+		String openid = request.getHeader("openid");
+		if (Func.isEmpty(openid)) {
+			throw new ServiceException("为获取到用户信息");
+		}
+		cl = bladeRedis.get(openid);
+		if (Func.isEmpty(cl)) {
+			Member client = new Member();
+			client.setOpenid(openid);
+			cl = memberService.getOne(Condition.getQueryWrapper(client));
+			bladeRedis.set(cl.getOpenid(), cl);
+		}
+		return cl;
+	}
+
+	public MemberDTO getMemberDTO(HttpServletRequest request) {
 		MemberDTO memberDTO =new MemberDTO();
 		Member cl =new Member();
 		String openid = request.getHeader("openid");

@@ -49,4 +49,5 @@ public interface IShopMemberService extends IService<ShopMember> {
 	List<ShopMemberRep> queryShopMemberPage(Map<String,Object> map);
 	List<ShopMemberRoleRight> selectShopMemberRoleRight();
 	ShopMemberRoleRightDTO getShopMemberRight(Map<String,Object> map);
+
 }
