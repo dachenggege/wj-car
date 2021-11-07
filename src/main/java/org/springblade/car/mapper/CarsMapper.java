@@ -17,6 +17,8 @@
 package org.springblade.car.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.springblade.car.Req.CarsAuditReq;
+import org.springblade.car.dto.CarsDTO;
 import org.springblade.car.dto.carsBeenBrowseDTO;
 import org.springblade.car.dto.carsBeenCallDTO;
 import org.springblade.car.entity.Cars;
@@ -41,11 +43,11 @@ public interface CarsMapper extends BaseMapper<Cars> {
 	 * @param cars
 	 * @return
 	 */
-	List<CarsVO> selectCarsPage(IPage page, CarsVO cars);
-	List<CarsVO> carCollectPage(IPage page, CarsVO cars);
-	List<CarsVO> carsBrowsePage(IPage page, CarsVO cars);
-	List<carsBeenBrowseDTO> carsBeenBrowsePage(IPage page, CarsVO cars);
-	List<carsBeenCallDTO> carsBeenCallPage(IPage page, CarsVO cars);
+	List<CarsDTO> selectCarsPage(IPage page,@Param("cars") CarsVO cars);
+	List<CarsVO> carCollectPage(IPage page, @Param("cars") CarsVO cars);
+	List<CarsVO> carsBrowsePage(IPage page, @Param("cars") CarsVO cars);
+	List<carsBeenBrowseDTO> carsBeenBrowsePage(IPage page, @Param("cars") CarsVO cars);
+	List<carsBeenCallDTO> carsBeenCallPage(IPage page, @Param("cars") CarsVO cars);
 
 	//刷新上新时间
 	Boolean updateCarListTime(@Param("id") Long id);

@@ -179,6 +179,8 @@ public class WMemberController extends BladeController {
 		cl.setCorporate(regist.getCorporate());
 		cl.setCompanyCertificate(regist.getCompanyCertificate());
 		cl.setCompanyAuditStatus(1);
+		cl.setLng(regist.getLng());
+		cl.setLat(regist.getLat());
 		memberService.updateById(cl);
 		bladeRedis.set(cl.getOpenid(),cl);
 		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());

@@ -241,7 +241,7 @@ public class WShopController extends BladeController {
 		MemberRights  rights=  cl.getRights();
 		ShopMember sm=new ShopMember();
 		sm.setShopId(shopMember.getShopId());
-		Integer mm= shopMemberService.count();
+		Integer mm= shopMemberService.count(Condition.getQueryWrapper(sm));
 		if(rights.getShopMemberNum()<=mm){
 			return R.fail("对不起您的会员等级门店只能添加"+rights.getShopMemberNum()+"个店员哦");
 		}
@@ -251,7 +251,8 @@ public class WShopController extends BladeController {
 		if(Func.isEmpty(Staff)){
 			R.fail("该会员权益有问题，请检查");
 		}
-		if(Staff.getMyJoinShopNum()<=Staffrights.getJoinShopNum()){
+		Integer joinShopNUm=Staff.getMyJoinShopNum()==null?0:Staff.getMyJoinShopNum();
+		if(joinShopNUm>=Staffrights.getJoinShopNum()){
 			return R.fail("对不起该会员加入门店的上限为"+rights.getJoinShopNum()+"个");
 		}
 
@@ -309,19 +310,19 @@ public class WShopController extends BladeController {
 	@GetMapping("/shopCarpage")
 	@ApiOperationSupport(order = 9)
 	@ApiOperation(value = "门店车源分页", notes = "传入shopCarReq")
-	public R<IPage<CarsVO>> shopCarpage(ShopCarReq shopCarReq, Query query) {
+	public R<IPage<CarsDTO>> shopCarpage(ShopCarReq shopCarReq, Query query) {
 		ShopMember shopMember=new ShopMember();
 		shopMember.setShopId(shopCarReq.getShopId());
-		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
-		List<Long> memberIds=new ArrayList<>();
-		for(ShopMember m:list){
-			//memberIds.add(m.getMemberId());
-		}
+//		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
+//		List<Long> memberIds=new ArrayList<>();
+//		for(ShopMember m:list){
+//			memberIds.add(m.getMemberId());
+//		}
 		CarsVO cars=new CarsVO();
 		BeanUtils.copyProperties(shopCarReq,cars);
-		cars.setMemberIds(memberIds);
+//		cars.setMemberIds(memberIds);
 		cars.setPallname(shopCarReq.getPallname());
-		IPage<CarsVO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
 
@@ -459,7 +460,7 @@ public class WShopController extends BladeController {
 	@GetMapping("/shopCollectCarpage")
 	@ApiOperationSupport(order = 9006)
 	@ApiOperation(value = "联盟车源分页", notes = "传入shopCarReq")
-	public R<IPage<CarsVO>> shopCollectCarpage(ShopCarReq shopCarReq, Query query) {
+	public R<IPage<CarsDTO>> shopCollectCarpage(ShopCarReq shopCarReq, Query query) {
 		Member cl = wMemberFactory.getMember(request);
 
 		Map<String,Object> map=new HashMap<>();
@@ -474,13 +475,13 @@ public class WShopController extends BladeController {
 		}
 
 		ShopMember shopMember=new ShopMember();
-		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
-		List<Long> memberIds=new ArrayList<>();
+//		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
+//		List<Long> memberIds=new ArrayList<>();
 		CarsVO cars=new CarsVO();
 		BeanUtils.copyProperties(shopCarReq,cars);
-		cars.setMemberIds(memberIds);
+//		cars.setMemberIds(memberIds);
 		cars.setPallname(shopCarReq.getPallname());
-		IPage<CarsVO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
 

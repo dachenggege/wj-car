@@ -21,8 +21,10 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springblade.car.dto.CarsDTO;
+import org.springblade.car.dto.CarsVinParseReq;
 import org.springblade.car.entity.*;
 import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.enums.CarSort;
@@ -31,12 +33,15 @@ import org.springblade.car.vo.CarsVO;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.car.wx.factory.WVinServeFactory;
 import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.log.annotation.ApiLog;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.modules.system.entity.Region;
+import org.springblade.modules.system.service.IRegionService;
 import org.springblade.util.NumberUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +66,8 @@ import java.util.List;
 public class WCarController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;
-	private final IBrandService brandService;
-	private final IAdService adService;
+	private final IShopService shopService;
+	private final IRegionService regionService;
 	private final IModelService modelService;
 	private final ICarsService carsService;
 	private final ISeriesService seriesService;
@@ -74,9 +79,19 @@ public class WCarController extends BladeController {
 
 
 
+	/**
+	 * 车辆VIN识别
+	 */
+	@ApiLog("发布车源VIN查询")
+	@GetMapping("/carVinQuery")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "发布车源VIN查询", notes = "传入vin号")
+	public R<CarsVinParseReq> carVinQuery(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
+		wVinServeFactory.isCheckVin(vin);
+		CarsVinParseReq cars = wVinServeFactory.carVinQuery(vin);
+		return R.data(cars);
 
-
-
+	}
 
 	@PostMapping("/saveCar")
 	@ApiOperationSupport(order = 1)
@@ -99,7 +114,45 @@ public class WCarController extends BladeController {
 			throw new ServiceException("成本价不能为空");
 		}
 
+
 		Member cl = wMemberFactory.getMember(request);
+
+		//个人车源
+		if(Func.equals(cars.getVest(),1)){
+			cars.setProvince(cl.getProvince());
+			cars.setProvinceName(cl.getProvinceName());
+			cars.setCity(cl.getCity());
+			cars.setCityName(cl.getCityName());
+			cars.setCounty(cl.getCounty());
+			cars.setCountyName(cl.getCountyName());
+		}
+
+		//门店车源
+		if(Func.equals(cars.getVest(),2)){
+			if(Func.isEmpty(cars.getShopId())){
+				return R.fail("门店id不能为空");
+			}
+			Shop shop= shopService.getById(cars.getShopId());
+			if(Func.isEmpty(shop)){
+				return R.fail("门店ID不存在");
+			}
+			cars.setProvince(shop.getProvince());
+			Region pr= regionService.getById(shop.getProvince());
+			if(Func.isNotEmpty(pr)) {
+				cars.setProvinceName(pr.getProvinceName());
+			}
+			cars.setCity(shop.getCity());
+			Region city= regionService.getById(shop.getCity());
+			if(Func.isNotEmpty(city)) {
+				cars.setCityName(city.getCityName());
+			}
+			cars.setCounty(shop.getCounty());
+			Region co= regionService.getById(shop.getCounty());
+			if(Func.isNotEmpty(co)) {
+				cars.setCountyName(co.getTownName());
+			}
+		}
+
 		cars.setAuditStatus(AuditStatus.AUDITING.id);
 		cars.setMemberId(cl.getId());
 		cars.setListtime(DateUtil.format(new Date(),DateUtil.PATTERN_DATETIME));
@@ -122,16 +175,41 @@ public class WCarController extends BladeController {
 		Member cl = wMemberFactory.getMember(request);
 		Long memberId=cl.getId();
 		CarsDTO carDetail=new CarsDTO();
-		Cars detail = carsService.getById(carId);
-		if(Func.isEmpty(detail)){
+		Cars cars = carsService.getById(carId);
+		if(Func.isEmpty(cars)){
 			throw new ServiceException("为获取到车源信息");
 		}
-		Member member= memberService.getById(detail.getMemberId());
-		BeanUtils.copyProperties(detail,carDetail);
+		Member member= memberService.getById(cars.getMemberId());
+		BeanUtils.copyProperties(cars,carDetail);
 
 		if(Func.isNotEmpty(member)){
-			carDetail.setPhone(member.getPhone());
-			carDetail.setMemberName(member.getName());
+			//个人车源
+			if(Func.equals(cars.getVest(),1)){
+				carDetail.setMemberName(member.getName());
+				carDetail.setPhone1(member.getPhone());
+				carDetail.setShopName(member.getCarDealer());
+				carDetail.setShopAddress(member.getDealerAddress());
+				carDetail.setLat(member.getLat());
+				carDetail.setLng(member.getLng());
+			}
+
+			//门店车源
+			if(Func.equals(cars.getVest(),2)){
+				Shop shop= shopService.getById(cars.getShopId());
+				if(Func.isNotEmpty(shop)) {
+
+					carDetail.setMemberName(member.getName());
+					carDetail.setPhone1(shop.getPhone1());
+					carDetail.setPhone2(shop.getPhone2());
+					carDetail.setPhone3(shop.getPhone3());
+					carDetail.setPhone4(shop.getPhone4());
+					carDetail.setPhone5(shop.getPhone5());
+					carDetail.setShopName(shop.getShopName());
+					carDetail.setShopAddress(shop.getShopAddress());
+					carDetail.setLat(shop.getLat());
+					carDetail.setLng(shop.getLng());
+				}
+			}
 		}
 		CarsCollect carsCollect=new CarsCollect();
 		carsCollect.setCarId(carId);

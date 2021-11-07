@@ -16,6 +16,8 @@
  */
 package org.springblade.car.service;
 
+import org.springblade.car.Req.CarsAuditReq;
+import org.springblade.car.dto.CarsDTO;
 import org.springblade.car.dto.carsBeenBrowseDTO;
 import org.springblade.car.dto.carsBeenCallDTO;
 import org.springblade.car.entity.Cars;
@@ -44,7 +46,7 @@ public interface ICarsService extends IService<Cars> {
 	 * @param cars
 	 * @return
 	 */
-	IPage<CarsVO> selectCarsPage(IPage<CarsVO> page, CarsVO cars);
+	IPage<CarsDTO> selectCarsPage(IPage<CarsDTO> page, CarsVO cars);
 	IPage<CarsVO> carCollectPage(IPage<CarsVO> page, CarsVO cars);
 	IPage<CarsVO> carsBrowsePage(IPage<CarsVO> page, CarsVO cars);
 	IPage<carsBeenCallDTO> carsBeenCallPage(IPage<carsBeenCallDTO> page, CarsVO cars);

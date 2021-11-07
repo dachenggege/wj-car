@@ -127,14 +127,14 @@ public class WHomePageController extends BladeController {
 	@GetMapping("/carpage")
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "车源分页", notes = "传入cars")
-	public R<IPage<CarsVO>> page(CarsVO cars, Query query) {
+	public R<IPage<CarsDTO>> page(CarsVO cars, Query query) {
 		if(Func.isNotEmpty(cars.getSort())){
 			cars.setSort(CarSort.getValue(Integer.valueOf(cars.getSort())));
 		}else {
 			cars.setSort(CarSort.TIME.value);
 		}
 
-		IPage<CarsVO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
 

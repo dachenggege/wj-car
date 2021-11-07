@@ -7,16 +7,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.springblade.car.Req.MemberAuditReq;
-import org.springblade.car.Req.MemberCertificationReq;
-import org.springblade.car.Req.MemberReq;
-import org.springblade.car.Req.MerchantAuditReq;
+import org.springblade.car.Req.*;
 import org.springblade.car.dto.MemberCertificationDTO;
 import org.springblade.car.entity.Member;
 import org.springblade.car.entity.MemberCertification;
 import org.springblade.car.factory.UserAreaFactory;
 import org.springblade.car.service.IMemberCertificationService;
 import org.springblade.car.service.IMemberService;
+import org.springblade.car.vo.CarsVO;
 import org.springblade.car.vo.MemberCertificationVO;
 import org.springblade.car.vo.MemberVO;
 import org.springblade.car.wx.factory.WMemberFactory;
@@ -85,6 +83,7 @@ public class WorkbenchController {
             cl.setRoletype(2);
             cl.setPersonAuditStatus(personAuditStatus);
             cl.setPersonAuditTime(new Date());
+            cl.setCertificationLv(0);
         }
         //不通过
         if(Func.equals(personAuditStatus,3)){
@@ -127,6 +126,7 @@ public class WorkbenchController {
             cl.setRoletype(3);
             cl.setCompanyAuditStatus(companyAuditStatus);
             cl.setCompanyAuditTime(new Date());
+            cl.setCertificationLv(0);
         }
         //不通过
         if(Func.equals(companyAuditStatus,3)){
@@ -192,8 +192,5 @@ public class WorkbenchController {
         bladeRedis.set(cl.getOpenid(),cl);
         return R.status(memberCertificationService.updateById(memberCertification));
     }
-
-
-
 
 }

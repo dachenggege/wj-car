@@ -31,8 +31,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @since 2021-08-26
  */
 @Data
-@TableName("t_shop_collect")
-@ApiModel(value = "ShopCollect对象", description = "门店收藏表")
+@TableName("t_shop_allied")
+@ApiModel(value = "ShopAllied对象", description = "门店结盟表")
 public class ShopAllied implements Serializable {
 
 	private static final long serialVersionUID = 1L;

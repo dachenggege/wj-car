@@ -73,6 +73,11 @@ public class MerchantRegist {
     @NotNull
     private String dealerAddress;
 
+    @ApiModelProperty(value = "车行经度")
+    private Double lng;
+
+    @ApiModelProperty(value = "车行维度")
+    private Double lat;
     /**
      * 公司名称
      */

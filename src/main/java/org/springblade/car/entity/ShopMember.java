@@ -19,6 +19,9 @@ package org.springblade.car.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
@@ -41,6 +44,7 @@ public class ShopMember implements Serializable {
 	* 主键id
 	*/
 		@ApiModelProperty(value = "主键id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long id;
 	/**
 	* 门店id

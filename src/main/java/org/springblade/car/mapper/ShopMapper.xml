@@ -106,7 +106,7 @@
         FROM t_shop s , (
         SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
         <if test="shop.userId != null">
-            and u.user_id=#{member.userId}
+            and u.user_id=#{shop.userId}
         </if>
         union
         select t.* from t_member t where t.is_deleted = 0

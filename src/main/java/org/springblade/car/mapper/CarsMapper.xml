@@ -74,7 +74,14 @@
 
 
     <select id="selectCarsCount" resultType="int">
-        select count(1) from t_cars t,t_member m where t.is_deleted = 0  and m.is_deleted=0
+        select count(1) from t_cars t, (
+        SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        <if test="cars.userId != null">
+            and u.user_id=#{cars.userId}
+        </if>
+        union
+        select t.* from t_member t where t.is_deleted = 0
+        ) m where t.is_deleted = 0  and m.is_deleted=0
         and t.member_id =m.id
 
         <if test="cars.id != null and cars.id !=''">
@@ -184,7 +191,16 @@
         select t.*,m.name as memberName,
         (SELECT COUNT(1) FROM  `t_cars_browse` b WHERE b.`is_deleted`=0 AND b.`car_id`=t.`id`) AS viewCount,
         (SELECT COUNT(1) FROM  `t_phone_record` r WHERE r.`is_deleted`=0 AND r.`cars_id`=t.`id`) AS callPhoneCount
-         from t_cars t,t_member m where t.is_deleted = 0  and m.is_deleted=0
+         from t_cars t,
+        (
+        SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        <if test="cars.userId != null">
+            and u.user_id=#{cars.userId}
+        </if>
+        union
+        select t.* from t_member t where t.is_deleted = 0
+        ) m
+        where t.is_deleted = 0  and m.is_deleted=0
         and t.member_id =m.id
 
         <if test="cars.id != null and cars.id !=''">

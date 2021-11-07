@@ -169,18 +169,18 @@ public class ShopController extends BladeController {
 	@GetMapping("/shopCarPage")
 	@ApiOperationSupport(order = 21)
 	@ApiOperation(value = "门店车源分页", notes = "传入shopCarReq")
-	public R<IPage<CarsVO>> shopCarpage(ShopCarReq shopCarReq, Query query) {
+	public R<IPage<CarsDTO>> shopCarpage(ShopCarReq shopCarReq, Query query) {
 		ShopMember shopMember=new ShopMember();
 		shopMember.setShopId(shopCarReq.getShopId());
-		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
-		List<Long> memberIds=new ArrayList<>();
-		for(ShopMember m:list){
-			memberIds.add(m.getStaffId());
-		}
+//		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
+//		List<Long> memberIds=new ArrayList<>();
+//		for(ShopMember m:list){
+//			memberIds.add(m.getStaffId());
+//		}
 		CarsVO cars=new CarsVO();
 		BeanUtils.copyProperties(shopCarReq,cars);
-		cars.setMemberIds(memberIds);
-		IPage<CarsVO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+//		cars.setMemberIds(memberIds);
+		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
 

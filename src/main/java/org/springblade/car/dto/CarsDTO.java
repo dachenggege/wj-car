@@ -35,7 +35,15 @@ public class CarsDTO extends  Cars{
 	private Boolean isCollect;
 
 	@ApiModelProperty(value = "手机号码")
-	private String phone;
+	private String phone1;
+	@ApiModelProperty(value = "手机号码")
+	private String phone2;
+	@ApiModelProperty(value = "手机号码")
+	private String phone3;
+	@ApiModelProperty(value = "手机号码")
+	private String phone4;
+	@ApiModelProperty(value = "手机号码")
+	private String phone5;
 
 	@ApiModelProperty(value = "发布者名字")
 	private String memberName;

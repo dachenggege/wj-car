@@ -23,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import org.springblade.car.dto.CarsDTO;
 import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.dto.carsBeenBrowseDTO;
 import org.springblade.car.dto.carsBeenCallDTO;
@@ -84,7 +85,7 @@ public class WMyCarController extends BladeController {
 	@PostMapping("/myCarsPage")
 	@ApiOperationSupport(order = 5)
 	@ApiOperation(value = "我的车源", notes = "传入cars")
-	public R<IPage<CarsVO>> myCarsPage(CarsVO cars,Query query) {
+	public R<IPage<CarsDTO>> myCarsPage(CarsVO cars,Query query) {
 		//Member cl = wMemberFactory.getMember(request);
 		//Member c = memberService.getById(cars.getMemberId());
 
@@ -95,7 +96,7 @@ public class WMyCarController extends BladeController {
 			cars.setSort(CarSort.TIME.value);
 		}
 
-		IPage<CarsVO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
 

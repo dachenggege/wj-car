@@ -101,19 +101,7 @@ public class WCarServeController extends BladeController {
 	private final IDictService dictService;
 	private IPayOrderService payOrderService;
 
-	/**
-	 * 车辆VIN识别
-	 */
-	@ApiLog("发布车源VIN查询")
-	@GetMapping("/carVinQuery")
-	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "发布车源VIN查询", notes = "传入vin号")
-	public R<CarsVinParseReq> carVinQuery(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
-		wVinServeFactory.isCheckVin(vin);
-		CarsVinParseReq cars = wVinServeFactory.carVinQuery(vin);
-		return R.data(cars);
 
-	}
 
 	@ApiLog("车辆VIN查询车辆信息")
 	@GetMapping("/vinParse")

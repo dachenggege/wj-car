@@ -16,6 +16,8 @@
  */
 package org.springblade.car.service.impl;
 
+import org.springblade.car.Req.CarsAuditReq;
+import org.springblade.car.dto.CarsDTO;
 import org.springblade.car.dto.carsBeenBrowseDTO;
 import org.springblade.car.dto.carsBeenCallDTO;
 import org.springblade.car.entity.Cars;
@@ -41,7 +43,7 @@ public class CarsServiceImpl extends ServiceImpl<CarsMapper, Cars> implements IC
 	}
 
 	@Override
-	public IPage<CarsVO> selectCarsPage(IPage<CarsVO> page, CarsVO cars) {
+	public IPage<CarsDTO> selectCarsPage(IPage<CarsDTO> page, CarsVO cars) {
 		return page.setRecords(baseMapper.selectCarsPage(page, cars));
 	}
 	@Override

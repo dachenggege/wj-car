@@ -17,6 +17,8 @@
 package org.springblade.car.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import org.springblade.car.entity.Cars;
 import lombok.Data;
@@ -40,7 +42,8 @@ public class CarsVO extends Cars {
 	private List<String> areas;
 	private List<String> noareas;
 
-	private List<Long> memberIds;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long userId;
 
 	@ApiModelProperty(value = "电话号码")
 	private String phone;

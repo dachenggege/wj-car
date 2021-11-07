@@ -31,34 +31,34 @@
         AND (c.shop_id=#{shopAllied.shopId} OR c.allied_shop_id=#{shopAllied.shopId})
         ) a
         WHERE t.is_deleted = 0  AND t.audit_status=2
+        AND (t.id=a.shop_id OR t.id=a.allied_shop_id)
         AND t.id !=#{shopAllied.shopId}
 
     </select>
 
     <!--申请结盟 -->
     <select id="applyAlliedShopPage" resultType="org.springblade.car.dto.ShopAlliedDTO" >
-        SELECT a.id ,t.id AS shopId,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
+         SELECT a.id ,t.id AS shopId,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
         (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
         a.apply_member_id AS applyMemberId,allied_shop_id AS alliedShopId,
         allied_status AS alliedStatus,
         t.shop_img AS shopImg,t.area_name AS areaName,t.shop_address AS shopAddress,
-        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum FROM t_shop  t,(
-        SELECT c.* FROM t_shop_allied c
-        WHERE c.is_deleted = 0 AND c.allied_status=1
-        AND (c.shop_id=#{shopAllied.shopId} OR c.allied_shop_id=#{shopAllied.shopId})
-        ) a
-        WHERE t.is_deleted = 0  AND t.audit_status =2
-        AND t.id !=#{shopAllied.shopId}
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
+        FROM t_shop  t, t_shop_allied a
+        WHERE a.is_deleted = 0 AND a.allied_status=1 AND t.is_deleted = 0  AND t.audit_status =2
+        AND a.allied_shop_id=t.id
+        AND t.id =#{shopAllied.alliedShopId}
     </select>
     <!--查询门店 -->
     <select id="selectShopAlliedPage" resultType="org.springblade.car.dto.SelectShopAlliedDTO" >
         SELECT t.id,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
         (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
         t.shop_img AS shopImg,t.area_name AS areaName,t.shop_address AS shopAddress,
-        ( SELECT allied_status FROM t_shop_allied c WHERE (c.shop_id=#{shopAllied.shopId} OR c.allied_shop_id=#{shopAllied.shopId}))  AS alliedStatus,
-        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
-        FROM t_shop t  WHERE t.is_deleted = 0 and t.audit_status=2
-        and t.id !=#{shopAllied.shopMemberId}
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
+        IFNULL(c.allied_status,0) alliedStatus
+        FROM t_shop t LEFT JOIN t_shop_allied c ON (t.id=c.shop_id OR t.id=c.allied_shop_id)
+        WHERE t.is_deleted = 0 AND t.audit_status=2
+        and t.member_id !=#{shopAllied.shopMemberId}
         <if test="shopAllied.shopName != null ">
             AND t.shop_name like concat(concat('%', #{shopAllied.shopName}), '%')
         </if>

@@ -23,13 +23,14 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
+import org.springblade.car.Req.CarsAuditReq;
+import org.springblade.car.Req.MemberReq;
 import org.springblade.car.dto.CarsDTO;
-import org.springblade.car.entity.CarsBrowse;
-import org.springblade.car.entity.CarsCollect;
-import org.springblade.car.entity.Member;
+import org.springblade.car.entity.*;
 import org.springblade.car.enums.CarSort;
 import org.springblade.car.factory.UserAreaFactory;
 import org.springblade.car.service.IMemberService;
+import org.springblade.car.service.IShopService;
 import org.springblade.common.cache.CacheNames;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -43,7 +44,6 @@ import org.springblade.util.NumberUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springblade.car.entity.Cars;
 import org.springblade.car.vo.CarsVO;
 import org.springblade.car.service.ICarsService;
 import org.springblade.core.boot.ctrl.BladeController;
@@ -61,11 +61,12 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/cars")
-@Api(value = "车源表", tags = "后台车源管理-车源列表")
+@Api(value = "车源表", tags = "v2后台车源管理-车源列表")
 public class CarsController extends BladeController {
-	private final UserAreaFactory userAreaFactory;
+	private final IShopService shopService;
 	private final ICarsService carsService;
 	private final IMemberService memberService;
+	private UserAreaFactory userAreaFactory;
 
 	/**
 	 * 详情
@@ -73,15 +74,43 @@ public class CarsController extends BladeController {
 	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "车源详情", notes = "传入cars")
-	public R<CarsDTO> detail(Cars cars) {
+	public R<CarsDTO> detail(Long carId) {
 		CarsDTO carDetail=new CarsDTO();
-		Cars detail = carsService.getOne(Condition.getQueryWrapper(cars));
-		Member member= memberService.getById(detail.getMemberId());
-		BeanUtils.copyProperties(detail,carDetail);
+		Cars cars = carsService.getById(carId);
+		if(Func.isEmpty(cars)){
+			throw new ServiceException("为获取到车源信息");
+		}
+		Member member= memberService.getById(cars.getMemberId());
+		BeanUtils.copyProperties(cars,carDetail);
 
 		if(Func.isNotEmpty(member)){
-			carDetail.setPhone(member.getPhone());
-			carDetail.setMemberName(member.getName());
+			//个人车源
+			if(Func.equals(cars.getVest(),1)){
+				carDetail.setMemberName(member.getName());
+				carDetail.setPhone1(member.getPhone());
+				carDetail.setShopName(member.getCarDealer());
+				carDetail.setShopAddress(member.getDealerAddress());
+				carDetail.setLat(member.getLat());
+				carDetail.setLng(member.getLng());
+			}
+
+			//门店车源
+			if(Func.equals(cars.getVest(),2)){
+				Shop shop= shopService.getById(cars.getShopId());
+				if(Func.isNotEmpty(shop)) {
+
+					carDetail.setMemberName(member.getName());
+					carDetail.setPhone1(shop.getPhone1());
+					carDetail.setPhone2(shop.getPhone2());
+					carDetail.setPhone3(shop.getPhone3());
+					carDetail.setPhone4(shop.getPhone4());
+					carDetail.setPhone5(shop.getPhone5());
+					carDetail.setShopName(shop.getShopName());
+					carDetail.setShopAddress(shop.getShopAddress());
+					carDetail.setLat(shop.getLat());
+					carDetail.setLng(shop.getLng());
+				}
+			}
 		}
 		return R.data(carDetail);
 	}
@@ -103,10 +132,13 @@ public class CarsController extends BladeController {
 	@GetMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "车源分页", notes = "传入cars")
-	public R<IPage<CarsVO>> page(CarsVO cars, Query query) {
-		//cars=userAreaFactory.getCarVO(cars);
+	public R<IPage<CarsDTO>> page(CarsVO cars, Query query) {
+		MemberReq memberReq=userAreaFactory.getUserAreas();
+		cars.setAreas(memberReq.getAreas());
+		cars.setNoareas(memberReq.getNoareas());
+		cars.setUserId(memberReq.getUserId());
 		cars.setSort("t.listtime");
-		IPage<CarsVO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 
 		return R.data(pages);
 	}
