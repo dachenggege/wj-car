@@ -168,8 +168,29 @@ public class CarsController extends BladeController {
 		return R.status(carsService.updateById(cars));
 	}
 
+	@GetMapping("/carAudit")
+	@ApiOperationSupport(order = 5)
+	@ApiOperation(value = "审核车源")
+	public R carAudit(@ApiParam(value = "车源id") @RequestParam(value = "id", required = true) Long id,
+								 @ApiParam(value = "状态 2审核通过，3审核不通过") @RequestParam(value = "auditStatus", required = true) int auditStatus,
+								 @ApiParam(value = "原因") @RequestParam(value = "nopassnotice", required = false) String nopassnotice) {
 
-	
+		Cars car= carsService.getById(id);
+		if(Func.isEmpty(car)){
+			return R.fail("车源信息不存在");
+		}
+		car.setAuditStatus(auditStatus);
+		car.setAuditTime(new Date());
+		car.setNopassnotice(nopassnotice);
+		return R.status(carsService.updateById(car));
+	}
+	@GetMapping("/upDownCar")
+	@ApiOperationSupport(order = 6)
+	@ApiOperation(value = "上架下架车源")
+	public R upDownMyCar(@ApiParam(value = "车源id", required = true) @RequestParam Long id,
+						 @ApiParam(value = "状态", required = true) @RequestParam Integer status) {
+		return R.status(carsService.upDownShopCar(id,status));
+	}
 	/**
 	 * 删除 车源表
 	 */

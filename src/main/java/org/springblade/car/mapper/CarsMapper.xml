@@ -224,13 +224,6 @@
         <if test="cars.memberId != null ">
             and t.member_id=#{cars.memberId}
         </if>
-        <if test="cars.memberIds != null and cars.memberIds != ''">
-            and t.member_id IN
-            <foreach collection="cars.memberIds" item="item" index="index" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-
         <if test="cars.brandId != null and cars.brandId !=''">
             and t.brand_id=#{cars.brandId}
         </if>

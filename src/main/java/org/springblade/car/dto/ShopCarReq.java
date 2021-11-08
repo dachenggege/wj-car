@@ -48,6 +48,9 @@ public class ShopCarReq {
     @ApiModelProperty(value = "审核状态1审核中,2审核通过，3审核不通过")
     private Integer auditStatus;
 
+    @ApiModelProperty(value = "上架状态状态0下架，1上架")
+    private Integer status;
+
 
 
 }

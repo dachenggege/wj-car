@@ -309,19 +309,14 @@ public class WShopController extends BladeController {
 	 */
 	@GetMapping("/shopCarpage")
 	@ApiOperationSupport(order = 9)
-	@ApiOperation(value = "门店车源分页", notes = "传入shopCarReq")
-	public R<IPage<CarsDTO>> shopCarpage(ShopCarReq shopCarReq, Query query) {
-		ShopMember shopMember=new ShopMember();
-		shopMember.setShopId(shopCarReq.getShopId());
-//		List<ShopMember> list= shopMemberService.list(Condition.getQueryWrapper(shopMember));
-//		List<Long> memberIds=new ArrayList<>();
-//		for(ShopMember m:list){
-//			memberIds.add(m.getMemberId());
-//		}
-		CarsVO cars=new CarsVO();
-		BeanUtils.copyProperties(shopCarReq,cars);
-//		cars.setMemberIds(memberIds);
-		cars.setPallname(shopCarReq.getPallname());
+	@ApiOperation(value = "门店车源分页", notes = "cars")
+	public R<IPage<CarsDTO>> shopCarpage(CarsVO cars, Query query) {
+		if(Func.isEmpty(cars.getShopId())){
+			R.fail("门店id不能为空哦");
+		}
+		if(Func.isEmpty(cars.getStatus())){
+			cars.setStatus(1);
+		}
 		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
@@ -332,7 +327,7 @@ public class WShopController extends BladeController {
 	@PostMapping("/removeShopCar")
 	@ApiOperationSupport(order = 13)
 	@ApiOperation(value = "删除门店车源", notes = "传入ids")
-	public R removeShopCar(@ApiParam(value = "主键集合", required = true) @RequestParam String id,
+	public R removeShopCar(@ApiParam(value = "主键集合", required = true) @RequestParam String ids,
 						   @ApiParam(value = "门店id", required = true) @RequestParam Long shopId) {
 		Member cl = wMemberFactory.getMember(request);
 
@@ -346,13 +341,13 @@ public class WShopController extends BladeController {
 		if(!roleRightDTO.getIsEditCar()){
 			R.fail("您没有权限删除门店车源哦");
 		}
-		return R.status(carsService.removeByIds(Func.toLongList(id)));
+		return R.status(carsService.removeByIds(Func.toLongList(ids)));
 	}
 
 	@GetMapping("/upDownShopCar")
 	@ApiOperationSupport(order = 14)
 	@ApiOperation(value = "上架下架门店车源")
-	public R upDownShopCar(@ApiParam(value = "车源id", required = true) @RequestParam Long carId,
+	public R upDownShopCar(@ApiParam(value = "车源id", required = true) @RequestParam Long id,
 						   @ApiParam(value = "状态", required = true) @RequestParam Integer status,
 						   @ApiParam(value = "门店id", required = true) @RequestParam Long shopId) {
 		Member cl = wMemberFactory.getMember(request);
@@ -367,7 +362,49 @@ public class WShopController extends BladeController {
 		if(!roleRightDTO.getIsDownCar()){
 			R.fail("您没有权限操作哦");
 		}
-		return R.status(carsService.upDownShopCar(carId,status));
+		return R.status(carsService.upDownShopCar(id,status));
+	}
+	@GetMapping("/updateListtime")
+	@ApiOperationSupport(order = 15)
+	@ApiOperation(value = "上新车源时间", notes = "传入id")
+	public R updateListtime(@ApiParam(value = "车源主键", required = true) @RequestParam Long id,
+							@ApiParam(value = "门店id", required = true) @RequestParam Long shopId) {
+//		Member cl = wMemberFactory.getMember(request);
+//
+//		Map<String,Object> map=new HashMap<>();
+//		map.put("staff_id",cl.getId());
+//		map.put("shop_id",shopId);
+//		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
+//		if(Func.isEmpty(roleRightDTO)){
+//			R.fail("您没有权限操作哦");
+//		}
+//		if(!roleRightDTO.getIsDownCar()){
+//			R.fail("您没有权限操作哦");
+//		}
+
+		return R.status(carsService.updateCarListTime(id));
+	}
+	@GetMapping("/shopCarsBeenCallPage")
+	@ApiOperationSupport(order = 16)
+	@ApiOperation(value = "门店车源被电话咨询记录", notes = "传入cars")
+	public R<IPage<carsBeenCallDTO>> shopCarsBeenCallPage(@ApiParam(value = "门店id", required = true) @RequestParam Long shopId,
+														  Query query) {
+		Member cl = wMemberFactory.getMember(request);
+		Map<String,Object> map=new HashMap<>();
+		map.put("staff_id",cl.getId());
+		map.put("shop_id",shopId);
+		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
+		if(Func.isEmpty(roleRightDTO)){
+			R.fail("您没有权限操作哦");
+		}
+		if(!roleRightDTO.getIsLookCarBrowse()){
+			R.fail("您没有权限操作哦");
+		}
+
+		CarsVO cars = new CarsVO();
+		cars.setShopId(shopId);
+		IPage<carsBeenCallDTO> pages = carsService.carsBeenCallPage(Condition.getPage(query), cars);
+		return R.data(pages);
 	}
 
 	@GetMapping("/hadAlliedShopPage")

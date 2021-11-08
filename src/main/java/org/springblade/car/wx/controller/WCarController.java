@@ -95,8 +95,9 @@ public class WCarController extends BladeController {
 
 	@PostMapping("/saveCar")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "发布车辆", notes = "传入cars")
+	@ApiOperation(value = "发布(编辑)车辆", notes = "传入cars")
 	public R saveCar(@Valid @RequestBody Cars cars) {
+
 		wVinServeFactory.isCheckVin(cars.getPvin());
 		if(Func.isEmpty(cars.getVest())){
 			throw new ServiceException("车源所属不能为空");
@@ -255,4 +256,26 @@ public class WCarController extends BladeController {
 
 		return R.status(res);
 	}
+
+	@PostMapping("/memberCarsPage")
+	@ApiOperationSupport(order = 9)
+	@ApiOperation(value = "会员车源分页", notes = "传入cars")
+	public R<IPage<CarsDTO>> memberCarsPage(
+			@ApiParam(value = "会员id") @RequestParam(value = "memberId", required = true) Long memberId,
+			@ApiParam(value = "车源所属：1个人 2门店") @RequestParam(value = "vest", required = true) Integer vest,
+										Query query) {
+		CarsVO cars=new CarsVO();
+		cars.setMemberId(memberId);
+		cars.setVest(vest);
+		if (Func.isNotEmpty(cars.getSort())) {
+			cars.setSort(CarSort.getValue(Integer.valueOf(cars.getSort())));
+		} else {
+			cars.setSort(CarSort.TIME.value);
+		}
+
+		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		return R.data(pages);
+	}
+
+
 }

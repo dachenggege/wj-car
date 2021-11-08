@@ -56,7 +56,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/HomePage")
-@Api(value = "微信-车港湾", tags = "微信-车港湾接口")
+@Api(value = "微信-车港湾", tags = "微信-v2首页车源接口")
 public class WHomePageController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;
@@ -133,7 +133,9 @@ public class WHomePageController extends BladeController {
 		}else {
 			cars.setSort(CarSort.TIME.value);
 		}
-
+		if(Func.isEmpty(cars.getStatus())){
+			cars.setStatus(1);
+		}
 		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
