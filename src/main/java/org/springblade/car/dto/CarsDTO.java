@@ -66,4 +66,8 @@ public class CarsDTO extends  Cars{
 	private Integer viewCount;
 	@ApiModelProperty(value = "电话咨询次数")
 	private Integer callPhoneCount;
+
+	@ApiModelProperty(value = "认证等级0未认证，1初级认证，2高级认证")
+	private Integer certificationLv;
+
 }

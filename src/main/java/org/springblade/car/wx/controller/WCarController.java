@@ -182,6 +182,7 @@ public class WCarController extends BladeController {
 		}
 		Member member= memberService.getById(cars.getMemberId());
 		BeanUtils.copyProperties(cars,carDetail);
+		carDetail.setCertificationLv(member.getCertificationLv());
 
 		if(Func.isNotEmpty(member)){
 			//个人车源
