@@ -50,11 +50,13 @@ public class ShopMember implements Serializable {
 	* 门店id
 	*/
 		@ApiModelProperty(value = "门店id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long shopId;
 	/**
 	* 用户id
 	*/
 		@ApiModelProperty(value = "店员id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long staffId;
 	@ApiModelProperty(value = "店员角色ID")
 	private Integer staffRole;

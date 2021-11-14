@@ -75,6 +75,15 @@ public class WShopController extends BladeController {
 	@ApiOperation(value = "新增门店", notes = "传入shop")
 	@Transactional
 	public R saveShop(@Valid @RequestBody Shop shop) {
+		if(Func.isEmpty(shop.getShopName())){
+			return R.fail("门店名称不能为空");
+		}
+		if(Func.isEmpty(shop.getProvince()) || Func.isEmpty(shop.getCity()) || Func.isEmpty(shop.getCounty()) ||  Func.isEmpty(shop.getShopAddress())){
+			return R.fail("门店地址不能为空");
+		}
+		if(Func.isEmpty(shop.getLat()) || Func.isEmpty(shop.getLng())){
+			return R.fail("门店经纬度不能为空");
+		}
 		MemberDTO cl = wMemberFactory.getMemberDTO(request);
 		//判断是否有创建门店的权限
 		MemberRights  rights=  cl.getRights();
@@ -317,6 +326,7 @@ public class WShopController extends BladeController {
 		if(Func.isEmpty(cars.getStatus())){
 			cars.setStatus(1);
 		}
+		cars.setVest(2);
 		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}

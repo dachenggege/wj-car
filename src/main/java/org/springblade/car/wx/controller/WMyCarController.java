@@ -89,6 +89,7 @@ public class WMyCarController extends BladeController {
 	public R<IPage<CarsDTO>> myCarsPage(CarsVO cars,Query query) {
 		Member cl = wMemberFactory.getMember(request);
 		cars.setMemberId(cl.getId());
+		cars.setVest(1);
 		if (Func.isNotEmpty(cars.getSort())) {
 			cars.setSort(CarSort.getValue(Integer.valueOf(cars.getSort())));
 		} else {

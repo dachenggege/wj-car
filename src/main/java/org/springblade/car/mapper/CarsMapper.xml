@@ -202,8 +202,14 @@
         ) m
         where t.is_deleted = 0  and m.is_deleted=0
         and t.member_id =m.id
+        <if test="cars.status != null">
+            and t.status=#{cars.status}
+        </if>
 
-        <if test="cars.id != null and cars.id !=''">
+        <if test="cars.vest != null">
+            and t.vest=#{cars.vest}
+        </if>
+        <if test="cars.id != null">
             and t.id=#{cars.id}
         </if>
         <if test="cars.pvin != null and cars.pvin !=''">
@@ -254,10 +260,10 @@
         <if test="cars.auditStatus != null and cars.auditStatus !=''">
             and t.audit_status=#{cars.auditStatus}
         </if>
-        <if test="cars.sprice != null">
+        <if test="cars.sprice != null and cars.sprice !=''">
             and t.pprice &gt; #{cars.sprice}
         </if>
-        <if test="cars.eprice != null">
+        <if test="cars.eprice != null and cars.eprice !=''">
             and t.pprice &lt; #{cars.eprice}
         </if>
         <if test="cars.areas != null and cars.areas != ''">
@@ -313,6 +319,12 @@
         SELECT t.*,c.create_time as createTime FROM t_cars t,t_cars_collect c WHERE t.is_deleted = 0
         AND c.is_deleted = 0 AND t.id=c.car_id
         AND c.is_collect=1
+        <if test="cars.status != null">
+            and t.status=#{cars.status}
+        </if>
+        <if test="cars.vest != null">
+            and t.vest=#{cars.vest}
+        </if>
         <if test="cars.memberId != null">
             and c.member_id=#{cars.memberId}
         </if>
@@ -392,6 +404,9 @@
     <select id="carsBrowsePage" resultMap="carsResultMap">
         SELECT t.*,c.create_time as createTime FROM t_cars t,t_cars_browse c WHERE t.is_deleted = 0
         AND c.is_deleted = 0 AND t.id=c.car_id
+        <if test="cars.status != null">
+            and t.status=#{cars.status}
+        </if>
         <if test="cars.id != null">
             and t.id=#{cars.id}
         </if>

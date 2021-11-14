@@ -19,6 +19,9 @@ package org.springblade.car.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
@@ -36,7 +39,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class PhoneRecord implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 	/**
 	* 1主页咨询,2车源联系,3论坛咨询,4客服咨询
@@ -52,16 +55,19 @@ public class PhoneRecord implements Serializable {
 	* 用户id
 	*/
 		@ApiModelProperty(value = "用户id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long memberId;
 	/**
 	* 车源id
 	*/
 		@ApiModelProperty(value = "车源id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long carsId;
 	/**
 	* 帖子id
 	*/
 		@ApiModelProperty(value = "帖子id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long forumId;
 	/**
 	* 创建人

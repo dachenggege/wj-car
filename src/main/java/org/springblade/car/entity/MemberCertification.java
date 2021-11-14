@@ -21,6 +21,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
@@ -43,11 +45,13 @@ public class MemberCertification implements Serializable {
 	* 主键ID
 	*/
 		@ApiModelProperty(value = "主键ID")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long id;
 	/**
 	* 用户ID
 	*/
 		@ApiModelProperty(value = "用户ID")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long memberId;
 	/**
 	* 用户角色1游客,2个人,3商家

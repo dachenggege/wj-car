@@ -179,6 +179,7 @@ public class ShopController extends BladeController {
 //		}
 		CarsVO cars=new CarsVO();
 		BeanUtils.copyProperties(shopCarReq,cars);
+		cars.setVest(2);
 //		cars.setMemberIds(memberIds);
 		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
 		return R.data(pages);

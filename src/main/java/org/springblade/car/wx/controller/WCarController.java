@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springblade.car.dto.CarsDTO;
 import org.springblade.car.dto.CarsVinParseReq;
+import org.springblade.car.dto.ShopMemberRoleRightDTO;
 import org.springblade.car.entity.*;
 import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.enums.CarSort;
@@ -50,7 +51,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 车源表 控制器
@@ -68,7 +71,7 @@ public class WCarController extends BladeController {
 	private WMemberFactory wMemberFactory;
 	private final IShopService shopService;
 	private final IRegionService regionService;
-	private final IModelService modelService;
+	private final IShopMemberService shopMemberService;
 	private final ICarsService carsService;
 	private final ISeriesService seriesService;
 	private final ICarsCollectService casCollectService;
@@ -100,20 +103,30 @@ public class WCarController extends BladeController {
 
 		wVinServeFactory.isCheckVin(cars.getPvin());
 		if(Func.isEmpty(cars.getVest())){
-			throw new ServiceException("车源所属不能为空");
+			return R.fail("车源所属不能为空");
 		}
 		if(Func.isEmpty(cars.getPafprice())){
-			throw new ServiceException("零售价不能为空");
+			return R.fail("零售价不能为空");
 		}
 		if(Func.isEmpty(cars.getPtradePrice())){
-			throw new ServiceException("批发价不能为空");
+			return R.fail("批发价不能为空");
 		}
 		if(Func.isEmpty(cars.getPafprice())){
-			throw new ServiceException("内部价不能为空");
+			return R.fail("内部价不能为空");
 		}
 		if(Func.isEmpty(cars.getPcostprice())){
-			throw new ServiceException("成本价不能为空");
+			return R.fail("成本价不能为空");
 		}
+
+		Cars car=new Cars();
+		car.setPvin(cars.getPvin());
+		Cars one= carsService.getOne(Condition.getQueryWrapper(car));
+
+		//如果是新增
+		if(Func.isEmpty(cars.getId()) && Func.isNotEmpty(one)) {
+			return R.fail("该车已经存在，不能在发布了");
+		}
+
 
 
 		Member cl = wMemberFactory.getMember(request);
@@ -130,6 +143,7 @@ public class WCarController extends BladeController {
 
 		//门店车源
 		if(Func.equals(cars.getVest(),2)){
+
 			if(Func.isEmpty(cars.getShopId())){
 				return R.fail("门店id不能为空");
 			}
@@ -137,6 +151,19 @@ public class WCarController extends BladeController {
 			if(Func.isEmpty(shop)){
 				return R.fail("门店ID不存在");
 			}
+
+			Map<String,Object> map=new HashMap<>();
+			map.put("staff_id",cl.getId());
+			map.put("shop_id",cars.getShopId());
+			ShopMemberRoleRightDTO  right = shopMemberService.getShopMemberRight(map);
+
+			if(Func.isEmpty(right)){
+				return R.fail("您不是该门店该门店的员工，不能发布车源哦");
+			}
+			if(!right.getIsPublishCar()){
+				return R.fail("您没有该门店发布车源权限哦，去找店主开通吧");
+			}
+
 			cars.setProvince(shop.getProvince());
 			Region pr= regionService.getById(shop.getProvince());
 			if(Func.isNotEmpty(pr)) {

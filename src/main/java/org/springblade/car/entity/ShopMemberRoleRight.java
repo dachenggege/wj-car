@@ -17,6 +17,8 @@
 package org.springblade.car.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -41,6 +43,7 @@ public class ShopMemberRoleRight implements Serializable {
 	* 主键id
 	*/
 		@ApiModelProperty(value = "主键角色id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long id;
 
 	@ApiModelProperty(value = "角色名称")

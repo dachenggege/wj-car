@@ -30,6 +30,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springblade.core.mp.base.BaseEntity;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * 用户门店表实体类
  *
@@ -64,11 +66,13 @@ public class Shop extends BaseEntity {
 	* 门店名称
 	*/
 		@ApiModelProperty(value = "门店名称")
+		@NotEmpty
 		private String shopName;
 	/**
 	* 门店地址
 	*/
 		@ApiModelProperty(value = "门店地址")
+		@NotEmpty
 		private String shopAddress;
 
 	@ApiModelProperty(value = "门店经度")
@@ -95,11 +99,13 @@ public class Shop extends BaseEntity {
 	* 门店图片地址多个用英文逗号分隔
 	*/
 		@ApiModelProperty(value = "门店图片地址多个用英文逗号分隔")
+		@NotEmpty
 		private String shopImg;
 	/**
 	* 证件地址多个用英文逗号分隔
 	*/
 		@ApiModelProperty(value = "证件地址多个用英文逗号分隔")
+		@NotEmpty
 		private String certificate;
 	/**
 	* 审核状态1审核中,2审核通过，3审核不通过

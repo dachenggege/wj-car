@@ -125,7 +125,7 @@ public class Cars extends BaseEntity {
 		private BigDecimal pcostprice;
 
 		@ApiModelProperty(value = "收车时间")
-		private Date purchaseTime;
+		private String purchaseTime;
 
 
 	/**

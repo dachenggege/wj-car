@@ -19,6 +19,9 @@ package org.springblade.car.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
@@ -41,16 +44,19 @@ public class CarsBrowse implements Serializable {
 	* 主键id
 	*/
 		@ApiModelProperty(value = "主键id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long id;
 	/**
 	* 车源id
 	*/
 		@ApiModelProperty(value = "车源id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long carId;
 	/**
 	* 浏览者id
 	*/
 		@ApiModelProperty(value = "浏览者id")
+		@JsonSerialize(using = ToStringSerializer.class)
 		private Long memberId;
 	/**
 	* 创建人
