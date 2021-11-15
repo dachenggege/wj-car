@@ -27,10 +27,7 @@ import lombok.AllArgsConstructor;
 import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.dto.MemberRegist;
 import org.springblade.car.dto.MerchantRegist;
-import org.springblade.car.entity.CarsBrowse;
-import org.springblade.car.entity.Member;
-import org.springblade.car.entity.MemberCertification;
-import org.springblade.car.entity.Shop;
+import org.springblade.car.entity.*;
 import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.enums.CarSort;
 import org.springblade.car.enums.RoleType;
@@ -88,7 +85,7 @@ public class WMemberController extends BladeController {
 	private IMemberService memberService;
 	private WxFactory wxFactory;
 	private final ICarsService carsService;
-	private final ICarsCollectService casCollectService;
+	private final IMemberFansService memberFansService;
 	private IPayOrderService payOrderService;
 	private final ICarsBrowseService carsBrowseService;
 
@@ -113,14 +110,23 @@ public class WMemberController extends BladeController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "获取用户信息")
 	public R<MemberDTO> getMemberById(@ApiParam(value = "用户Id") @RequestParam(value = "memberId", required = true) String memberId) {
-		Member cl = memberService.getById(memberId);
-		if(Func.isEmpty(cl)){
+		Member cl = wMemberFactory.getMember(request);
+		Member member = memberService.getById(memberId);
+		if(Func.isEmpty(member)){
 			throw new ServiceException("为获取到用户信息");
 		}
-		cl.setLastLogin(new Date());
-		memberService.updateById(cl);
-		bladeRedis.set(cl.getOpenid(),cl);
-		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
+		MemberDTO dto = wMemberFactory.getMemberByid(member.getId());
+
+		MemberFans memberFans =new MemberFans();
+		memberFans.setMemberId(member.getId());
+		memberFans.setFansId(cl.getId());
+		MemberFans fans=memberFansService.getOne(Condition.getQueryWrapper(memberFans));
+		if(Func.isNotEmpty(fans)){
+			dto.setIsFocus(true);
+		}else {
+			dto.setIsFocus(false);
+		}
+
 		return R.data(dto);
 	}
 	@PostMapping("/submitCertification")

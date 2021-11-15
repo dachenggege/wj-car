@@ -15,7 +15,7 @@
 
 
     <select id="selectMemberFansPage" resultType="org.springblade.car.entity.Member">
-        select m.* from t_member_fans f,t_memer m where f.is_deleted = 0 and m.is_deleted=0
+        select m.* from t_member_fans f,t_member m where f.is_deleted = 0 and m.is_deleted=0
         and f.member_id=m.id
         <if test="memferFans.memberId != null">
             and f.member_id=#{memferFans.memberId}
@@ -23,10 +23,10 @@
     </select>
 
     <select id="selectMemberFcousPage" resultType="org.springblade.car.entity.Member">
-        select m.* from t_member_fans f,t_memer m where f.is_deleted = 0 and m.is_deleted=0
+        select m.* from t_member_fans f,t_member m where f.is_deleted = 0 and m.is_deleted=0
         and f.fans_id=m.id
         <if test="memferFans.fansId != null">
-            and m.fans_id=#{memferFans.fansId}
+            and f.fans_id=#{memferFans.fansId}
         </if>
     </select>
 </mapper>

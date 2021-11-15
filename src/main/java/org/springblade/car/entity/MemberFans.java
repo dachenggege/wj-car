@@ -27,6 +27,8 @@ import lombok.EqualsAndHashCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 实体类
  *
@@ -51,12 +53,14 @@ public class MemberFans implements Serializable {
 	*/
 		@ApiModelProperty(value = "用户id")
 		@JsonSerialize(using = ToStringSerializer.class)
+		@NotNull
 		private Long memberId;
 	/**
 	* 粉丝id
 	*/
 		@ApiModelProperty(value = "粉丝id")
 		@JsonSerialize(using = ToStringSerializer.class)
+		@NotNull
 		private Long fansId;
 	/**
 	* 创建时间

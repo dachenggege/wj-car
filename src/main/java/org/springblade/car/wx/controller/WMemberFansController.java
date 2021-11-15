@@ -64,6 +64,14 @@ public class WMemberFansController extends BladeController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "新增关注", notes = "传入memberFans")
 	public R memberfansSave(@Valid @RequestBody MemberFans memberFans) {
+		if(Func.isEmpty(memberFans.getFansId())){
+			return R.fail("粉丝id不能为空");
+		}
+		if(Func.isEmpty(memberFans.getMemberId())){
+			return R.fail("用户id不能为空");
+		}
+		//Member cl = wMemberFactory.getMember(request);
+
 		MemberFans fans=memberFansService.getOne(Condition.getQueryWrapper(memberFans));
 		if(Func.isEmpty(fans)){
 			memberFansService.save(memberFans);
@@ -104,8 +112,16 @@ public class WMemberFansController extends BladeController {
 	@PostMapping("/remove")
 	@ApiOperationSupport(order = 8)
 	@ApiOperation(value = "删除我的关注", notes = "传入ids")
-	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status(memberFansService.removeByIds(Func.toLongList(ids)));
+	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String id) {
+		Member cl = wMemberFactory.getMember(request);
+		MemberFans memberFans =new MemberFans();
+		memberFans.setMemberId(Long.valueOf(id));
+		memberFans.setFansId(cl.getId());
+		MemberFans fans=memberFansService.getOne(Condition.getQueryWrapper(memberFans));
+		if(Func.isNotEmpty(fans)){
+			memberFansService.removeById(fans.getId());
+		}
+		return R.success("成功");
 	}
 
 	

@@ -36,21 +36,24 @@ public class MemberDTO extends Member {
 	@ApiModelProperty(value = "会员等级及权益")
 	private MemberRights rights;
 
-	@ApiModelProperty(value = "我的关注数量")
+	@ApiModelProperty(value = "关注数量")
 	private Integer focusNum;
 
 	@ApiModelProperty(value = "粉丝数量")
 	private Integer fansNum;
 
-	@ApiModelProperty(value = "我的车源数量")
+	@ApiModelProperty(value = "车源数量")
 	private Integer myCarNum;
 
 	@ApiModelProperty(value = "门店车源数量")
 	private Integer myShopCarNum;
 
-	@ApiModelProperty(value = "我创建的门店数")
+	@ApiModelProperty(value = "创建的门店数")
 	private Integer myShopNum;
 
-	@ApiModelProperty(value = "我加入的门店数")
+	@ApiModelProperty(value = "加入的门店数")
 	private Integer myJoinShopNum;
+
+	@ApiModelProperty(value = "是否关注")
+	private Boolean isFocus;
 }
