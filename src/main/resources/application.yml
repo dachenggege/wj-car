@@ -32,6 +32,26 @@ spring:
         session-stat-enable: true
         session-stat-max-count: 10
 
+  mail:
+#    host: smtp.qq.com
+#    port: 465
+#    username: 495214926@qq.com
+#    password: wwlwsjsvwhphbjgb  # 邮箱授权码
+    host: smtp.exmail.qq.com
+    port: 465
+    username: songyc@szmlink.com
+    password: E6LL8kZtZDGEmGHy
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+
 # mybatis
 mybatis-plus:
   mapper-locations: classpath:org/springblade/**/mapper/*Mapper.xml
@@ -188,6 +208,7 @@ blade:
       - /blade-resource/oss/endpoint/put-img
       - /second-hand-car/wx/**
       - /second-hand-car/wshop/**
+      - /second-hand-car/mail/**
     #授权认证配置
     auth:
       - method: ALL
