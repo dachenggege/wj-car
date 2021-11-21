@@ -85,4 +85,7 @@ public class VinVehicle {
         private String vehlsSeri	;//	是否商用车(不一定有值)
         @ApiModelProperty(value = "别名")
         private String vehicleAlias	;
+
+        @ApiModelProperty(value = "微信支付订单号")
+        private String outTradeNo;
 }

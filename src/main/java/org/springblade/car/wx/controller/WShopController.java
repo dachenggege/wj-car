@@ -91,7 +91,7 @@ public class WShopController extends BladeController {
 			return R.fail("对不起您没有创建门店的权限");
 		}
 		if(rights.getCreateShopNum()<=cl.getMyShopNum()){
-			return R.fail("对不起您会员等级只能传建"+rights.getCreateShopNum()+"个门店哦");
+			return R.fail("对不起您会员等级只能创建"+rights.getCreateShopNum()+"个门店哦");
 		}
 		shop.setId(NumberUtil.getRandomNumber(6,8));
 		shop.setAuditStatus(AuditStatus.AUDITING.id);

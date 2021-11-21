@@ -160,6 +160,7 @@ public class MemberRights implements Serializable {
 	*/
 		@ApiModelProperty(value = "每天后N次看视频")
 		private Integer freeVinParseNum2;
+
 	@ApiModelProperty(value = "查询vin每条价格")
 	private Double vinParsePrice;
 	/**

@@ -16,6 +16,7 @@
  */
 package org.springblade.car.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springblade.car.entity.PayOrder;
 import org.springblade.car.vo.PayOrderVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -38,5 +39,6 @@ public interface PayOrderMapper extends BaseMapper<PayOrder> {
 	 * @return
 	 */
 	List<PayOrderVO> selectPayOrderPage(IPage page, PayOrderVO payOrder);
+	int freeOrderCount(@Param("memberId") Long memberId);
 
 }

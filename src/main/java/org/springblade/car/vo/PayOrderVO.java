@@ -19,6 +19,7 @@ package org.springblade.car.vo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import org.springblade.car.entity.PayOrder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -51,5 +52,8 @@ public class PayOrderVO extends PayOrder {
 	private String phone;
 	@ApiModelProperty(value = "用户名称")
 	private String memberName;
+
+	private List<Integer> types;
+
 
 }

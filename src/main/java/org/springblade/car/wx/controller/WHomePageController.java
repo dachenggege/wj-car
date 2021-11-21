@@ -18,6 +18,7 @@ package org.springblade.car.wx.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -56,7 +57,8 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/HomePage")
-@Api(value = "微信-车港湾", tags = "微信-v2首页车源接口")
+@Api(value = "微信-车港湾", tags = "v2微信-首页车源接口")
+@ApiSort(1009)
 public class WHomePageController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;

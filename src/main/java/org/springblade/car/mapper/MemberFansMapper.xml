@@ -16,7 +16,7 @@
 
     <select id="selectMemberFansPage" resultType="org.springblade.car.entity.Member">
         select m.* from t_member_fans f,t_member m where f.is_deleted = 0 and m.is_deleted=0
-        and f.member_id=m.id
+        and f.fans_id=m.id
         <if test="memferFans.memberId != null">
             and f.member_id=#{memferFans.memberId}
         </if>
@@ -24,7 +24,7 @@
 
     <select id="selectMemberFcousPage" resultType="org.springblade.car.entity.Member">
         select m.* from t_member_fans f,t_member m where f.is_deleted = 0 and m.is_deleted=0
-        and f.fans_id=m.id
+        and f.member_id=m.id
         <if test="memferFans.fansId != null">
             and f.fans_id=#{memferFans.fansId}
         </if>

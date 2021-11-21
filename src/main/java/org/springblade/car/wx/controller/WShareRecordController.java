@@ -18,6 +18,7 @@ package org.springblade.car.wx.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -47,7 +48,8 @@ import javax.validation.Valid;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/sharerecord")
-@Api(value = "", tags = "微信-车服务分享")
+@Api(value = "", tags = "v2微信-车服务分享")
+@ApiSort(1011)
 public class WShareRecordController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;
@@ -68,7 +70,7 @@ public class WShareRecordController extends BladeController {
 		return R.status(shareRecordService.save(shareRecord));
 	}
 
-	@PostMapping("/sharerecordCount")
+	@GetMapping("/sharerecordCount")
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "查询当天小程序分享次数", notes = "传入shareRecord")
 	public R<Integer> sharerecordCount() {

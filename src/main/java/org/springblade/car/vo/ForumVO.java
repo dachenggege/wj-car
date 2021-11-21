@@ -40,8 +40,8 @@ import java.util.List;
 @ApiModel(value = "ForumVO对象", description = "ForumVO对象")
 public class ForumVO extends Forum {
 	private static final long serialVersionUID = 1L;
-//	private List<String> areas;
-//	private List<String> noareas;
+	private List<String> areas;
+	private List<String> noareas;
 
 	@ApiModelProperty(value = "真实姓名")
 	private String name;

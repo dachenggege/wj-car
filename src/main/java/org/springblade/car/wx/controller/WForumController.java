@@ -52,7 +52,7 @@ import javax.validation.Valid;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/forum")
-@Api(value = "微信-车论坛", tags = "微信-车论坛接口")
+@Api(value = "微信-车论坛", tags = "v2微信-车论坛接口")
 public class WForumController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;

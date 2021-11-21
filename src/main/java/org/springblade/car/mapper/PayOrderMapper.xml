@@ -9,7 +9,7 @@
         <result column="type" property="type"/>
         <result column="out_trade_no" property="outTradeNo"/>
         <result column="pay_money" property="payMoney"/>
-        <result column="dict_id" property="dictId"/>
+        <result column="vin" property="vin"/>
         <result column="remark" property="remark"/>
         <result column="member_lv" property="memberLv"/>
         <result column="rights_id" property="rightsId"/>
@@ -29,6 +29,12 @@
         AND t.member_id=m.id
         <if test="payOrder.type != null">
             and t.type=#{payOrder.type}
+        </if>
+        <if test="payOrder.types != null and payOrder.types != ''">
+        and t.type IN
+        <foreach collection="payOrder.types" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
         </if>
         <if test="payOrder.phone != null and payOrder.phone !=''">
             and m.phone=#{payOrder.phone}
@@ -96,6 +102,13 @@
         </if>
 
         order by t.create_time desc
+    </select>
+
+
+    <select id="freeOrderCount" resultType="java.lang.Integer" parameterType="java.lang.Long">
+         select count(1) from t_pay_order t where is_deleted = 0 and t.type=4
+         and member_id=#{memberId}
+         and create_time &gt; DATE_FORMAT(NOW(),'%Y-%m-%d')
     </select>
 
 </mapper>

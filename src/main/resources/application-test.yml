@@ -11,30 +11,30 @@ server:
     # 是否分配的直接内存
     direct-buffers: true
   ############ssl#Hhttps############################33
-  ssl:
-    enabled: true
-    key-store: classpath:4798561_yn52.mlcloud.com.cn.pfx
-    key-store-password: ETInr0Jz
-    key-store-type: PKCS12
+#  ssl:
+#    enabled: true
+#    key-store: classpath:6338268_www.wjcy2sc.com.pfx
+#    key-store-password: IjFsCkBC
+#    key-store-type: PKCS12
 #数据源配置
 spring:
   redis:
     ##redis 单机环境配置
     ##将docker脚本部署的redis服务映射为宿主机ip
     ##生产环境推荐使用阿里云高可用redis服务并设置密码
-    host: 127.0.0.1
+    host: 120.25.247.50
     port: 6379
-    password: Mailian!QAZ
-    database: 2
+    password: WanJiaRedis@007
+    database: 1
     ssl: false
     ##redis 集群环境配置
     #cluster:
     #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
     #  commandTimeout: 5000
   datasource:
-    url: jdbc:mysql://58.250.212.24:33306/wj_car?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://120.25.247.50:3306/wj_car?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     username: root
-    password: Mailian@2021_2
+    password: WanJIaMysql@007
 
 #第三方登陆
 social:
@@ -50,7 +50,7 @@ blade:
     ##将docker脚本部署的redis服务映射为宿主机ip
     ##生产环境推荐使用阿里云高可用redis服务并设置密码
     address: redis://127.0.0.1:6379
-    password: Mailian@2021_2
+    password: WanJiaRedis@007
   #本地文件上传
   file:
     remote-mode: true

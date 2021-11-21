@@ -50,7 +50,7 @@ public class PayOrder extends BaseEntity {
 	/**
 	* 1会员充值，2保障金
 	*/
-		@ApiModelProperty(value = "1会员升级，2会员续费，3vin订单查询")
+		@ApiModelProperty(value = "1会员升级，2会员续费，3vin免费订单查询，4vin分享微信查询")
 		private Integer type;
 
 	/**
@@ -72,4 +72,6 @@ public class PayOrder extends BaseEntity {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "会员权益id")
 	private Integer rightsId;
+	@ApiModelProperty("VIN号")
+	private String vin;
 }

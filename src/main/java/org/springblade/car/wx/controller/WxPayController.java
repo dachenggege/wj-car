@@ -18,8 +18,10 @@ package org.springblade.car.wx.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.sun.org.apache.xpath.internal.axes.PredicatedNodeTest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Synchronized;
 import org.springblade.car.dto.MemberDTO;
@@ -205,6 +207,14 @@ public class WxPayController extends BladeController {
 		if(Func.isEmpty(openid)){
 			return  R.fail("openid不能为空");
 		}
+		String outTradeNo=orderPayReq.getOutTradeNo();
+		if(Func.isEmpty(outTradeNo)){
+			return  R.fail("订单id不能为空");
+		}
+		String vin=orderPayReq.getVin();
+		if(Func.isEmpty(vin)){
+			return  R.fail("vin号不能为空");
+		}
 		Member cl = wMemberFactory.getMember(request);
 		orderPayReq.setOpenid(openid);
 		orderPayReq.setMemberId(cl.getId());
@@ -226,12 +236,10 @@ public class WxPayController extends BladeController {
 
 		PayOrder pay=new PayOrder();
 		BeanUtils.copyProperties(orderPayReq,pay);
-		Long id= NumberUtil.getRandomNum(16);
-		pay.setId(id);
-		pay.setOutTradeNo(id.toString());
+		pay.setId(Long.valueOf(outTradeNo));
 		pay.setStatus(1);
 
-		Map<String, String> resMap=WXPay(id.toString(),pay.getPayMoney(),openid,Wx);
+		Map<String, String> resMap=WXPay(outTradeNo,pay.getPayMoney(),openid,Wx);
 
 		String return_code = resMap.get("return_code");
 		String result_code = resMap.get("result_code");
@@ -252,10 +260,12 @@ public class WxPayController extends BladeController {
 
 	@PostMapping("/carServiceShareOrder")
 	@ApiOperationSupport(order = 3)
-	@ApiOperation(value = "车服务查询下单分享支付", notes = "传入OrderPayReq")
+	@ApiOperation(value = "车服务查询下单分享支付(免费)", notes = "传入OrderPayReq")
 	@Transactional
 	@Synchronized
 	public R carServiceOrder(@Valid @RequestBody OrderPayReq orderPayReq) {
+
+
 		String openid =request.getHeader("openid");
 		if(Func.isEmpty(openid)){
 			return  R.fail("openid不能为空");
@@ -266,13 +276,26 @@ public class WxPayController extends BladeController {
 		if(Func.isEmpty(openid)){
 			return  R.fail("微信用户openid不能为空");
 		}
+		String outTradeNo=orderPayReq.getOutTradeNo();
+		if(Func.isEmpty(outTradeNo)){
+			return  R.fail("订单id不能为空");
+		}
+		String vin=orderPayReq.getVin();
+		if(Func.isEmpty(vin)){
+			return R.fail("vin号不能为空");
+		}
 
+		Integer type=orderPayReq.getType();
+		if(Func.isEmpty(type)){
+			return  R.fail("type不能为空");
+		}
+		if(!(type.equals(3) || type.equals(4))){
+			return  R.fail("type不正确，3vin免费订单查询，4vin分享微信查询");
+		}
 
 		PayOrder pay=new PayOrder();
 		BeanUtils.copyProperties(orderPayReq,pay);
-		Long id= NumberUtil.getRandomNum(16);
-		pay.setId(id);
-		pay.setOutTradeNo(id.toString());
+		pay.setId(Long.valueOf(outTradeNo));
 		pay.setStatus(2);
 		pay.setPayMoney(0d);
 

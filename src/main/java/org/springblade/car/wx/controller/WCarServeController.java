@@ -22,7 +22,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.qcloud.cos.utils.Md5Utils;
+import com.sun.mail.imap.Rights;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,6 +35,7 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springblade.car.dto.CarsVinParseReq;
+import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.dto.VinParseData;
 import org.springblade.car.dto.VinVehicle;
 import org.springblade.car.entity.*;
@@ -59,6 +62,7 @@ import org.springblade.modules.system.service.IDictService;
 import org.springblade.modules.system.vo.DictVO;
 import org.springblade.util.BigDecimalUtil;
 import org.springblade.util.JsonUtils;
+import org.springblade.util.NumberUtil;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,7 +96,8 @@ import java.util.regex.Pattern;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/carServe")
-@Api(value = "微信-车服务", tags = "微信-车服务接口")
+@ApiSort(1010)
+@Api(value = "微信-车服务", tags = "v2微信-车服务接口")
 public class WCarServeController extends BladeController {
 	private HttpServletRequest request;
 	private WMemberFactory wMemberFactory;
@@ -102,16 +107,27 @@ public class WCarServeController extends BladeController {
 	private IPayOrderService payOrderService;
 
 
-
-	@ApiLog("车辆VIN查询车辆信息")
+	//@ApiLog("车辆VIN查询车辆信息")
 	@GetMapping("/vinParse")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "车辆VIN查询车辆信息", notes = "传入vin号")
-	public R<String> vinParse(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
+	public R<VinVehicle> vinParse(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
+		Member cl= wMemberFactory.getMember(request);
 		wVinServeFactory.isCheckVin(vin);
 		VinParseData data=wVinServeFactory.vinParse(vin);
-		String res=data.getVinVehicle().getBrandName();
-		return R.data(res);
+		VinVehicle vehicle=data.getVinVehicle();
+		if(Func.isNotEmpty(vehicle)) {
+			PayOrder order = new PayOrder();
+			order.setMemberId(cl.getId());
+			order.setVin(vin);
+			order.setType(3);
+			order.setStatus(2);
+			PayOrder payOrder = payOrderService.getOne(Condition.getQueryWrapper(order));
+			if (Func.isNotEmpty(payOrder)) {
+				vehicle.setOutTradeNo(payOrder.getOutTradeNo());
+			}
+		}
+		return R.data(vehicle);
 
 	}
 	//@ApiLog("查询服务参数")
@@ -119,34 +135,38 @@ public class WCarServeController extends BladeController {
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "查询服务参数")
 	public R<Map<String,Object>> carServiceParm() {
-		Member cl= wMemberFactory.getMember(request);
-		Map<String,Object> queryMap=new HashMap<>();
-		List<DictVO> dictList= dictService.childList(queryMap,11l);
+		MemberDTO cl= wMemberFactory.getMemberDTO(request);
+		MemberRights right= cl.getRights();
 		Map<String,Object> reMap=new HashMap<>();
-		int shareCount=shareRecordService.sharerecordCount(cl.getId());
-		for(DictVO vo:dictList){
-			reMap.put(vo.getDictKey(),vo.getDictValue());
+		int hadShareCount=shareRecordService.sharerecordCount(cl.getId());
+		int freeOrderCount=payOrderService.freeOrderCount(cl.getId());
+
+		Long id= NumberUtil.getRandomNum(16);
+		int remainFreeNum=0;
+		if(right.getFreeVinParseNum()>freeOrderCount){
+			remainFreeNum=right.getFreeVinParseNum()-freeOrderCount;
 		}
-		reMap.put("shareCount",shareCount);
+		int remainShareCount=0;
+		if(right.getFreeVinParseNum1()>hadShareCount){
+			remainShareCount=right.getFreeVinParseNum1()-hadShareCount;
+		}
+		reMap.put("vinParsePrice",right.getVinParsePrice());//--vin查询金额
+		reMap.put("remainShareCount",remainShareCount);//剩余免费分享微信次数
+		reMap.put("freeShareCount",right.getFreeVinParseNum1());//免费分享微信总数
+		reMap.put("remainFreeNum",remainFreeNum);//剩余免费查询次数
+		reMap.put("freeVinParseNum",right.getFreeVinParseNum());//免费查询总数
+		reMap.put("outTradeNo",id.toString());//订单号
+		//--是否免费
+		if(right.getVinParsePrice().equals(0.0)){
+			reMap.put("isFree",true);
+		}else {
+			reMap.put("isFree",false);
+		}
+
 		return R.data(reMap);
 
 	}
 
-	@ApiLog("vin查询下订单")
-	@GetMapping("/vinOrder")
-	@ApiOperationSupport(order = 3)
-	@ApiOperation(value = "vin查询下订单", notes = "传入vin号")
-	@Transactional
-	public R<String> vinOrder(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
-		Member cl= wMemberFactory.getMember(request);
-		wVinServeFactory.isCheckVin(vin);
-
-
-		VinParseData data=wVinServeFactory.vinParse(vin);
-		String res=data.getVinVehicle().getBrandName();
-		return R.data(res);
-
-	}
 
 	@GetMapping("/vinPrderPage")
 	@ApiOperationSupport(order = 8)
@@ -155,7 +175,12 @@ public class WCarServeController extends BladeController {
 		Member cl = wMemberFactory.getMember(request);
 		PayOrderVO payOrder=new PayOrderVO();
 		payOrder.setMemberId(cl.getId());
-		payOrder.setType(2);
+		List<Integer> types=new ArrayList<>();
+		types.add(0,3);
+		types.add(1,4);
+
+		payOrder.setTypes(types);
+		payOrder.setStatus(2);
 		IPage<PayOrderVO> pages = payOrderService.selectPayOrderPage(Condition.getPage(query), payOrder);
 		return R.data(pages);
 	}

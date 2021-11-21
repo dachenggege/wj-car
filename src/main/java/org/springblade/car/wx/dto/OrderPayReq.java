@@ -36,6 +36,9 @@ public class OrderPayReq {
 	/**
 	 * 用户id
 	 */
+	@ApiModelProperty(value = "订单id")
+	private String outTradeNo;
+
 	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "用户id")
 	private Long memberId;
@@ -43,7 +46,7 @@ public class OrderPayReq {
 	@ApiModelProperty(value = "微信用户openid")
 	private String openid;
 
-	@ApiModelProperty(value = "1会员升级，2会员续费，3VIN查询")
+	@ApiModelProperty(value = "1会员升级，2会员续费，3vin免费订单查询，4vin分享微信查询")
 	@NotNull
 	private Integer type;
 	/**
@@ -59,4 +62,6 @@ public class OrderPayReq {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "会员权益id")
 	private Integer rightsId;
+	@ApiModelProperty("VIN号")
+	private String vin;
 }

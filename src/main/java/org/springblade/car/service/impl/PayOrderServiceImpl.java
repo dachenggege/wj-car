@@ -16,6 +16,7 @@
  */
 package org.springblade.car.service.impl;
 
+import org.apache.ibatis.annotations.Param;
 import org.springblade.car.entity.PayOrder;
 import org.springblade.car.vo.PayOrderVO;
 import org.springblade.car.mapper.PayOrderMapper;
@@ -37,5 +38,10 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
 	public IPage<PayOrderVO> selectPayOrderPage(IPage<PayOrderVO> page, PayOrderVO payOrder) {
 		return page.setRecords(baseMapper.selectPayOrderPage(page, payOrder));
 	}
+
+	public 	int freeOrderCount(@Param("memberId") Long memberId){
+		return baseMapper.freeOrderCount(memberId);
+	}
+
 
 }

@@ -70,6 +70,9 @@ public class WMemberFansController extends BladeController {
 		if(Func.isEmpty(memberFans.getMemberId())){
 			return R.fail("用户id不能为空");
 		}
+		if(Func.equals(memberFans.getFansId(),memberFans.getMemberId())){
+			return R.fail("不能关注自己哦");
+		}
 		//Member cl = wMemberFactory.getMember(request);
 
 		MemberFans fans=memberFansService.getOne(Condition.getQueryWrapper(memberFans));

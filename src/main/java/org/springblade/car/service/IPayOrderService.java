@@ -16,6 +16,7 @@
  */
 package org.springblade.car.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.springblade.car.entity.PayOrder;
 import org.springblade.car.vo.PayOrderVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -37,5 +38,6 @@ public interface IPayOrderService extends IService<PayOrder> {
 	 * @return
 	 */
 	IPage<PayOrderVO> selectPayOrderPage(IPage<PayOrderVO> page, PayOrderVO payOrder);
+	int freeOrderCount(@Param("memberId") Long memberId);
 
 }

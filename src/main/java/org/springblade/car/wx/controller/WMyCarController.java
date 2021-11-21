@@ -66,7 +66,7 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/member")
-@Api(value = "微信-用户", tags = "微信-v2我的车源接口")
+@Api(value = "微信-用户", tags = "v2微信-我的车源接口")
 @ApiSort(1008)
 public class WMyCarController extends BladeController {
 	private HttpServletRequest request;
