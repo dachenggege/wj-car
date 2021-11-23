@@ -47,7 +47,7 @@ import javax.validation.Valid;
 @RestController
 @AllArgsConstructor
 @RequestMapping("second-hand-car/wx/carsbrowse")
-@Api(value = "车源浏览表", tags = "微信-车源浏览接口")
+@Api(value = "车源浏览表", tags = "v2微信-车源浏览接口")
 public class WCarsBrowseController extends BladeController {
 
 	private final ICarsBrowseService carsBrowseService;
