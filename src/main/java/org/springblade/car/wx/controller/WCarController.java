@@ -15,10 +15,16 @@
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
 package org.springblade.car.wx.controller;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.tencentcloudapi.common.Credential;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
+import com.tencentcloudapi.common.profile.ClientProfile;
+import com.tencentcloudapi.common.profile.HttpProfile;
+import com.tencentcloudapi.ocr.v20181119.OcrClient;
+import com.tencentcloudapi.ocr.v20181119.models.GeneralEfficientOCRRequest;
+import com.tencentcloudapi.ocr.v20181119.models.GeneralEfficientOCRResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -81,13 +87,56 @@ public class WCarController extends BladeController {
 	private WVinServeFactory wVinServeFactory;
 
 
+	@GetMapping("/qcrVinQuery")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "vin图片识别车辆信息", notes = "imageBase64")
+	public R<CarsVinParseReq> qcrVinQuery(@ApiParam(value = "imageBase64") @RequestParam(value = "imageBase64", required = true )String imageBase64) {
+		CarsVinParseReq cars = new CarsVinParseReq();
+		try{
+
+			String SecretId="AKIDRgfPtTnpb6LJ0QaT5QUHn32lERN2QXO0";
+			String SecretKey="MRFm33mEPKxKRHrACwPbYGhrmrgEVVFi";
+			// 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey,此处还需注意密钥对的保密
+			// 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取
+			Credential cred = new Credential(SecretId, SecretKey);
+			// 实例化一个http选项，可选的，没有特殊需求可以跳过
+			HttpProfile httpProfile = new HttpProfile();
+			httpProfile.setEndpoint("ocr.tencentcloudapi.com");
+			// 实例化一个client选项，可选的，没有特殊需求可以跳过
+			ClientProfile clientProfile = new ClientProfile();
+			clientProfile.setHttpProfile(httpProfile);
+			// 实例化要请求产品的client对象,clientProfile是可选的
+			OcrClient client = new OcrClient(cred, "ap-guangzhou", clientProfile);
+
+			// 实例化一个请求对象,每个接口都会对应一个request对象
+			GeneralEfficientOCRRequest req = new GeneralEfficientOCRRequest();
+			req.setImageBase64(imageBase64);
+			//req.setImageUrl("http://120.25.247.50:9000/car/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211123161341.jpg");
+			// 返回的resp是一个GeneralEfficientOCRResponse的实例，与请求对象对应
+			GeneralEfficientOCRResponse resp = client.GeneralEfficientOCR(req);
+			// 输出json格式的字符串回包
+			String respString=GeneralEfficientOCRResponse.toJsonString(resp);
+			System.out.println(respString);
+			if(Func.isEmpty(respString)){
+				R.fail("识别失败，请上传清晰的图片");
+			}
+			String vin=wVinServeFactory.getVin(respString);
+			if(Func.isEmpty(vin)){
+				R.fail("识别失败，请上传清晰的图片");
+			}
+			cars = wVinServeFactory.carVinQuery(vin);
+		} catch (TencentCloudSDKException e) {
+			System.out.println(e.toString());
+		}
+		return R.data(cars);
+	}
 
 	/**
 	 * 车辆VIN识别
 	 */
 	@ApiLog("发布车源VIN查询")
 	@GetMapping("/carVinQuery")
-	@ApiOperationSupport(order = 1)
+	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "发布车源VIN查询", notes = "传入vin号")
 	public R<CarsVinParseReq> carVinQuery(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
 		wVinServeFactory.isCheckVin(vin);
@@ -97,7 +146,7 @@ public class WCarController extends BladeController {
 	}
 
 	@PostMapping("/saveCar")
-	@ApiOperationSupport(order = 1)
+	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "发布(编辑)车辆", notes = "传入cars")
 	public R saveCar(@Valid @RequestBody Cars cars) {
 
@@ -197,7 +246,7 @@ public class WCarController extends BladeController {
 	 * 车源详情
 	 */
 	@GetMapping("/carDetail")
-	@ApiOperationSupport(order = 1)
+	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "车源详情", notes = "传入cars")
 	public R<CarsDTO> carDetail(Long carId) {
 		Member cl = wMemberFactory.getMember(request);
