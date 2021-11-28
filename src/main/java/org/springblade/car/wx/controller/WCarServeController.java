@@ -114,46 +114,18 @@ public class WCarServeController extends BladeController {
 	private final IDictService dictService;
 	private IPayOrderService payOrderService;
 
-	@GetMapping("/qcrVinQuery")
+	@PostMapping("/qcrVinQuery")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "vin图片识别车辆信息", notes = "imageBase64")
-	public R<VinVehicle> qcrVinQuery(@ApiParam(value = "imageBase64") @RequestParam(value = "imageBase64", required = true )String imageBase64) {
+	public R<VinVehicle> qcrVinQuery(@ApiParam(value = "imageBase64") @RequestBody String imageBase64) {
 		VinVehicle vehicle= new VinVehicle();
 		Member cl= wMemberFactory.getMember(request);
-		try{
+		String vin=wVinServeFactory.gjqcrVinQuery(imageBase64);
+		System.out.println("车服务vin图片识别车辆信息vin="+vin);
 
-			String SecretId="AKIDRgfPtTnpb6LJ0QaT5QUHn32lERN2QXO0";
-			String SecretKey="MRFm33mEPKxKRHrACwPbYGhrmrgEVVFi";
-			// 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey,此处还需注意密钥对的保密
-			// 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取
-			Credential cred = new Credential(SecretId, SecretKey);
-			// 实例化一个http选项，可选的，没有特殊需求可以跳过
-			HttpProfile httpProfile = new HttpProfile();
-			httpProfile.setEndpoint("ocr.tencentcloudapi.com");
-			// 实例化一个client选项，可选的，没有特殊需求可以跳过
-			ClientProfile clientProfile = new ClientProfile();
-			clientProfile.setHttpProfile(httpProfile);
-			// 实例化要请求产品的client对象,clientProfile是可选的
-			OcrClient client = new OcrClient(cred, "ap-guangzhou", clientProfile);
-
-			// 实例化一个请求对象,每个接口都会对应一个request对象
-			GeneralEfficientOCRRequest req = new GeneralEfficientOCRRequest();
-			req.setImageBase64(imageBase64);
-			//req.setImageUrl("http://120.25.247.50:9000/car/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211123161341.jpg");
-			// 返回的resp是一个GeneralEfficientOCRResponse的实例，与请求对象对应
-			GeneralEfficientOCRResponse resp = client.GeneralEfficientOCR(req);
-			// 输出json格式的字符串回包
-			String respString=GeneralEfficientOCRResponse.toJsonString(resp);
-			System.out.println(respString);
-			if(Func.isEmpty(respString)){
-				R.fail("识别失败，请上传清晰的图片");
-			}
-			String vin=wVinServeFactory.getVin(respString);
-			if(Func.isEmpty(vin)){
-				R.fail("识别失败，请上传清晰的图片");
-			}
-			VinParseData data=wVinServeFactory.vinParse(vin);
-			vehicle=data.getVinVehicle();
+		VinParseData data=wVinServeFactory.vinParse(vin);
+		vehicle=data.getVinVehicle();
+		vehicle.setPvin(vin);
 			if(Func.isNotEmpty(vehicle)) {
 				PayOrder order = new PayOrder();
 				order.setMemberId(cl.getId());
@@ -165,9 +137,7 @@ public class WCarServeController extends BladeController {
 					vehicle.setOutTradeNo(payOrder.getOutTradeNo());
 				}
 			}
-		} catch (TencentCloudSDKException e) {
-			System.out.println(e.toString());
-		}
+
 		return R.data(vehicle);
 	}
 

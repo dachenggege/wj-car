@@ -43,4 +43,5 @@ public interface StylesMapper extends BaseMapper<Styles> {
 
 	//vin查询匹配车品牌 车系 车型
 	public List<Styles> selectStylesVin(Map<String,Object> queryMap);
+	List<String> queryStylesKeyWordsList();
 }

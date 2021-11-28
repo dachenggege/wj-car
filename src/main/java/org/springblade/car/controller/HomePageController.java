@@ -24,6 +24,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import org.springblade.car.Req.MemberReq;
 import org.springblade.car.dto.HomePageAllCountDTO;
 import org.springblade.car.dto.HomePageCountDTO;
 import org.springblade.car.entity.Brand;
@@ -33,6 +34,7 @@ import org.springblade.car.vo.*;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
@@ -66,24 +68,27 @@ public class HomePageController extends BladeController {
 	@ApiOperation(value = "查询统计")
 	public R<HomePageCountDTO> queryCount(Date startDate, Date endDate ) {
 		HomePageCountDTO homePageCountDTO=new HomePageCountDTO();
-	/*	MemberVO member=userAreaFactory.getMemberVO();
-		 List<String> areas=member.getAreas();
-		 List<String> noareas=member.getNoareas();
-		member.setStartCreateTime(startDate);
-		member.setEndCreateTime(endDate);
-		 Integer newRegister=memberService.selectMemberCount(member);
+		MemberReq memberReq=userAreaFactory.getUserAreas();
+		memberReq.setUserId(AuthUtil.getUser().getUserId());
+		 List<String> areas=memberReq.getAreas();
+		 List<String> noareas=memberReq.getNoareas();
+		memberReq.setStartCreateTime(startDate);
+		memberReq.setEndCreateTime(endDate);
+		 Integer newRegister=memberService.selectMemberCount(memberReq);
+
 		homePageCountDTO.setNewRegister(newRegister);
-		member.setRoletype(2);
-		Integer newMember=memberService.selectMemberCount(member);
+		memberReq.setRoletype(2);
+		Integer newMember=memberService.selectMemberCount(memberReq);
 
 		homePageCountDTO.setNewMember(newMember);
 
-		member.setRoletype(1);
-		Integer newVisitor=memberService.selectMemberCount(member);
+		memberReq.setRoletype(1);
+		Integer newVisitor=memberService.selectMemberCount(memberReq);
 
 		homePageCountDTO.setNewVisitor(newVisitor);
 
 		CarsVO carsVO=new CarsVO();
+		carsVO.setUserId(AuthUtil.getUser().getUserId());
 		carsVO.setAreas(areas);
 		carsVO.setNoareas(noareas);
 		carsVO.setStartCreateTime(startDate);
@@ -93,6 +98,7 @@ public class HomePageController extends BladeController {
 		homePageCountDTO.setNewCar(newCars);
 
 		ShopVO shopVO=new ShopVO();
+		shopVO.setUserId(AuthUtil.getUser().getUserId());
 		shopVO.setAreas(areas);
 		shopVO.setNoareas(noareas);
 		shopVO.setStartCreateTime(startDate);
@@ -102,13 +108,14 @@ public class HomePageController extends BladeController {
 		homePageCountDTO.setNewShop(newShop);
 
 		ForumVO forumVO=new ForumVO();
+		forumVO.setUserId(AuthUtil.getUser().getUserId());
 		forumVO.setAreas(areas);
 		forumVO.setNoareas(noareas);
 		forumVO.setStartCreateTime(startDate);
 		forumVO.setEndCreateTime(endDate);
 		Integer newForum=forumService.selectForumCount(forumVO);
 
-		homePageCountDTO.setNewForum(newForum);*/
+		homePageCountDTO.setNewForum(newForum);
 
 		return R.data(homePageCountDTO);
 	}
@@ -118,22 +125,24 @@ public class HomePageController extends BladeController {
 	@ApiOperation(value = "全部统计")
 	public R<HomePageAllCountDTO> queryAllCount() {
 		HomePageAllCountDTO homePageCountDTO=new HomePageAllCountDTO();
-		/*MemberVO member=userAreaFactory.getMemberVO();
-		List<String> areas=member.getAreas();
-		List<String> noareas=member.getNoareas();
-		Integer allRegister=memberService.selectMemberCount(member);
+		MemberReq memberReq=userAreaFactory.getUserAreas();
+		memberReq.setUserId(AuthUtil.getUser().getUserId());
+		List<String> areas=memberReq.getAreas();
+		List<String> noareas=memberReq.getNoareas();
+		Integer allRegister=memberService.selectMemberCount(memberReq);
 		homePageCountDTO.setAllRegister(allRegister);
-		member.setRoletype(2);
-		Integer allMember=memberService.selectMemberCount(member);
+		memberReq.setRoletype(2);
+		Integer allMember=memberService.selectMemberCount(memberReq);
 
 		homePageCountDTO.setAllMember(allMember);
 
-		member.setRoletype(1);
-		Integer allVisitor=memberService.selectMemberCount(member);
+		memberReq.setRoletype(1);
+		Integer allVisitor=memberService.selectMemberCount(memberReq);
 
 		homePageCountDTO.setAllVisitor(allVisitor);
 
 		CarsVO carsVO=new CarsVO();
+		carsVO.setUserId(AuthUtil.getUser().getUserId());
 		carsVO.setAreas(areas);
 		carsVO.setNoareas(noareas);
 		Integer allCars=carsService.selectCarsCount(carsVO);
@@ -141,6 +150,8 @@ public class HomePageController extends BladeController {
 		homePageCountDTO.setAllCar(allCars);
 
 		ShopVO shopVO=new ShopVO();
+		shopVO.setUserId(AuthUtil.getUser().getUserId());
+
 		shopVO.setAreas(areas);
 		shopVO.setNoareas(noareas);
 		Integer allShop=shopService.selectShopCount(shopVO);
@@ -148,11 +159,12 @@ public class HomePageController extends BladeController {
 		homePageCountDTO.setAllShop(allShop);
 
 		ForumVO forumVO=new ForumVO();
+		forumVO.setUserId(AuthUtil.getUser().getUserId());
 		forumVO.setAreas(areas);
 		forumVO.setNoareas(noareas);
 		Integer allForum=forumService.selectForumCount(forumVO);
 
-		homePageCountDTO.setAllForum(allForum);*/
+		homePageCountDTO.setAllForum(allForum);
 
 		return R.data(homePageCountDTO);
 	}

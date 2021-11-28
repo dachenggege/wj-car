@@ -24,7 +24,14 @@
 
 
     <select id="selectPayOrderPage" resultType="org.springblade.car.vo.PayOrderVO">
-        SELECT t.*,m.name AS memberName,m.phone
+        SELECT t.*,m.name AS memberName,m.phone,
+        CASE t.type
+        WHEN 1 THEN '会员升级'
+        WHEN 2 THEN '会员续费'
+        WHEN 3 THEN 'vin免费订单查询'
+        WHEN 4 THEN 'vin分享微信查询'
+        ELSE '其他' END
+        as typeName
         FROM t_pay_order t , t_member m WHERE t.is_deleted = 0 AND m.is_deleted = 0
         AND t.member_id=m.id
         <if test="payOrder.type != null">

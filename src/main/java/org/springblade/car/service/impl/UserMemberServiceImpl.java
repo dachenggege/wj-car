@@ -16,38 +16,38 @@
  */
 package org.springblade.car.service.impl;
 
-import org.apache.ibatis.annotations.Param;
-import org.springblade.car.Req.MemberReq;
-import org.springblade.car.dto.MemberDTO;
-import org.springblade.car.entity.Member;
-import org.springblade.car.vo.MemberVO;
-import org.springblade.car.mapper.MemberMapper;
-import org.springblade.car.service.IMemberService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springblade.car.entity.Ad;
+import org.springblade.car.entity.Member;
+import org.springblade.car.entity.UserMember;
+import org.springblade.car.mapper.AdMapper;
+import org.springblade.car.mapper.UserMemberMapper;
+import org.springblade.car.service.IAdService;
+import org.springblade.car.service.IUserMemberService;
+import org.springblade.car.vo.AdVO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * 用户表 服务实现类
+ *
  *
  * @author BladeX
- * @since 2021-10-13
+ * @since 2021-07-20
  */
 @Service
-public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> implements IMemberService {
+public class UserMemberServiceImpl extends ServiceImpl<UserMemberMapper, UserMember> implements IUserMemberService {
 
 	@Override
-	public IPage<MemberVO> selectMemberPage(IPage<MemberVO> page, MemberReq member) {
-		return page.setRecords(baseMapper.selectMemberPage(page, member));
+	public IPage<UserMember> selectUserMemberPage(IPage<UserMember> page, UserMember userMember) {
+		return page.setRecords(baseMapper.selectUserMemberPage(page, userMember));
 	}
-	public List<MemberVO> selectMemberList(MemberReq member){
-		return baseMapper.selectMemberPage(null, member);
+	public List<Member> selectMemberList(Long userId){
+		return  baseMapper.selectMemberList(userId);
 	}
-	public 	Integer selectMemberCount(MemberReq member){
-		return baseMapper.selectMemberCount(member);
+	public Boolean delUserMembrs(Long userId){
+		return baseMapper.delUserMembrs(userId);
 	}
-
 
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.car.mapper.UserMemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="userMemberResultMap" type="org.springblade.car.entity.UserMember">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="member_id" property="memberId"/>
+    </resultMap>
+    <delete id="delUserMembrs" parameterType="java.lang.Long">
+        delete from t_user_member where user_id=#{userId}
+    </delete>
+
+    <select id="selectUserMemberPage" resultMap="userMemberResultMap">
+        select * from t_user_member  t where t.is_deleted = 0
+        <if test="userMember.id != null">
+            and t.id=#{userMember.id}
+        </if>
+        <if test="userMember.userId != null">
+            and t.user_id=#{userMember.userId}
+        </if>
+    </select>
+    <select id="selectMemberList" resultType="org.springblade.car.entity.Member"
+            parameterType="java.lang.Long">
+        SELECT t.* FROM t_member  t,t_user_member u WHERE t.is_deleted = 0
+        AND t.id=u.member_id
+        <if test="userId != null">
+            and u.user_id=#{userId}
+        </if>
+    </select>
+
+</mapper>

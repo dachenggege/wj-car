@@ -59,6 +59,14 @@
         <if test="group_name != null and sgroup_name !=''">
             and t.group_name like concat(concat('%', #{group_name}), '%')
         </if>
+        <if test="series_name != null and series_name !=''">
+            and t.series_name like concat(concat('%', #{series_name}), '%')
+        </if>
+    </select>
+    <select id="queryStylesKeyWordsList" resultType="java.lang.String">
+        SELECT CONCAT(styles_name,styles_year,brand_name,series_name,group_name,configuration) as keyWords
+        FROM `t_styles` t
+        where is_deleted = 0
     </select>
 
 </mapper>

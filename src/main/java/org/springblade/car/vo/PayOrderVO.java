@@ -55,5 +55,8 @@ public class PayOrderVO extends PayOrder {
 
 	private List<Integer> types;
 
+	@ApiModelProperty(value = "支付类型")
+	private String typeName;
+
 
 }

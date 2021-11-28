@@ -17,6 +17,7 @@
 package org.springblade.modules.system.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springblade.core.tenant.mp.TenantEntity;
@@ -101,10 +102,14 @@ public class User extends TenantEntity {
 	* 不含管理区域
 	 */
 	private String noareas;
+
 	private String areasNames;
 
 	/**
 	 * 不含管理区域
 	 */
 	private String noareasNames;
+
+	@ApiModelProperty(value = "非管辖区用户Id(多个用逗号分隔)")
+	private String members;
 }

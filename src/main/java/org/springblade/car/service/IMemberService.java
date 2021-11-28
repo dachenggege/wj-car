@@ -42,6 +42,6 @@ public interface IMemberService extends IService<Member> {
 	IPage<MemberVO> selectMemberPage(IPage<MemberVO> page, MemberReq member);
 
 	List<MemberVO> selectMemberList(MemberReq member);
-
+	Integer selectMemberCount(MemberReq member);
 
 }

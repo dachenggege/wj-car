@@ -17,6 +17,8 @@
 package org.springblade.car.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.models.auth.In;
 import org.springblade.car.entity.Shop;
@@ -37,5 +39,18 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "ShopVO对象", description = "用户门店表")
 public class ShopVO extends Shop {
+   private static final long serialVersionUID = 1L;
+   private List<String> areas;
+   private List<String> noareas;
 
+   @JsonSerialize(using = ToStringSerializer.class)
+   private Long userId;
+   @JsonFormat(
+           pattern = "yyyy-MM-dd HH:mm:ss"
+   )
+   private Date startCreateTime;
+   @JsonFormat(
+           pattern = "yyyy-MM-dd HH:mm:ss"
+   )
+   private Date endCreateTime;
 }

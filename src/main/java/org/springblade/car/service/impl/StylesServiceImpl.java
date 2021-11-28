@@ -44,4 +44,7 @@ public class StylesServiceImpl extends ServiceImpl<StylesMapper, Styles> impleme
 	 public List<Styles> selectStylesVin(Map<String,Object> queryMap){
 		return baseMapper.selectStylesVin(queryMap);
 	 }
+	 public List<String> queryStylesKeyWordsList(){
+		return baseMapper.queryStylesKeyWordsList();
+	 }
 }

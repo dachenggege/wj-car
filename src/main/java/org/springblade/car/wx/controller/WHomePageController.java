@@ -130,6 +130,22 @@ public class WHomePageController extends BladeController {
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "车源分页", notes = "传入cars")
 	public R<IPage<CarsDTO>> page(CarsVO cars, Query query) {
+		String code=cars.getCity();
+		cars.setCity(null);
+		if(Func.isNotEmpty(code)){
+			String county=code.substring(4,6);
+			String city=code.substring(2,4);
+			if(Func.equals(city,"00") && Func.equals(county,"00")){
+				cars.setProvince(code);
+			}
+			if(Func.equals(county,"00") && !Func.equals(city,"00")){
+				cars.setCity(code);
+			}
+			if(!Func.equals(county,"00") && !Func.equals(city,"00")){
+				cars.setCounty(code);
+			}
+		}
+
 		if(Func.isNotEmpty(cars.getSort())){
 			cars.setSort(CarSort.getValue(Integer.valueOf(cars.getSort())));
 		}else {

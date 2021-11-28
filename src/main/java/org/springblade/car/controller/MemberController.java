@@ -40,6 +40,8 @@ import org.springblade.car.vo.MemberVO;
 import org.springblade.car.service.IMemberService;
 import org.springblade.core.boot.ctrl.BladeController;
 
+import java.util.List;
+
 /**
  * 用户表 控制器
  *
@@ -61,9 +63,19 @@ public class MemberController extends BladeController {
 	 */
 	@GetMapping("/memberDetail")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "用户详情", notes = "传入member")
+	@ApiOperation(value = "用户详情", notes = "传入id")
 	public R<MemberDTO> detail(Long id) {
 		MemberDTO detail = WMemberFactory.getMemberByid(id);
+		return R.data(detail);
+	}
+
+	@GetMapping("/memberDetailByPhone")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "电话查询用户", notes = "传入phone")
+	public R<List<MemberVO>> memberDetailByPhone(String phone) {
+		MemberReq member=new MemberReq();
+		member.setPhone(phone);
+		List<MemberVO> detail = memberService.selectMemberList(member);
 		return R.data(detail);
 	}
 

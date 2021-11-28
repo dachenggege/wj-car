@@ -14,78 +14,39 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.modules.system.vo;
+package org.springblade.car.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springblade.car.entity.Member;
-import org.springblade.modules.system.entity.User;
-
-import java.util.List;
+import org.springblade.core.mp.base.BaseEntity;
 
 /**
- * 视图实体类
+ * 广告表实体类
  *
- * @author Chill
+ * @author BladeX
+ * @since 2021-07-20
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "UserVO对象", description = "UserVO对象")
-public class UserVO extends User {
+@TableName("t_user_member")
+@ApiModel(value = "Ad对象", description = "广告表")
+public class UserMember{
+
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 主键ID
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long id;
 
-	/**
-	 * 密码
-	 */
-	@JsonIgnore
-	private String password;
+		@ApiModelProperty(value = "Id")
+		private int id;
 
-	/**
-	 * 租户名
-	 */
-	private String tenantName;
+		@ApiModelProperty(value = "userId")
+		@JsonSerialize(using = ToStringSerializer.class)
+		private Long userId;
 
-	/**
-	 * 用户平台名
-	 */
-	private String userTypeName;
+		@ApiModelProperty(value = "memberId")
+		@JsonSerialize(using = ToStringSerializer.class)
+		private Long memberId;
 
-	/**
-	 * 角色名
-	 */
-	private String roleName;
-
-	/**
-	 * 部门名
-	 */
-	private String deptName;
-
-	/**
-	 * 岗位名
-	 */
-	private String postName;
-
-	/**
-	 * 性别
-	 */
-	private String sexName;
-
-	/**
-	 * 拓展信息
-	 */
-	private String userExt;
-
-	@ApiModelProperty(value = "非管辖区用户")
-	private List<Member> userMemberList;
 }

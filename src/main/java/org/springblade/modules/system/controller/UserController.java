@@ -22,6 +22,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
+import org.springblade.car.entity.Member;
+import org.springblade.car.entity.UserMember;
+import org.springblade.car.service.IUserMemberService;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.launch.constant.AppConstant;
@@ -35,6 +38,8 @@ import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.constant.RoleConstant;
 import org.springblade.core.tool.utils.DateUtil;
+import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.NumberUtil;
 import org.springblade.core.tool.utils.StringPool;
 import org.springblade.modules.system.entity.User;
 import org.springblade.modules.system.excel.UserExcel;
@@ -42,6 +47,8 @@ import org.springblade.modules.system.excel.UserImporter;
 import org.springblade.modules.system.service.IUserService;
 import org.springblade.modules.system.vo.UserVO;
 import org.springblade.modules.system.wrapper.UserWrapper;
+import org.springframework.beans.BeanUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
@@ -68,6 +75,7 @@ import static org.springblade.core.cache.constant.CacheConstant.USER_CACHE;
 public class UserController {
 
 	private final IUserService userService;
+	private final IUserMemberService userMemberService;
 
 	/**
 	 * 查询单条
@@ -78,7 +86,10 @@ public class UserController {
 	@PreAuth(RoleConstant.HAS_ROLE_ADMIN)
 	public R<UserVO> detail(User user) {
 		User detail = userService.getOne(Condition.getQueryWrapper(user));
-		return R.data(UserWrapper.build().entityVO(detail));
+		UserVO vo=UserWrapper.build().entityVO(detail);
+		List<Member> members=userMemberService.selectMemberList(user.getId());
+		vo.setUserMemberList(members);
+		return R.data(vo);
 	}
 
 	/**
@@ -132,7 +143,25 @@ public class UserController {
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "新增或修改", notes = "传入User")
 	@PreAuth(RoleConstant.HAS_ROLE_ADMIN)
+	@Transactional
 	public R submit(@Valid @RequestBody User user) {
+		if(Func.isEmpty(user.getId())){
+			Long id= System.currentTimeMillis();
+			user.setId(id);
+		}
+		userMemberService.delUserMembrs(user.getId());
+		String [] members=user.getMembers().split(",");
+		UserMember userMember=new UserMember();
+		List<UserMember> userMemberList=new ArrayList<>();
+		for(int i=0;i<members.length;i++){
+			if(Func.isNotEmpty(members[i])) {
+				userMember=new UserMember();
+				userMember.setUserId(user.getId());
+				userMember.setMemberId(Long.valueOf(members[i]));
+				userMemberList.add(userMember);
+			}
+		}
+		userMemberService.saveBatch(userMemberList);
 		CacheUtil.clear(USER_CACHE);
 		return R.status(userService.submit(user));
 	}
@@ -144,6 +173,19 @@ public class UserController {
 	@ApiOperationSupport(order = 5)
 	@ApiOperation(value = "修改", notes = "传入User")
 	public R update(@Valid @RequestBody User user) {
+		userMemberService.delUserMembrs(user.getId());
+		String [] members=user.getMembers().split(",");
+		UserMember userMember=new UserMember();
+		List<UserMember> userMemberList=new ArrayList<>();
+		for(int i=0;i<members.length;i++){
+			if(Func.isNotEmpty(members[i])) {
+				userMember=new UserMember();
+				userMember.setUserId(user.getId());
+				userMember.setMemberId(Long.valueOf(members[i]));
+				userMemberList.add(userMember);
+			}
+		}
+		userMemberService.saveBatch(userMemberList);
 		CacheUtil.clear(USER_CACHE);
 		return R.status(userService.updateUser(user));
 	}

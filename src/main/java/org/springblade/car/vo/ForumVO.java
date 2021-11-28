@@ -42,6 +42,8 @@ public class ForumVO extends Forum {
 	private static final long serialVersionUID = 1L;
 	private List<String> areas;
 	private List<String> noareas;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long userId;
 
 	@ApiModelProperty(value = "真实姓名")
 	private String name;

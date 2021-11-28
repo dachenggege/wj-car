@@ -11,6 +11,8 @@ import org.apache.poi.ss.formula.functions.T;
  */
 @Data
 public class VinVehicle {
+        @ApiModelProperty(value = "车架号")
+        private String pvin;
         @ApiModelProperty(value = "品牌名称")
         private String brandName	;//	品牌名称
         @ApiModelProperty(value = "动力类型")

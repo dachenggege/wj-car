@@ -21,7 +21,14 @@
 
     <select id="selectForumCount" resultType="int">
         SELECT count(1)
-        FROM t_forum f,t_member m
+        FROM t_forum f,(
+        SELECT distinct t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        <if test="forum.userId != null">
+            and u.user_id=#{forum.userId}
+        </if>
+        union
+        select t.* from t_member t where t.is_deleted = 0
+        ) m
         WHERE f.is_deleted = 0 AND m.is_deleted=0
         AND f.`member_id`=m.id
         <if test="forum.id != null">
@@ -90,7 +97,15 @@
         ,IFNULL((SELECT is_like FROM t_forum_like t WHERE t.forum_id=f.id AND t.member_id=#{forum.likeMember}),FALSE) AS isLike
 
         </if>
-        FROM t_forum f,t_member m
+        FROM t_forum f,
+        (
+        SELECT distinct t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        <if test="forum.userId != null">
+            and u.user_id=#{forum.userId}
+        </if>
+        union
+        select t.* from t_member t where t.is_deleted = 0
+        ) m
         WHERE f.is_deleted = 0 AND m.is_deleted=0
         AND f.`member_id`=m.id
         <if test="forum.id != null">

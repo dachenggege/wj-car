@@ -29,6 +29,7 @@
         <result column="noareas" property="noareas"/>
         <result column="areas_names" property="areasNames"/>
         <result column="noareas_names" property="noareasNames"/>
+        <result column="members" property="members"/>
 
     </resultMap>
 

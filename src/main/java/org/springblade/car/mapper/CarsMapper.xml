@@ -74,18 +74,30 @@
 
 
     <select id="selectCarsCount" resultType="int">
-        select count(1) from t_cars t, (
-        SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        select count(1)
+        from t_cars t,
+        (
+        SELECT distinct t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
         <if test="cars.userId != null">
             and u.user_id=#{cars.userId}
         </if>
         union
         select t.* from t_member t where t.is_deleted = 0
-        ) m where t.is_deleted = 0  and m.is_deleted=0
+        ) m
+        where t.is_deleted = 0  and m.is_deleted=0
         and t.member_id =m.id
+        <if test="cars.status != null">
+            and t.status=#{cars.status}
+        </if>
 
-        <if test="cars.id != null and cars.id !=''">
+        <if test="cars.vest != null">
+            and t.vest=#{cars.vest}
+        </if>
+        <if test="cars.id != null">
             and t.id=#{cars.id}
+        </if>
+        <if test="cars.shopId != null">
+            and t.shop_id=#{cars.shopId}
         </if>
         <if test="cars.pvin != null and cars.pvin !=''">
             and t.pvin=#{cars.pvin}
@@ -105,13 +117,6 @@
         <if test="cars.memberId != null ">
             and t.member_id=#{cars.memberId}
         </if>
-        <if test="cars.memberIds != null and cars.memberIds != ''">
-            and t.member_id IN
-            <foreach collection="cars.memberIds" item="item" index="index" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-
         <if test="cars.brandId != null and cars.brandId !=''">
             and t.brand_id=#{cars.brandId}
         </if>
@@ -142,10 +147,10 @@
         <if test="cars.auditStatus != null and cars.auditStatus !=''">
             and t.audit_status=#{cars.auditStatus}
         </if>
-        <if test="cars.sprice != null">
+        <if test="cars.sprice != null and cars.sprice !=''">
             and t.pprice &gt; #{cars.sprice}
         </if>
-        <if test="cars.eprice != null">
+        <if test="cars.eprice != null and cars.eprice !=''">
             and t.pprice &lt; #{cars.eprice}
         </if>
         <if test="cars.areas != null and cars.areas != ''">
@@ -184,6 +189,12 @@
         <if test="cars.endCreateTime != null ">
             and t.create_time &lt; #{cars.endCreateTime}
         </if>
+        <if test="cars.name != null and cars.name !=''">
+            and m.name like concat(concat('%', #{cars.name}), '%')
+        </if>
+        <if test="cars.phone != null and cars.phone !=''">
+            and m.phone=#{cars.phone}
+        </if>
     </select>
 
 
@@ -193,7 +204,7 @@
         (SELECT COUNT(1) FROM  `t_phone_record` r WHERE r.`is_deleted`=0 AND r.`cars_id`=t.`id`) AS callPhoneCount
          from t_cars t,
         (
-        SELECT t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
+        SELECT distinct t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
         <if test="cars.userId != null">
             and u.user_id=#{cars.userId}
         </if>
@@ -211,6 +222,9 @@
         </if>
         <if test="cars.id != null">
             and t.id=#{cars.id}
+        </if>
+        <if test="cars.shopId != null">
+            and t.shop_id=#{cars.shopId}
         </if>
         <if test="cars.pvin != null and cars.pvin !=''">
             and t.pvin=#{cars.pvin}

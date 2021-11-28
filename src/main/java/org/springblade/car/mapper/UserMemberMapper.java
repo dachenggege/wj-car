@@ -16,31 +16,32 @@
  */
 package org.springblade.car.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import org.springblade.car.Req.MemberReq;
-import org.springblade.car.dto.MemberDTO;
-import org.springblade.car.entity.Member;
-import org.springblade.car.vo.MemberVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
+import org.springblade.car.entity.Ad;
+import org.springblade.car.entity.Member;
+import org.springblade.car.entity.UserMember;
+import org.springblade.car.vo.AdVO;
+
 import java.util.List;
 
 /**
- * 用户表 Mapper 接口
+ * 广告表 Mapper 接口
  *
  * @author BladeX
- * @since 2021-10-13
+ * @since 2021-07-20
  */
-public interface MemberMapper extends BaseMapper<Member> {
+public interface UserMemberMapper extends BaseMapper<UserMember> {
 
 	/**
 	 * 自定义分页
 	 *
 	 * @param page
-	 * @param member
+	 * @param userMember
 	 * @return
 	 */
-	List<MemberVO> selectMemberPage(IPage page, @Param("member") MemberReq member);
-	Integer selectMemberCount( @Param("member") MemberReq member);
-
+	List<UserMember> selectUserMemberPage(IPage page, UserMember userMember);
+	List<Member> selectMemberList(@Param("userId") Long userId);
+	Boolean delUserMembrs(@Param("userId") Long userId);
 }
