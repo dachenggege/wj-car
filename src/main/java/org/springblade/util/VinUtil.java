@@ -83,23 +83,23 @@ public class VinUtil {
         return false;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(isValidVin("UU6JA69691D713820"));
-
-        System.out.println(isValidVin("LFV3A21K7D4262398"));
-
-        System.out.println(isValidVin("LFV3A23C793062656"));
-
-        System.out.println(isValidVin("LSGDC82C11S10203O"));
-
-        System.out.println(isValidVin("LSGDC82C11S102030"));
-
-        System.out.println(isValidVin("LSGUD84X2BE041557"));
-
-        System.out.println(isValidVin("WDDBF4CB2EJ143048"));
-
-        System.out.println(isValidVin("1LFP3ACCXD1D99699"));
-
-    }
+//
+//    public static void main(String[] args) {
+//        System.out.println(isValidVin("UU6JA69691D713820"));
+//
+//        System.out.println(isValidVin("LFV3A21K7D4262398"));
+//
+//        System.out.println(isValidVin("LFV3A23C793062656"));
+//
+//        System.out.println(isValidVin("LSGDC82C11S10203O"));
+//
+//        System.out.println(isValidVin("LSGDC82C11S102030"));
+//
+//        System.out.println(isValidVin("LSGUD84X2BE041557"));
+//
+//        System.out.println(isValidVin("WDDBF4CB2EJ143048"));
+//
+//        System.out.println(isValidVin("1LFP3ACCXD1D99699"));
+//
+//    }
 }
