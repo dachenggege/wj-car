@@ -56,6 +56,9 @@
         <if test="styles_price != null">
             and t.styles_price=#{styles_price}
         </if>
+        <if test="brand_name != null">
+            and t.brand_name like concat(concat('%', #{brand_name}), '%')
+        </if>
         <if test="group_name != null and sgroup_name !=''">
             and t.group_name like concat(concat('%', #{group_name}), '%')
         </if>
