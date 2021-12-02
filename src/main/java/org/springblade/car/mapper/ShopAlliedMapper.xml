@@ -50,17 +50,32 @@
         AND t.id =#{shopAllied.alliedShopId}
     </select>
     <!--查询门店 -->
-    <select id="selectShopAlliedPage" resultType="org.springblade.car.dto.SelectShopAlliedDTO" >
-        SELECT DISTINCT t.id,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
+    <select id="selectShopAlliedPage" resultType="org.springblade.car.dto.ShopAlliedDTO" >
+        SELECT DISTINCT t.id, t.id shopId ,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
         (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
         t.shop_img AS shopImg,t.area_name AS areaName,t.shop_address AS shopAddress,
-        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
-        IFNULL((SELECT DISTINCT allied_status FROM t_shop_allied WHERE   #{shopAllied.shopId}=shop_id OR #{shopAllied.shopId}=allied_shop_id ),0) AS alliedStatus
+        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
         FROM t_shop t
         WHERE t.is_deleted = 0 AND t.audit_status=2
         and t.member_id !=#{shopAllied.shopMemberId}
-        <if test="shopAllied.shopName != null ">
+        <if test="shopAllied.shopName != null and shopAllied.shopName !=''">
             AND t.shop_name like concat(concat('%', #{shopAllied.shopName}), '%')
         </if>
+    </select>
+    <select id="selectShopAllied" resultType="org.springblade.car.entity.ShopAllied" >
+   SELECT  * FROM
+        (
+       SELECT * FROM t_shop_allied a
+        WHERE a.is_deleted=0
+       AND a.shop_id=#{shopId}
+       AND a.allied_shop_id=#{alliedShopId}
+	    UNION
+       SELECT * FROM t_shop_allied a
+        WHERE a.is_deleted=0
+       AND a.shop_id=#{alliedShopId}
+       AND a.allied_shop_id=#{shopId}
+       ) t
+       LIMIT 0,1
+
     </select>
 </mapper>

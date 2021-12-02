@@ -63,4 +63,6 @@ public class ShopAlliedDTO {
 	private String shopAddress;
 	@ApiModelProperty(value = "门店车图片")
 	private String shopImg;
+
+
 }

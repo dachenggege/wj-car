@@ -16,6 +16,8 @@
  */
 package org.springblade.car.service.impl;
 
+import org.apache.ibatis.annotations.Param;
+import org.springblade.car.dto.SelectShopAlliedDTO;
 import org.springblade.car.dto.ShopAlliedDTO;
 import org.springblade.car.entity.ShopAllied;
 import org.springblade.car.vo.ShopAlliedVO;
@@ -23,8 +25,11 @@ import org.springblade.car.mapper.ShopAlliedMapper;
 import org.springblade.car.service.IShopAlliedService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.car.vo.ShopVO;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import java.util.List;
 
 /**
  * 门店收藏表 服务实现类
@@ -42,7 +47,22 @@ public class ShopAlliedServiceImpl extends ServiceImpl<ShopAlliedMapper, ShopAll
 		return page.setRecords(baseMapper.applyAlliedShopPage(page, shopCollect));
 	}
 	public IPage<ShopAlliedDTO> selectShopAlliedPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect) {
-		return page.setRecords(baseMapper.selectShopAlliedPage(page, shopCollect));
+		IPage<ShopAlliedDTO> page1=page.setRecords(baseMapper.selectShopAlliedPage(page, shopCollect));
+		if(Func.isNotEmpty(page1.getRecords())){
+		for(ShopAlliedDTO dto :page1.getRecords()){
+			ShopAllied shopAllied=baseMapper.selectShopAllied(shopCollect.getShopId(),dto.getShopId());
+				if (Func.isNotEmpty(shopAllied)) {
+					dto.setAlliedStatus(shopAllied.getAlliedStatus());
+				} else {
+					dto.setAlliedStatus(0);
+				}
+			}
+		}
+		return page1;
+	}
+
+	public ShopAllied selectShopAllied(Long shopId,Long alliedShopId){
+		return baseMapper.selectShopAllied(shopId,alliedShopId);
 	}
 
 }

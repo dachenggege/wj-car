@@ -329,13 +329,15 @@
     </select>
 
     <select id="shopAlliedCarPage" resultType="org.springblade.car.dto.CarsDTO">
-        select t.*,m.name as memberName,
+        select distinct t.*,m.name as memberName,
         (SELECT COUNT(1) FROM  `t_cars_browse` b WHERE b.`is_deleted`=0 AND b.`car_id`=t.`id`) AS viewCount,
         (SELECT COUNT(1) FROM  `t_phone_record` r WHERE r.`is_deleted`=0 AND r.`cars_id`=t.`id`) AS callPhoneCount
         from t_cars t,`t_shop_allied` a,t_member m
         where t.is_deleted = 0  and m.is_deleted=0
         AND t.`vest`=2
+        AND a.allied_status=2
         and t.member_id =m.id
+        AND (a.`allied_shop_id`=t.shop_id OR a.`shop_id`=t.`shop_id`)
         <if test="cars.status != null">
             and t.status=#{cars.status}
         </if>
@@ -344,10 +346,7 @@
             and t.vest=#{cars.vest}
         </if>
         <if test="cars.id != null">
-            and t.id=#{cars.id}
-        </if>
-        <if test="cars.shopId != null">
-            and t.shop_id=#{cars.shopId}
+            AND (a.`allied_shop_id`=cars.id OR a.`shop_id`=cars.id)
         </if>
         <if test="cars.pvin != null and cars.pvin !=''">
             and t.pvin=#{cars.pvin}

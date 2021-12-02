@@ -17,6 +17,7 @@
 package org.springblade.car.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.springblade.car.dto.SelectShopAlliedDTO;
 import org.springblade.car.dto.ShopAlliedDTO;
 import org.springblade.car.entity.ShopAllied;
 import org.springblade.car.vo.ShopAlliedVO;
@@ -36,5 +37,6 @@ public interface ShopAlliedMapper extends BaseMapper<ShopAllied> {
 	List<ShopAlliedDTO> hadAlliedShopPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
 	List<ShopAlliedDTO> applyAlliedShopPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
 	List<ShopAlliedDTO> selectShopAlliedPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
+	ShopAllied selectShopAllied(@Param("shopId") Long shopId,@Param("alliedShopId") Long alliedShopId);
 
 }

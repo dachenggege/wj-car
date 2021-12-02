@@ -112,8 +112,8 @@
 
         SELECT s.*,t.name AS shopMember ,
         (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS staffNum,
-        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
-        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum
+        (SELECT COUNT(1) FROM t_cars WHERE is_deleted = 0 and audit_status=2 and shop_id=t.id) AS shopCarNum,
+        (SELECT COUNT(1) FROM t_shop_allied WHERE is_deleted = 0 and allied_status=2 and (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum
         FROM t_shop s , (
         SELECT distinct t.* FROM t_member t , t_user_member u WHERE t.is_deleted = 0 AND t.id=u.member_id
         <if test="shop.userId != null">
@@ -187,9 +187,11 @@
         (SELECT NAME FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) AS shopMember ,
         (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS staffNum,
         (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
-        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum,
+        (SELECT COUNT(1) FROM t_shop_allied WHERE allied_status=2 and (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum,
         (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
-        (SELECT COUNT(1) FROM t_shop_allied a,t_cars c WHERE c.status=1 AND (a.shop_id=t.id OR a.allied_shop_id=t.id)  AND (c.shop_id=a.shop_id OR c.shop_id=a.allied_shop_id)) AS alliedCarNum
+        (SELECT COUNT(1) FROM t_shop_allied a,t_cars c
+            WHERE c.status=1 and a.is_deleted = 0 and a.allied_status=2 and c.is_deleted = 0 and c.audit_status=2
+            AND (a.shop_id=t.id OR a.allied_shop_id=t.id)  AND (c.shop_id=a.shop_id OR c.shop_id=a.allied_shop_id)) AS alliedCarNum
         FROM t_shop t, t_shop_member s
         WHERE t.is_deleted = 0 AND s.is_deleted = 0
         AND t.id=s.`shop_id`
@@ -203,9 +205,11 @@
         SELECT t.*,
         (SELECT NAME FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) AS shopMember ,
         (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS staffNum,
-        (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
-        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum,
-        (SELECT COUNT(1) FROM t_shop_allied a,t_cars c WHERE c.status=1 AND (a.shop_id=t.id OR a.allied_shop_id=t.id)  AND (c.shop_id=a.shop_id OR c.shop_id=a.allied_shop_id)) AS alliedCarNum
+        (SELECT COUNT(1) FROM t_cars WHERE is_deleted = 0 and audit_status=2 and shop_id=t.id) AS shopCarNum,
+        (SELECT COUNT(1) FROM t_shop_allied WHERE is_deleted = 0 and allied_status=2 and (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum,
+        (SELECT COUNT(1) FROM t_shop_allied a,t_cars c
+            WHERE c.status=1 and a.is_deleted = 0 and a.allied_status=2 and c.is_deleted = 0 and c.audit_status=2
+            AND (a.shop_id=t.id OR a.allied_shop_id=t.id)  AND (c.shop_id=a.shop_id OR c.shop_id=a.allied_shop_id)) AS alliedCarNum
         FROM t_shop t WHERE t.is_deleted = 0
         <if test="id != null">
             and t.id=#{id}

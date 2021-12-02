@@ -16,6 +16,7 @@
  */
 package org.springblade.car.service;
 
+import org.springblade.car.dto.SelectShopAlliedDTO;
 import org.springblade.car.dto.ShopAlliedDTO;
 import org.springblade.car.entity.ShopAllied;
 import org.springblade.car.vo.ShopAlliedVO;
@@ -34,5 +35,5 @@ public interface IShopAlliedService extends IService<ShopAllied> {
 	IPage<ShopAlliedDTO> hadAlliedShopPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
 	IPage<ShopAlliedDTO> applyAlliedShopPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
 	IPage<ShopAlliedDTO> selectShopAlliedPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
-	//ShopAllied selectShopCollect(ShopAllied shopAllied);
+	ShopAllied selectShopAllied(Long shopId,Long alliedShopId);
 }
