@@ -156,8 +156,6 @@ public class StylesController extends BladeController {
 				entity.setBrandName(dto.getBrand_name());
 				entity.setSeriesId(dto.getSeries_id());
 				entity.setSeriesName(dto.getSeries_name());
-				entity.setGroupName(dto.getGroup_name());
-				entity.setConfiguration(dto.getConfiguration());
 				stylesList.add(entity);
 			}
 		}

@@ -29,6 +29,7 @@ import org.springblade.car.entity.Member;
 import org.springblade.car.service.IForumCommentService;
 import org.springblade.car.service.IForumLikeService;
 import org.springblade.car.service.IForumService;
+import org.springblade.car.vo.ForumCommentVO;
 import org.springblade.car.vo.ForumVO;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.core.boot.ctrl.BladeController;
@@ -36,12 +37,14 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.util.NumberUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  *  控制器
@@ -147,13 +150,17 @@ public class WForumController extends BladeController {
 	@PostMapping("/comment")
 	@ApiOperationSupport(order = 8)
 	@ApiOperation(value = "评论", notes = "传入forumComment")
-	public R<ForumComment> comment(@Valid @RequestBody ForumComment forumComment) {
+	public R<ForumCommentVO> comment(@Valid @RequestBody ForumComment forumComment) {
 		Member cl = wMemberFactory.getMember(request);
 		Long id= NumberUtil.getRandomNumber(1,12);
 		forumComment.setId(id);
 		forumComment.setMumberId(cl.getId());
 		forumCommentService.save(forumComment);
-		return R.data(forumComment);
+		ForumCommentVO vo=new ForumCommentVO();
+		BeanUtil.copy(forumComment,vo);
+		vo.setCommenter(cl.getNickname());
+		vo.setCommentMember(cl.getId());
+		return R.data(vo);
 	}
 
 	/**

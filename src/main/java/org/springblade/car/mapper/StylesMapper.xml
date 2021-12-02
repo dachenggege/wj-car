@@ -21,8 +21,8 @@
         <result column="series_name" property="seriesName"/>
         <result column="listorder" property="listorder"/>
         <result column="open" property="open"/>
-        <result column="group_name" property="groupName"/>
-        <result column="configuration" property="configuration"/>
+        <result column="model_id" property="modelId"/>
+        <result column="model_name" property="modelName"/>
     </resultMap>
 
 
@@ -65,11 +65,6 @@
         <if test="series_name != null and series_name !=''">
             and t.series_name like concat(concat('%', #{series_name}), '%')
         </if>
-    </select>
-    <select id="queryStylesKeyWordsList" resultType="java.lang.String">
-        SELECT CONCAT(styles_name,styles_year,brand_name,series_name,group_name,configuration) as keyWords
-        FROM `t_styles` t
-        where is_deleted = 0
     </select>
 
 </mapper>

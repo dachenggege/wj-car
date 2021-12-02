@@ -48,6 +48,8 @@ public interface ICarsService extends IService<Cars> {
 	 */
 	IPage<CarsDTO> selectCarsPage(IPage<CarsDTO> page, CarsVO cars);
 	IPage<CarsVO> carCollectPage(IPage<CarsVO> page, CarsVO cars);
+	IPage<CarsDTO> shopAlliedCarPage(IPage<CarsDTO> page, CarsVO cars);
+
 	IPage<CarsVO> carsBrowsePage(IPage<CarsVO> page, CarsVO cars);
 	IPage<carsBeenCallDTO> carsBeenCallPage(IPage<carsBeenCallDTO> page, CarsVO cars);
 	IPage<carsBeenBrowseDTO> carsBeenBrowsePage(IPage<carsBeenBrowseDTO> page,CarsVO cars);

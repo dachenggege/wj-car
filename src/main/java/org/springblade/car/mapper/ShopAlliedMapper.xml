@@ -51,12 +51,12 @@
     </select>
     <!--查询门店 -->
     <select id="selectShopAlliedPage" resultType="org.springblade.car.dto.SelectShopAlliedDTO" >
-        SELECT t.id,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
+        SELECT DISTINCT t.id,t.shop_name AS shopName,t.`member_id` AS shopMemberId,
         (SELECT NAME FROM t_member m WHERE t.member_id=m.id) AS shopMember,
         t.shop_img AS shopImg,t.area_name AS areaName,t.shop_address AS shopAddress,
         (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
-        IFNULL(c.allied_status,0) alliedStatus
-        FROM t_shop t LEFT JOIN t_shop_allied c ON (t.id=c.shop_id OR t.id=c.allied_shop_id)
+        IFNULL((SELECT DISTINCT allied_status FROM t_shop_allied WHERE   #{shopAllied.shopId}=shop_id OR #{shopAllied.shopId}=allied_shop_id ),0) AS alliedStatus
+        FROM t_shop t
         WHERE t.is_deleted = 0 AND t.audit_status=2
         and t.member_id !=#{shopAllied.shopMemberId}
         <if test="shopAllied.shopName != null ">

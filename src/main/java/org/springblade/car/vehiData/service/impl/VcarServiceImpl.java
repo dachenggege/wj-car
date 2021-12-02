@@ -24,6 +24,8 @@ import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  *  服务实现类
  *
@@ -37,5 +39,7 @@ public class VcarServiceImpl extends BaseServiceImpl<VcarMapper, Vcar> implement
 	public IPage<VcarVO> selectVcarPage(IPage<VcarVO> page, VcarVO vcar) {
 		return page.setRecords(baseMapper.selectVcarPage(page, vcar));
 	}
-
+	public List<Vcar> RunCardetaillist(){
+		return baseMapper.RunCardetaillist();
+	}
 }

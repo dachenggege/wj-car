@@ -10,7 +10,7 @@ import java.util.*;
  * @desc
  */
 public class SimilarityUtils {
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        //要比较的两个字符串
 //        String keywords = "2012款一汽奥迪A6三厢2.5LCVT舒适型 奥迪A6L 30FSI CVT舒适型";
 //        //String keywords = "2ABBBCCCA132";
@@ -42,7 +42,7 @@ public class SimilarityUtils {
 //        maxSim.put(3l,4);
 //        maxSim.put(4l,3);
 //        System.out.println( getMaxValue(maxSim));
-    }
+//   }
 
     //字符串去重
     public static String removeRepeatChar(String s) {

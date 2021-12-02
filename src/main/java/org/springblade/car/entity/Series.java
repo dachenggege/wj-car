@@ -71,10 +71,4 @@ public class Series extends BaseEntity {
 		@ApiModelProperty(value = "是否显示")
 		private Boolean open;
 
-	@ApiModelProperty(value = "车辆等级")
-	private Integer modelId;
-
-	@ApiModelProperty(value = "等级")
-	private String modelName;
-
 }

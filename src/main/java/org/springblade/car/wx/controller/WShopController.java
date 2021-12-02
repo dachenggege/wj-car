@@ -513,6 +513,9 @@ public class WShopController extends BladeController {
 		Map<String,Object> map=new HashMap<>();
 		map.put("staff_id",cl.getId());
 		map.put("shop_id",shopCarReq.getShopId());
+		if(Func.isEmpty(shopCarReq.getShopId())){
+			R.fail("shopId没传值");
+		}
 		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
 			R.fail("您没有权限查看联盟车源哦");
@@ -528,7 +531,7 @@ public class WShopController extends BladeController {
 		BeanUtils.copyProperties(shopCarReq,cars);
 //		cars.setMemberIds(memberIds);
 		cars.setPallname(shopCarReq.getPallname());
-		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		IPage<CarsDTO> pages = carsService.shopAlliedCarPage(Condition.getPage(query), cars);
 		return R.data(pages);
 	}
 

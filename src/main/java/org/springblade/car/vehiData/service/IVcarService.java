@@ -21,6 +21,8 @@ import org.springblade.car.vehiData.vo.VcarVO;
 import org.springblade.core.mp.base.BaseService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  *  服务类
  *
@@ -37,5 +39,5 @@ public interface IVcarService extends BaseService<Vcar> {
 	 * @return
 	 */
 	IPage<VcarVO> selectVcarPage(IPage<VcarVO> page, VcarVO vcar);
-
+	List<Vcar> RunCardetaillist();
 }

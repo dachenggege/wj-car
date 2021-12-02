@@ -28,7 +28,9 @@ public interface CacheNames {
 	String AREAS_KEY = "blade:cach:areas:";
 	String NO_AREAS_KEY = "blade:cach:noareas:";
 	String REGION_KEY = "blade:cach:region:";
-	String VIN_KEY = "blade:cach:vin:";
+	String JUHE_VIN_KEY = "blade:cach:vin:juhe:";
+	String ALIYUN_VIN_KEY = "blade:cach:vin:aliyun:";
+
 	String STYLES_KEY = "blade:cach:stylesKey:";
 
 

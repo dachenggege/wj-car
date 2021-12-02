@@ -12,8 +12,6 @@
         <result column="brand_name" property="brandName"/>
         <result column="listorder" property="listorder"/>
         <result column="open" property="open"/>
-        <result column="model_id" property="modelId"/>
-        <result column="model_name" property="modelName"/>
     </resultMap>
 
 

@@ -38,5 +38,5 @@ public interface VcarMapper extends BaseMapper<Vcar> {
 	 * @return
 	 */
 	List<VcarVO> selectVcarPage(IPage page, VcarVO vcar);
-
+	List<Vcar> RunCardetaillist();
 }

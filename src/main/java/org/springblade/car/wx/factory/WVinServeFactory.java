@@ -98,79 +98,9 @@ public class WVinServeFactory{
 	String SecretId="AKIDRgfPtTnpb6LJ0QaT5QUHn32lERN2QXO0";
 	String SecretKey="MRFm33mEPKxKRHrACwPbYGhrmrgEVVFi";
 
-	/**
-	 * 发布车源时的vin查询返回信息
-	 */
-	public CarsVinParseReq carVinQuery(String vin) {
-		System.out.println("发布车源vin查询vin=："+vin);
-		VinVehicle entity=vinParse(vin).getVinVehicle();
-		CarsVinParseReq cars = new CarsVinParseReq();
-		cars.setPvin(vin);
-		if(Func.isNotEmpty(entity)) {
-			Double ListPrice= checkNumber(entity.getListPrice())/10000;
-			Map<String, Object> queryMap = new HashMap<>();
-			//queryMap.put("styles_price", ListPrice);
-			queryMap.put("styles_year",entity.getYearPattern());
-			String brandName=entity.getBrandName();
-			brandName=StringUtils.substringBefore(brandName, "(");
-			String vehicleAlias=entity.getVehicleAlias();
-			vehicleAlias=StringUtils.substringBefore(vehicleAlias, " ");
-			queryMap.put("group_name", brandName);
-			queryMap.put("series_name", vehicleAlias);
-			List<Styles> stylesList = stylesService.selectStylesVin(queryMap);
-			String keywords= entity.getVehicleName()+entity.getVehicleAlias();
-			Long stylesId= getMaxValue(stylesList,keywords);
-			Styles styles=stylesService.getById(stylesId);
-			if(Func.isNotEmpty(styles)) {
-				cars.setBrandId(Long.valueOf(styles.getBrandId()));
-				cars.setBrandName(styles.getBrandName());
-				cars.setSeriesId(Long.valueOf(styles.getSeriesId()));
-				cars.setSeriesName(styles.getSeriesName());
-				cars.setStylesId(styles.getId());
-				cars.setStylesName(styles.getStylesName());
-				Series series = seriesService.getById(styles.getSeriesId());
-				if (Func.isNotEmpty(series)) {
-					cars.setModelId(Long.valueOf(series.getModelId()));
-					cars.setModelName(series.getModelName());
-				}
-			}
-				cars.setPprice(BigDecimal.valueOf(ListPrice));
-				cars.setPallname(entity.getVehicleName());
-				cars.setPcolor(entity.getVehicleColor());//颜色
-				cars.setPgas(entity.getDisplacement());//排量
-				cars.setPtransmission(entity.getGearboxType());//变速箱
-				cars.setPemission(entity.getEffluentStandard());//排放标准
-				cars.setPfuel(entity.getPowerType());//燃油类型
-
-		}
-
-
-
-
-		return cars;
-
-	}
-	public Long getMaxValue(List<Styles> stylesList ,String keywords){
-		keywords=keywords.replace(" ","");
-		//System.out.println("keywords="+keywords);
-		String str="";
-		//取匹配最高的
-		Map<Long,Integer> maxSim=new HashMap<>();
-		for (Styles entity : stylesList) {
-		//	keywords= entity.getYearPattern()+entity.getBrandName()+entity.getFamilyName()+entity.getGroupName();
-			//styles_name,styles_year,brand_name,series_name,group_name,configuration
-			str= entity.getStylesYear()+entity.getBrandName()+entity.getStylesName() +entity.getConfiguration()+entity.getGroupName()+entity.getSeriesName();
-			//System.out.println(str);
-			str=SimilarityUtils.removeRepeatChar(str).replace(" ","");;
-			//System.out.println(str);
-			maxSim.put(entity.getId(),SimilarityUtils.subCount(keywords,str));
-		}
-		return SimilarityUtils.getMaxValue(maxSim);
-	}
-
 
 	public VinParseData vinParse(String vin) {
-		String key=CacheNames.VIN_KEY+vin;
+		String key=CacheNames.JUHE_VIN_KEY+vin;
 		String res=bladeRedis.get(key);
 		if(Func.isEmpty(res)){
 			VinParse queryvinParse=new VinParseVO();
@@ -186,7 +116,7 @@ public class WVinServeFactory{
 				url.append(JuheConstant.vinParse_URL).append("?key=").append(JuheConstant.vinParse_KEY)
 						.append("&vin=").append(vin);
 				res = restTemplate.getForEntity(url.toString(), String.class).getBody();
-				bladeRedis.set(CacheNames.VIN_KEY + vin, res);
+				bladeRedis.set(CacheNames.JUHE_VIN_KEY + vin, res);
 
 				VinParse vinParse = new VinParseVO();
 				vinParse.setVin(vin);

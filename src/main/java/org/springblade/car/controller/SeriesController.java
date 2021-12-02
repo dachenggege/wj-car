@@ -150,7 +150,7 @@ public class SeriesController extends BladeController {
 				entity.setSeriesName(dto.getName());
 				entity.setSeriesGroupname(dto.getSgroup());
 				entity.setBrandId(dto.getBrandid());
-				entity.setModelName(dto.getLevelname());
+//				entity.setModelName(dto.getLevelname());
 				entity.setOpen(true);
 				seriesList.add(entity);
 			}

@@ -29,4 +29,8 @@
         select * from v_vcar where is_deleted = 0
     </select>
 
+    <select id="RunCardetaillist" resultMap="vcarResultMap">
+        SELECT * FROM `v_vcar` c WHERE id NOT IN ( SELECT parentid FROM `v_vcardetail` ) AND salestate NOT IN('待销','待售')
+    </select>
+
 </mapper>

@@ -3,6 +3,7 @@ package org.springblade.car.wx.factory;
 import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.*;
 import org.springblade.car.service.*;
+import org.springblade.car.vo.ShopVO;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.redis.cache.BladeRedis;
@@ -109,9 +110,9 @@ public class WMemberFactory {
 		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
 
 		//门店数
-		Shop queryshop =new  Shop();
+		ShopVO queryshop =new  ShopVO();
 		queryshop.setMemberId(cl.getId());
-		Integer shopCount= shopService.count(Condition.getQueryWrapper(queryshop));
+		Integer shopCount= shopService.selectShopCount(queryshop);
 
 
 		memberDTO.setFansNum(fansNum);
@@ -167,9 +168,9 @@ public class WMemberFactory {
 		myShopCar.setMemberId(cl.getId());
 		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
 		//门店数
-		Shop queryshop =new  Shop();
+		ShopVO queryshop =new  ShopVO();
 		queryshop.setMemberId(cl.getId());
-		Integer shopCount= shopService.count(Condition.getQueryWrapper(queryshop));
+		Integer shopCount= shopService.selectShopCount(queryshop);
 
 		memberDTO.setFansNum(fansNum);
 		memberDTO.setFocusNum(focusNum);

@@ -44,6 +44,8 @@ public class Vcardetail extends BaseEntity {
 	private String productionstate;
 	private String salestate;
 	private String sizetype;
+	private Integer parentid;
+	private Integer depth;
 
 
 }

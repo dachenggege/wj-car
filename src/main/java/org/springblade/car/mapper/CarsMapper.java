@@ -45,6 +45,7 @@ public interface CarsMapper extends BaseMapper<Cars> {
 	 */
 	List<CarsDTO> selectCarsPage(IPage page,@Param("cars") CarsVO cars);
 	List<CarsVO> carCollectPage(IPage page, @Param("cars") CarsVO cars);
+	List<CarsDTO> shopAlliedCarPage(IPage page, @Param("cars") CarsVO cars);
 	List<CarsVO> carsBrowsePage(IPage page, @Param("cars") CarsVO cars);
 	List<carsBeenBrowseDTO> carsBeenBrowsePage(IPage page, @Param("cars") CarsVO cars);
 	List<carsBeenCallDTO> carsBeenCallPage(IPage page, @Param("cars") CarsVO cars);

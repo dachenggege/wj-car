@@ -37,6 +37,7 @@ import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.enums.CarSort;
 import org.springblade.car.service.*;
 import org.springblade.car.vo.CarsVO;
+import org.springblade.car.wx.factory.AliyunVINFactory;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.car.wx.factory.WVinServeFactory;
 import org.springblade.core.boot.ctrl.BladeController;
@@ -87,6 +88,7 @@ public class WCarController extends BladeController {
 	private final ICarsBrowseService carsBrowseService;
 	private IMemberService memberService;
 	private WVinServeFactory wVinServeFactory;
+	private AliyunVINFactory aliyunVINFactory;
 
 
 	@PostMapping("/qcrVinQuery")
@@ -96,7 +98,8 @@ public class WCarController extends BladeController {
 		CarsVinParseReq cars = new CarsVinParseReq();
 		String vin=wVinServeFactory.gjqcrVinQuery(imageBase64);
 		System.out.println("发布车源vin图片识别车辆信息vin="+vin);
-		cars = wVinServeFactory.carVinQuery(vin);
+		//cars = wVinServeFactory.carVinQuery(vin);
+		 cars = aliyunVINFactory.carVinQuery(vin);
 		return R.data(cars);
 	}
 
@@ -109,7 +112,8 @@ public class WCarController extends BladeController {
 	@ApiOperation(value = "发布车源VIN查询", notes = "传入vin号")
 	public R<CarsVinParseReq> carVinQuery(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
 		wVinServeFactory.isCheckVin(vin);
-		CarsVinParseReq cars = wVinServeFactory.carVinQuery(vin);
+		//CarsVinParseReq cars = wVinServeFactory.carVinQuery(vin);
+		CarsVinParseReq cars = aliyunVINFactory.carVinQuery(vin);
 		return R.data(cars);
 
 	}

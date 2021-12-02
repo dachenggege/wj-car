@@ -45,7 +45,7 @@
         ) t
         WHERE s.is_deleted = 0 AND t.is_deleted = 0
         AND s.member_id=t.id
-
+        and s.audit_status in(1,2)
         <if test="shop.auditStatus != null ">
             and s.audit_status=#{shop.auditStatus}
         </if>
@@ -204,7 +204,8 @@
         (SELECT NAME FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) AS shopMember ,
         (SELECT COUNT(1) FROM t_shop_member WHERE shop_id=t.id) AS staffNum,
         (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum,
-        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum
+        (SELECT COUNT(1) FROM t_shop_allied WHERE (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum,
+        (SELECT COUNT(1) FROM t_shop_allied a,t_cars c WHERE c.status=1 AND (a.shop_id=t.id OR a.allied_shop_id=t.id)  AND (c.shop_id=a.shop_id OR c.shop_id=a.allied_shop_id)) AS alliedCarNum
         FROM t_shop t WHERE t.is_deleted = 0
         <if test="id != null">
             and t.id=#{id}

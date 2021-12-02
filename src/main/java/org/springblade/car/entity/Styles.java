@@ -108,10 +108,12 @@ public class Styles extends BaseEntity {
 	*/
 		@ApiModelProperty(value = "是否显示")
 		private Boolean open;
-		@ApiModelProperty(value = "厂商")
-		private String groupName;
-		@ApiModelProperty(value = "配置")
-		private String configuration;
+
+	@ApiModelProperty(value = "车辆等级")
+	private Integer modelId;
+
+	@ApiModelProperty(value = "等级")
+	private String modelName;
 
 
 }

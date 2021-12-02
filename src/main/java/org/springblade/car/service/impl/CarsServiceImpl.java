@@ -49,7 +49,13 @@ public class CarsServiceImpl extends ServiceImpl<CarsMapper, Cars> implements IC
 	@Override
 	public IPage<CarsVO> carCollectPage(IPage<CarsVO> page, CarsVO cars) {
 		return page.setRecords(baseMapper.carCollectPage(page, cars));
-	}	@Override
+	}
+	@Override
+	public IPage<CarsDTO> shopAlliedCarPage(IPage<CarsDTO> page, CarsVO cars) {
+		return page.setRecords(baseMapper.shopAlliedCarPage(page, cars));
+	}
+
+	@Override
 	public IPage<CarsVO> carsBrowsePage(IPage<CarsVO> page, CarsVO cars) {
 		return page.setRecords(baseMapper.carsBrowsePage(page, cars));
 	}

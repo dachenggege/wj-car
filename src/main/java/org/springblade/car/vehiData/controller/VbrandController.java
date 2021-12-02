@@ -70,14 +70,14 @@ public class VbrandController extends BladeController {
 	private IVcardetailService vcardetailService;
 
 
-	@GetMapping("/brand")
-	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "1品牌")
+//	@GetMapping("/brand")
+//	@ApiOperationSupport(order = 6)
+//	@ApiOperation(value = "1品牌")
 	public R brand() {
 		String host = "https://jisucxdq.market.alicloudapi.com";
 		String path = "/car/brand";
 		String method = "GET";
-		String appcode = "";
+		String appcode = "580594f573c44d6596eab5da7b533fea";
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Authorization", "APPCODE " + appcode);
 		headers.put("Content-Type", "application/json; charset=UTF-8");
@@ -124,12 +124,12 @@ public class VbrandController extends BladeController {
 		return R.status(r);
 	}
 
-	@GetMapping("/type")
-	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "2车型")
+//	@GetMapping("/type")
+//	@ApiOperationSupport(order = 6)
+//	@ApiOperation(value = "2车型")
 	public R type() {
 		Vbrand brand = new Vbrand();
-		brand.setId(1l);
+		//brand.setId(1l);
 		List<Vbrand> list= vbrandService.list(Condition.getQueryWrapper(brand));
 		for(Vbrand vbrand:list){
 			rundate(String.valueOf(vbrand.getId()));
@@ -138,13 +138,14 @@ public class VbrandController extends BladeController {
 	}
 	@GetMapping("/cardetail")
 	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "2车型详细年款式")
+	@ApiOperation(value = "3车型详细年款式")
 	public R cardetail() {
 		Vcar vcar = new Vcar();
-		vcar.setId(220l);
-		List<Vcar> list= vcarService.list(Condition.getQueryWrapper(vcar));
+		//vcar.setId(220l);
+		//List<Vcar> list= vcarService.list(Condition.getQueryWrapper(vcar));
+		List<Vcar> list= vcarService.RunCardetaillist();
 		for(Vcar vcar1:list){
-			carDetaldate(String.valueOf(vcar1.getId()));
+			carDetaldate(vcar1);
 		}
 		return R.success("OK");
 	}
@@ -152,7 +153,7 @@ public class VbrandController extends BladeController {
 		String host = "https://jisucxdq.market.alicloudapi.com";
 		String path = "/car/type";
 		String method = "GET";
-		String appcode = "";
+		String appcode = "580594f573c44d6596eab5da7b533fea";
 		Map<String, String> headers = new HashMap<String, String>();
 		//最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
 		headers.put("Authorization", "APPCODE " + appcode);
@@ -200,17 +201,17 @@ public class VbrandController extends BladeController {
 		return R.status(r);
 	}
 
-	public R carDetaldate(String parentid) {
+	public R carDetaldate(Vcar vcar) {
 		String host = "http://jisucxdq.market.alicloudapi.com";
 		String path = "/car/car";
 		String method = "GET";
-		String appcode = "";
+		String appcode = "580594f573c44d6596eab5da7b533fea";
 		Map<String, String> headers = new HashMap<String, String>();
 		//最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
 		headers.put("Authorization", "APPCODE " + appcode);
 		headers.put("Content-Type", "application/json; charset=UTF-8");
 		Map<String, String> querys = new HashMap<String, String>();
-		querys.put("parentid", parentid);
+		querys.put("parentid", String.valueOf(vcar.getId()));
 		querys.put("sort", "sort");
 
 
@@ -232,13 +233,17 @@ public class VbrandController extends BladeController {
 			if(Func.isNotEmpty(resultJson)) {
 				List<Vcardetail> VcardetailList = new ArrayList<>();
 				JSONArray vcarJsonList = resultJson.getJSONArray("list");
-				for (int j = 0; j < vcarJsonList.size(); j++) {
-					JSONObject vcarddtailJson = vcarJsonList.getJSONObject(j);
-					Vcardetail vcar = JSONObject.parseObject(vcarddtailJson.toJSONString(), Vcardetail.class);
-					VcardetailList.add(vcar);
-				}
-				r=vcardetailService.saveOrUpdateBatch(VcardetailList);
+				if(Func.isNotEmpty(vcarJsonList)) {
+					for (int j = 0; j < vcarJsonList.size(); j++) {
+						JSONObject vcarddtailJson = vcarJsonList.getJSONObject(j);
+						Vcardetail vcardetail = JSONObject.parseObject(vcarddtailJson.toJSONString(), Vcardetail.class);
+						vcardetail.setParentid(vcar.getId().intValue());
+						vcardetail.setDepth(4);
+						VcardetailList.add(vcardetail);
+					}
 
+					r = vcardetailService.saveOrUpdateBatch(VcardetailList);
+				}
 			}
 
 		}

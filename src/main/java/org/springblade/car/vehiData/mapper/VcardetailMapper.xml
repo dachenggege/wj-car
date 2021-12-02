@@ -19,6 +19,8 @@
         <result column="productionstate" property="productionstate"/>
         <result column="salestate" property="salestate"/>
         <result column="sizetype" property="sizetype"/>
+        <result column="parentid" property="parentid"/>
+        <result column="depth" property="depth"/>
     </resultMap>
 
 
