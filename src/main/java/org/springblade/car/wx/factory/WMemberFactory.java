@@ -102,11 +102,17 @@ public class WMemberFactory {
 		//我的车源数量
 		Cars myCar=new Cars();
 		myCar.setMemberId(cl.getId());
+		myCar.setVest(1);
+		myCar.setAuditStatus(2);
+		myCar.setStatus(1);
 		int mycarNum= carsService.count(Condition.getQueryWrapper(myCar));
 
 		//我的车源数量
 		Cars myShopCar=new Cars();
 		myShopCar.setMemberId(cl.getId());
+		myShopCar.setVest(2);
+		myShopCar.setAuditStatus(2);
+		myShopCar.setStatus(1);
 		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
 
 		//门店数
@@ -161,11 +167,17 @@ public class WMemberFactory {
 		//我的车源数量
 		Cars myCar=new Cars();
 		myCar.setMemberId(cl.getId());
+		myCar.setVest(1);
+		myCar.setAuditStatus(2);
+		myCar.setStatus(1);
 		int mycarNum= carsService.count(Condition.getQueryWrapper(myCar));
 
-		//我的车源数量
+		//我的门店车源数量
 		Cars myShopCar=new Cars();
 		myShopCar.setMemberId(cl.getId());
+		myShopCar.setVest(2);
+		myShopCar.setAuditStatus(2);
+		myShopCar.setStatus(1);
 		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
 		//门店数
 		ShopVO queryshop =new  ShopVO();

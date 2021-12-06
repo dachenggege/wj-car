@@ -317,6 +317,8 @@ public class WCarController extends BladeController {
 		CarsVO cars=new CarsVO();
 		cars.setMemberId(memberId);
 		cars.setVest(vest);
+		cars.setStatus(1);
+		cars.setAuditStatus(2);
 		if (Func.isNotEmpty(cars.getSort())) {
 			cars.setSort(CarSort.getValue(Integer.valueOf(cars.getSort())));
 		} else {
