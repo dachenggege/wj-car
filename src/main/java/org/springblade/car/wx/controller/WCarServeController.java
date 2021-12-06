@@ -123,6 +123,10 @@ public class WCarServeController extends BladeController {
 		String vin=wVinServeFactory.gjqcrVinQuery(imageBase64);
 		System.out.println("车服务vin图片识别车辆信息vin="+vin);
 
+		if(Func.isEmpty(vin)){
+			return R.fail(201,vin);
+		}
+
 		VinParseData data=wVinServeFactory.vinParse(vin);
 		vehicle=data.getVinVehicle();
 		vehicle.setPvin(vin);

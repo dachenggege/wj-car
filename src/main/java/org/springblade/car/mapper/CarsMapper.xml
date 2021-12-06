@@ -16,6 +16,7 @@
         <result column="series_id" property="seriesId"/>
         <result column="styles_id" property="stylesId"/>
         <result column="pallname" property="pallname"/>
+        <result column="officialprice" property="officialprice"/>
         <result column="pprice" property="pprice"/>
         <result column="ptrade_price" property="ptradePrice"/>
         <result column="pafprice" property="pafprice"/>

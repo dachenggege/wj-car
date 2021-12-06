@@ -110,6 +110,9 @@ public class Cars extends BaseEntity {
 	*/
 		@ApiModelProperty(value = "价格")
 		private BigDecimal pprice;
+
+		@ApiModelProperty(value = "官方指导价")
+		private BigDecimal officialprice;
 	/**
 	* 批发价格
 	*/

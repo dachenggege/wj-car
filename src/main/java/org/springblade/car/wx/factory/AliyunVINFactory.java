@@ -15,6 +15,7 @@ import org.springblade.car.wx.dto.VinRepCar;
 import org.springblade.car.wx.dto.VinRepDetail;
 import org.springblade.car.wx.pay.WXConfig;
 import org.springblade.common.cache.CacheNames;
+import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.util.HttpUtils;
@@ -48,7 +49,9 @@ public class AliyunVINFactory {
 		System.out.println("发布车源vin查询vin=："+vin);
 		VinRepDetail entity=vinQuery(vin);
 		CarsVinParseReq cars = new CarsVinParseReq();
-		cars.setPvin(vin);
+		if(Func.isEmpty(entity)) {
+			return cars;
+		}
 		if(Func.isNotEmpty(entity)) {
 			//String ListPrice= entity.getPrice().replace("万","");
 			List<VinRepCar> carlist=entity.getCarlist();
@@ -58,6 +61,7 @@ public class AliyunVINFactory {
 				Long carid= repCar.getCarid().longValue();
 				Styles styles=stylesService.getById(carid);
 				if(Func.isNotEmpty(styles)) {
+					cars.setPvin(vin);
 					cars.setBrandId(Long.valueOf(styles.getBrandId()));
 					cars.setBrandName(styles.getBrandName());
 					cars.setSeriesId(Long.valueOf(styles.getSeriesId()));
@@ -119,11 +123,14 @@ public class AliyunVINFactory {
 			}
 		}
 		if(Func.isNotEmpty(str)){
-			if(Func.isNotEmpty(str)) {
-				JSONObject jsonObject = JSONObject.parseObject(str);
-				JSONObject resultJson = jsonObject.getJSONObject("result");
+			//Aliyun-VIN返回信息={"status":"201","msg":"VIN为空","result":""}
+
+			JSONObject jsonObject = JSONObject.parseObject(str);
+			JSONObject resultJson = jsonObject.getJSONObject("result");
+			if(Func.isNotEmpty(resultJson)) {
 				vinRepDetail = JSONObject.parseObject(resultJson.toJSONString(), VinRepDetail.class);
 			}
+
 		}
 		System.out.println(vinRepDetail.getVin());
 		return vinRepDetail;

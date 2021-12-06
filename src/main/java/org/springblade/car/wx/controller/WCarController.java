@@ -100,6 +100,9 @@ public class WCarController extends BladeController {
 		System.out.println("发布车源vin图片识别车辆信息vin="+vin);
 		//cars = wVinServeFactory.carVinQuery(vin);
 		 cars = aliyunVINFactory.carVinQuery(vin);
+		 if(Func.isEmpty(cars)){
+			return R.fail(201,vin);
+		 }
 		return R.data(cars);
 	}
 
@@ -114,6 +117,9 @@ public class WCarController extends BladeController {
 		wVinServeFactory.isCheckVin(vin);
 		//CarsVinParseReq cars = wVinServeFactory.carVinQuery(vin);
 		CarsVinParseReq cars = aliyunVINFactory.carVinQuery(vin);
+		if(Func.isEmpty(cars)){
+			return R.fail(201,vin);
+		}
 		return R.data(cars);
 
 	}
