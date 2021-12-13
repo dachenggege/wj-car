@@ -53,8 +53,8 @@ public class CarsVinParseReq {
     /**
      * 价格
      */
-    @ApiModelProperty(value = "价格")
-    private BigDecimal pprice;
+    @ApiModelProperty(value = "官方指导价格")
+    private BigDecimal officialprice;
     /**
      * 级别id
      */

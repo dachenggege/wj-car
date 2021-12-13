@@ -108,7 +108,7 @@ public class MemberController extends BladeController {
 	/**
 	 * 删除 用户表
 	 */
-	@PostMapping("/memberRemove")
+	@PostMapping("/remove")
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "删除用户", notes = "传入ids")
 	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {

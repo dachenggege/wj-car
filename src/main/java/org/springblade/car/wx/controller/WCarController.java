@@ -148,19 +148,12 @@ public class WCarController extends BladeController {
 		if(Func.isEmpty(cars.getVest())){
 			return R.fail("车源所属不能为空");
 		}
-		if(Func.isEmpty(cars.getPafprice())){
+		if(Func.isEmpty(cars.getOfficialprice())){
+			return R.fail("官方指导价不能为空");
+		}
+		if(Func.isEmpty(cars.getPprice())){
 			return R.fail("零售价不能为空");
 		}
-		if(Func.isEmpty(cars.getPtradePrice())){
-			return R.fail("批发价不能为空");
-		}
-		if(Func.isEmpty(cars.getPafprice())){
-			return R.fail("内部价不能为空");
-		}
-		if(Func.isEmpty(cars.getPcostprice())){
-			return R.fail("成本价不能为空");
-		}
-
 		Cars car=new Cars();
 		car.setPvin(cars.getPvin());
 		Cars one= carsService.getOne(Condition.getQueryWrapper(car));

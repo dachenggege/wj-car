@@ -68,7 +68,7 @@ public class AliyunVINFactory {
 					cars.setSeriesName(styles.getSeriesName());
 					cars.setStylesId(styles.getId());
 					cars.setStylesName(styles.getStylesName());
-					cars.setPprice(styles.getStylesPrice());
+					cars.setOfficialprice(styles.getStylesPrice());
 					cars.setModelId(Long.valueOf(styles.getModelId()));
 					cars.setModelName(styles.getModelName());
 				}
