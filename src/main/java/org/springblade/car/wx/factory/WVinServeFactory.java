@@ -159,10 +159,12 @@ public class WVinServeFactory{
 				vinParseData.setReason(reason);
 				String result = jsonObject.getString("result");
 				if (!Func.equals("success", reason)){
-					throw new ServiceException("请上传清晰的VIN："+reason);
+					//throw new ServiceException("请上传清晰的VIN："+reason);
+					return vinParseData;
 				}
 				if (!Func.equals("0", error_code)){
-					throw new ServiceException("请上传清晰的VIN："+reason);
+					//throw new ServiceException("请上传清晰的VIN："+reason);
+					return vinParseData;
 				}
 				if (Func.isNotEmpty(result)) {
 					JSONObject lotteryJson = JSONObject.parseObject(result);

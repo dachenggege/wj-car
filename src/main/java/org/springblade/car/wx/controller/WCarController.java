@@ -97,12 +97,21 @@ public class WCarController extends BladeController {
 	public R<CarsVinParseReq> qcrVinQuery(@ApiParam(value = "imageBase64") @RequestBody String imageBase64) {
 		CarsVinParseReq cars = new CarsVinParseReq();
 		String vin=wVinServeFactory.gjqcrVinQuery(imageBase64);
+		if(Func.isEmpty(vin)){
+			return R.fail("无法识别，请上传清晰的vin图片");
+		}
 		System.out.println("发布车源vin图片识别车辆信息vin="+vin);
 		//cars = wVinServeFactory.carVinQuery(vin);
 		 cars = aliyunVINFactory.carVinQuery(vin);
 		 if(Func.isEmpty(cars)){
-			return R.fail(201,vin);
+			 cars = new CarsVinParseReq();
+			 cars.setPvin(vin);
+			return R.data(201,cars,"未识别到车辆信息");
 		 }
+		if(Func.isEmpty(cars.getPvin())){
+			cars.setPvin(vin);
+			return R.data(201,cars,"未识别到车辆信息");
+		}
 		return R.data(cars);
 	}
 
@@ -118,7 +127,13 @@ public class WCarController extends BladeController {
 		//CarsVinParseReq cars = wVinServeFactory.carVinQuery(vin);
 		CarsVinParseReq cars = aliyunVINFactory.carVinQuery(vin);
 		if(Func.isEmpty(cars)){
-			return R.fail(201,vin);
+			cars = new CarsVinParseReq();
+			cars.setPvin(vin);
+			return R.data(201,cars,"未识别到车辆信息");
+		}
+		if(Func.isEmpty(cars.getPvin())){
+			cars.setPvin(vin);
+			return R.data(201,cars,"未识别到车辆信息");
 		}
 		return R.data(cars);
 
@@ -228,8 +243,7 @@ public class WCarController extends BladeController {
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "车源详情", notes = "传入cars")
 	public R<CarsDTO> carDetail(Long carId) {
-		Member cl = wMemberFactory.getMember(request);
-		Long memberId=cl.getId();
+
 		CarsDTO carDetail=new CarsDTO();
 		Cars cars = carsService.getById(carId);
 		if(Func.isEmpty(cars)){
@@ -268,27 +282,32 @@ public class WCarController extends BladeController {
 				}
 			}
 		}
-		CarsCollect carsCollect=new CarsCollect();
-		carsCollect.setCarId(carId);
-		carsCollect.setMemberId(memberId);
-		CarsCollect entity=casCollectService.selectCarsCollect(carsCollect);
-		if (Func.isNotEmpty(entity)){
-			carDetail.setIsCollect(entity.getIsCollect());
-		}
-		//添加浏览记录
-		CarsBrowse carsBrowse=new CarsBrowse();
-		carsBrowse.setMemberId(memberId);
-		carsBrowse.setCarId(carId);
-		List<CarsBrowse> list =carsBrowseService.list(Condition.getQueryWrapper(carsBrowse));
-		if(Func.isEmpty(list)){
-			carsBrowseService.save(carsBrowse);
-		}else{
-			for(CarsBrowse cb:list){
-				cb.setUpdateTime(LocalDateTime.now());
-			}
-			carsBrowseService.updateBatchById(list);
-		}
 
+		String openid = request.getHeader("openid");
+		if(Func.isNotEmpty(openid)) {
+			Member cl = wMemberFactory.getMember(request);
+			Long memberId=cl.getId();
+			CarsCollect carsCollect=new CarsCollect();
+			carsCollect.setCarId(carId);
+			carsCollect.setMemberId(memberId);
+			CarsCollect entity=casCollectService.selectCarsCollect(carsCollect);
+			if (Func.isNotEmpty(entity)){
+				carDetail.setIsCollect(entity.getIsCollect());
+			}
+			//添加浏览记录
+			CarsBrowse carsBrowse=new CarsBrowse();
+			carsBrowse.setMemberId(memberId);
+			carsBrowse.setCarId(carId);
+			List<CarsBrowse> list =carsBrowseService.list(Condition.getQueryWrapper(carsBrowse));
+			if(Func.isEmpty(list)){
+				carsBrowseService.save(carsBrowse);
+			}else{
+				for(CarsBrowse cb:list){
+					cb.setUpdateTime(LocalDateTime.now());
+				}
+				carsBrowseService.updateBatchById(list);
+			}
+		}
 
 		return R.data(carDetail);
 	}

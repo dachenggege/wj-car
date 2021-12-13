@@ -124,10 +124,20 @@ public class WCarServeController extends BladeController {
 		System.out.println("车服务vin图片识别车辆信息vin="+vin);
 
 		if(Func.isEmpty(vin)){
-			return R.fail(201,vin);
+			return R.fail("无法识别，请上传清晰的vin图片");
 		}
 
 		VinParseData data=wVinServeFactory.vinParse(vin);
+
+		if (!Func.equals("success", data.getReason())){
+			vehicle.setPvin(vin);
+			return R.data(201,vehicle,"未识别到车辆信息");
+		}
+		if (!Func.equals("0", data.getError_code())){
+			vehicle.setPvin(vin);
+			return R.data(201,vehicle,"未识别到车辆信息");
+		}
+
 		vehicle=data.getVinVehicle();
 		vehicle.setPvin(vin);
 			if(Func.isNotEmpty(vehicle)) {
@@ -152,8 +162,22 @@ public class WCarServeController extends BladeController {
 	public R<VinVehicle> vinParse(@ApiParam(value = "车架号") @RequestParam(value = "vin", required = true)String vin) {
 		Member cl= wMemberFactory.getMember(request);
 		wVinServeFactory.isCheckVin(vin);
-		VinParseData data=wVinServeFactory.vinParse(vin);
-		VinVehicle vehicle=data.getVinVehicle();
+		VinParseData data= new VinParseData();
+		data=wVinServeFactory.vinParse(vin);
+
+		VinVehicle vehicle= new VinVehicle();
+
+		if (!Func.equals("success", data.getReason())){
+			vehicle.setPvin(vin);
+			return R.data(201,vehicle,"未识别到车辆信息");
+		}
+		if (!Func.equals("0", data.getError_code())){
+			vehicle.setPvin(vin);
+			return R.data(201,vehicle,"未识别到车辆信息");
+		}
+
+
+		vehicle=data.getVinVehicle();
 		if(Func.isNotEmpty(vehicle)) {
 			PayOrder order = new PayOrder();
 			order.setMemberId(cl.getId());

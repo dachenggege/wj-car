@@ -132,9 +132,14 @@ public class AliyunVINFactory {
 			}
 
 		}
-		System.out.println(vinRepDetail.getVin());
+		//System.out.println(vinRepDetail.getVin());
+
+		if(Func.isEmpty(vinRepDetail.getVin())){
+			return new VinRepDetail();
+		}
 		return vinRepDetail;
 	}
+
 
 
 }
