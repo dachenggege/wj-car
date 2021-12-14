@@ -48,6 +48,21 @@ public class CarsDTO extends  Cars{
 	@ApiModelProperty(value = "发布者名字")
 	private String memberName;
 
+	@ApiModelProperty(value = "发布者昵称")
+	private String memberNickName;
+	/**
+	 * 用户角色1游客,2个人,3商家
+	 */
+	@ApiModelProperty(value = "发布者角色1游客,2个人,3商家")
+	private Integer roletype;
+
+	/**
+	 * 会员等级
+	 */
+	@ApiModelProperty(value = "发布者等级")
+	private Integer memberLv;
+
+
 	@ApiModelProperty(value = "门店名字")
 	private String shopName;
 

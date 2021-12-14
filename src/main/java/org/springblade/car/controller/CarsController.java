@@ -82,11 +82,14 @@ public class CarsController extends BladeController {
 		}
 		Member member= memberService.getById(cars.getMemberId());
 		BeanUtils.copyProperties(cars,carDetail);
-
+		carDetail.setMemberName(member.getName());
+		carDetail.setMemberNickName(member.getNickname());
+		carDetail.setRoletype(member.getRoletype());
+		carDetail.setCertificationLv(member.getCertificationLv());
+		carDetail.setMemberLv(member.getMemberLv());
 		if(Func.isNotEmpty(member)){
 			//个人车源
 			if(Func.equals(cars.getVest(),1)){
-				carDetail.setMemberName(member.getName());
 				carDetail.setPhone1(member.getPhone());
 				carDetail.setShopName(member.getCarDealer());
 				carDetail.setShopAddress(member.getDealerAddress());
@@ -99,7 +102,6 @@ public class CarsController extends BladeController {
 				Shop shop= shopService.getById(cars.getShopId());
 				if(Func.isNotEmpty(shop)) {
 
-					carDetail.setMemberName(member.getName());
 					carDetail.setPhone1(shop.getPhone1());
 					carDetail.setPhone2(shop.getPhone2());
 					carDetail.setPhone3(shop.getPhone3());

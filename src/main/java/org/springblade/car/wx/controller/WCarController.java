@@ -156,6 +156,7 @@ public class WCarController extends BladeController {
 		}
 		Cars car=new Cars();
 		car.setPvin(cars.getPvin());
+		car.setIsDeleted(0);
 		Cars one= carsService.getOne(Condition.getQueryWrapper(car));
 
 		//如果是新增

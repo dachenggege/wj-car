@@ -200,7 +200,7 @@
 
 
     <select id="selectCarsPage" resultType="org.springblade.car.dto.CarsDTO">
-        select t.*,m.name as memberName,
+        select t.*,m.name as memberName,m.nickname memberNickName,m.roletype,m.member_lv memberLv,m.certification_lv certificationLv,
         (SELECT COUNT(1) FROM  `t_cars_browse` b WHERE b.`is_deleted`=0 AND b.`car_id`=t.`id`) AS viewCount,
         (SELECT COUNT(1) FROM  `t_phone_record` r WHERE r.`is_deleted`=0 AND r.`cars_id`=t.`id`) AS callPhoneCount
          from t_cars t,
