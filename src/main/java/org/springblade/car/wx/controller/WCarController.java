@@ -157,10 +157,10 @@ public class WCarController extends BladeController {
 		Cars car=new Cars();
 		car.setPvin(cars.getPvin());
 		car.setIsDeleted(0);
-		Cars one= carsService.getOne(Condition.getQueryWrapper(car));
+		Integer count= carsService.count(Condition.getQueryWrapper(car));
 
 		//如果是新增
-		if(Func.isEmpty(cars.getId()) && Func.isNotEmpty(one)) {
+		if(Func.isEmpty(cars.getId()) && count>0) {
 			return R.fail("该车已经存在，不能在发布了");
 		}
 
