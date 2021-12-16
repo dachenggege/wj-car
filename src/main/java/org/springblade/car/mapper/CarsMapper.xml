@@ -73,6 +73,123 @@
          UPDATE t_cars SET status=0 where id=#{id}
     </update>
 
+    <select id="selectHomePageCarsPage" resultType="org.springblade.car.dto.CarsDTO">
+        select t.*,m.name as memberName,m.nickname memberNickName,
+        IF(m.id=#{memberId},1,0) AS isMyCar,
+        m.roletype,m.member_lv memberLv,m.certification_lv certificationLv
+        from t_cars t,t_member m
+        where t.is_deleted = 0  and m.is_deleted=0
+        and t.member_id =m.id
+        <if test="cars.status != null">
+            and t.status=#{cars.status}
+        </if>
+
+        <if test="cars.vest != null">
+            and t.vest=#{cars.vest}
+        </if>
+        <if test="cars.id != null">
+            and t.id=#{cars.id}
+        </if>
+        <if test="cars.shopId != null">
+            and t.shop_id=#{cars.shopId}
+        </if>
+        <if test="cars.pvin != null and cars.pvin !=''">
+            and t.pvin=#{cars.pvin}
+        </if>
+        <if test="cars.pallname != null and cars.pallname !=''">
+            and t.pallname like concat(concat('%', #{cars.pallname}), '%')
+        </if>
+        <if test="cars.province != null and cars.province !=''">
+            and t.province=#{cars.province}
+        </if>
+        <if test="cars.city != null and cars.city !=''">
+            and t.city=#{cars.city}
+        </if>
+        <if test="cars.county != null and cars.county !=''">
+            and t.county=#{cars.county}
+        </if>
+        <if test="cars.memberId != null ">
+            and t.member_id=#{cars.memberId}
+        </if>
+        <if test="cars.brandId != null and cars.brandId !=''">
+            and t.brand_id=#{cars.brandId}
+        </if>
+        <if test="cars.seriesId != null and cars.seriesId !=''">
+            and t.series_id=#{cars.seriesId}
+        </if>
+        <if test="cars.stylesId != null and cars.stylesId !=''">
+            and t.styles_id=#{cars.stylesId}
+        </if>
+        <if test="cars.modelId != null and cars.modelId !=''">
+            and t.model_id=#{cars.modelId}
+        </if>
+        <if test="cars.issell != null and cars.issell !=''">
+            and t.issell=#{cars.issell}
+        </if>
+        <if test="cars.isrecom != null and cars.isrecom !=''">
+            and t.isrecom=#{cars.isrecom}
+        </if>
+        <if test="cars.isshow != null and cars.isshow !=''">
+            and t.isshow=#{cars.isshow}
+        </if>
+        <if test="cars.ptransfer != null and cars.ptransfer !=''">
+            and t.ptransfer=#{cars.ptransfer}
+        </if>
+        <if test="cars.isjiangjia != null and cars.isjiangjia !=''">
+            and t.isjiangjia=#{cars.isjiangjia}
+        </if>
+        <if test="cars.auditStatus != null and cars.auditStatus !=''">
+            and t.audit_status=#{cars.auditStatus}
+        </if>
+        <if test="cars.sprice != null and cars.sprice !=''">
+            and t.pprice &gt; #{cars.sprice}
+        </if>
+        <if test="cars.eprice != null and cars.eprice !=''">
+            and t.pprice &lt; #{cars.eprice}
+        </if>
+        <if test="cars.areas != null and cars.areas != ''">
+            and (t.province IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county IN
+            <foreach collection="cars.areas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="cars.noareas != null and cars.noareas != ''">
+            and (t.province NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.city  NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            or t.county  NOT IN
+            <foreach collection="cars.noareas" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="cars.startCreateTime != null ">
+            and t.create_time &gt; #{cars.startCreateTime}
+        </if>
+        <if test="cars.endCreateTime != null ">
+            and t.create_time &lt; #{cars.endCreateTime}
+        </if>
+        <if test="cars.name != null and cars.name !=''">
+            and m.name like concat(concat('%', #{cars.name}), '%')
+        </if>
+            order by isMyCar DESC, ${cars.sort}
+    </select>
+
+
 
     <select id="selectCarsCount" resultType="int">
         select count(1)
@@ -197,7 +314,6 @@
             and m.phone=#{cars.phone}
         </if>
     </select>
-
 
     <select id="selectCarsPage" resultType="org.springblade.car.dto.CarsDTO">
         select t.*,m.name as memberName,m.nickname memberNickName,m.roletype,m.member_lv memberLv,m.certification_lv certificationLv,

@@ -45,6 +45,9 @@ public class CarsDTO extends  Cars{
 	@ApiModelProperty(value = "手机号码")
 	private String phone5;
 
+	@ApiModelProperty(value = "发布者是否本人")
+	private Boolean isMyCar;
+
 	@ApiModelProperty(value = "发布者名字")
 	private String memberName;
 

@@ -218,13 +218,50 @@ public class WCarController extends BladeController {
 			}
 		}
 
-		cars.setAuditStatus(AuditStatus.AUDITING.id);
+
 		cars.setMemberId(cl.getId());
 		cars.setListtime(DateUtil.format(new Date(),DateUtil.PATTERN_DATETIME));
 		if(Func.isEmpty(cars.getId())) {
+			cars.setAuditStatus(AuditStatus.AUDITING.id);
 			cars.setId(NumberUtil.getRandomNumber(1, 10));
 		}
 		else{
+			Cars old=carsService.getById(cars.getId());
+			cars.setAuditStatus(AuditStatus.AUDITING.id);
+//审核通过后的车子，用户选择重新编辑，如果只改动了零售价、表显里程、年检到期、强险到期、
+// 描述的其中一项或多项，而没有其他的项改动，是不需要后台重新审核的
+			if(Func.equals(old.getAuditStatus(),AuditStatus.PASS.id)){
+				if(Func.equals(old.getVest(),cars.getVest())//车源所属
+						&& Func.equals(old.getPvin(),cars.getPvin())//车架号
+						&& Func.equals(old.getBrandId(),cars.getBrandId())//品牌
+						&& Func.equals(old.getSeriesId(),cars.getSeriesId())//车型
+						&& Func.equals(old.getStylesId(),cars.getStylesId())//车系
+						&& Func.equals(old.getOfficialprice(),cars.getOfficialprice())//官方指导价
+						&& Func.equals(old.getPtradePrice(),cars.getPtradePrice())//批发价
+						&& Func.equals(old.getPafprice(),cars.getPafprice())//内部价
+						&& Func.equals(old.getPcostprice(),cars.getPcostprice())//成本价
+						&& Func.equals(old.getModelId(),cars.getModelId())//车辆类型
+						&& Func.equals(old.getPcolor(),cars.getPcolor())//颜色
+						&& Func.equals(old.getPtransmission(),cars.getPtransmission())//变速箱
+						&& Func.equals(old.getPgas(),cars.getPgas())//排量
+						&& Func.equals(old.getPemission(),cars.getPemission())//排放标准
+						&& Func.equals(old.getPfuel(),cars.getPfuel())//燃油类型
+						&& Func.equals(old.getPontime(),cars.getPontime())//上牌时间
+				){
+					cars.setAuditStatus(AuditStatus.PASS.id);
+				}
+
+//				if(Func.equals(old.getPprice(),cars.getPprice())
+//						&& Func.equals(old.getPkilometre(),cars.getPkilometre())
+//						&& Func.equals(old.getPinsurance(),cars.getPinsurance())
+//						&& Func.equals(old.getPinspection(),cars.getPinspection())
+//				){
+//
+//				}
+
+
+			}
+
 			return R.status(carsService.updateById(cars));
 		}
 		return R.status(carsService.save(cars));

@@ -44,6 +44,7 @@ public interface CarsMapper extends BaseMapper<Cars> {
 	 * @return
 	 */
 	List<CarsDTO> selectCarsPage(IPage page,@Param("cars") CarsVO cars);
+	List<CarsDTO> selectHomePageCarsPage(IPage page,@Param("cars") CarsVO cars,@Param("memberId")Long memberId);
 	List<CarsVO> carCollectPage(IPage page, @Param("cars") CarsVO cars);
 	List<CarsDTO> shopAlliedCarPage(IPage page, @Param("cars") CarsVO cars);
 	List<CarsVO> carsBrowsePage(IPage page, @Param("cars") CarsVO cars);

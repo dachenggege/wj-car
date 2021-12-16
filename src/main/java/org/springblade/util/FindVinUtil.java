@@ -48,7 +48,7 @@ public class FindVinUtil {
     }
 
 //    public static void main(String[] args) {
-//        String beforeStr = "你是LJ11PABC3CC023824W你是LJ11PABC3CC023823W";
+//        String beforeStr = "看LFV5A24G7D3131607";
 //        System.out.println("处理前的字符串：" + beforeStr);
 //        System.out.println(readVinByPattern(beforeStr));
 //    }

@@ -23,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.car.dto.CarsDTO;
+import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.*;
 import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.enums.CarSort;
@@ -61,17 +62,14 @@ import java.util.List;
 @ApiSort(1009)
 public class WHomePageController extends BladeController {
 	private HttpServletRequest request;
-	private WMemberFactory wMemberFactory;
 	private final IBrandService brandService;
 	private final IAdService adService;
 	private final IModelService modelService;
 	private final ICarsService carsService;
 	private final ISeriesService seriesService;
-	private final ICarsCollectService casCollectService;
 	private final IStylesService stylesService;
-	private final ICarsBrowseService carsBrowseService;
 	private IMemberService memberService;
-	private WVinServeFactory wVinServeFactory;
+	private BladeRedis bladeRedis;
 	/**
 	 *  广告列表
 	 */
@@ -130,31 +128,45 @@ public class WHomePageController extends BladeController {
 	@ApiOperationSupport(order = 6)
 	@ApiOperation(value = "车源分页", notes = "传入cars")
 	public R<IPage<CarsDTO>> page(CarsVO cars, Query query) {
-		String code=cars.getCity();
+		String code = cars.getCity();
 		cars.setCity(null);
-		if(Func.isNotEmpty(code)){
-			String county=code.substring(4,6);
-			String city=code.substring(2,4);
-			if(Func.equals(city,"00") && Func.equals(county,"00")){
+		if (Func.isNotEmpty(code)) {
+			String county = code.substring(4, 6);
+			String city = code.substring(2, 4);
+			if (Func.equals(city, "00") && Func.equals(county, "00")) {
 				cars.setProvince(code);
 			}
-			if(Func.equals(county,"00") && !Func.equals(city,"00")){
+			if (Func.equals(county, "00") && !Func.equals(city, "00")) {
 				cars.setCity(code);
 			}
-			if(!Func.equals(county,"00") && !Func.equals(city,"00")){
+			if (!Func.equals(county, "00") && !Func.equals(city, "00")) {
 				cars.setCounty(code);
 			}
 		}
 
-		if(Func.isNotEmpty(cars.getSort())){
+		if (Func.isNotEmpty(cars.getSort())) {
 			cars.setSort(CarSort.getValue(Integer.valueOf(cars.getSort())));
-		}else {
+		} else {
 			cars.setSort(CarSort.TIME.value);
 		}
-		if(Func.isEmpty(cars.getStatus())){
+		if (Func.isEmpty(cars.getStatus())) {
 			cars.setStatus(1);
 		}
-		IPage<CarsDTO> pages = carsService.selectCarsPage(Condition.getPage(query), cars);
+		Member cl = new Member();
+		Long memberId=null;
+		String openid = request.getHeader("openid");
+		if (Func.isNotEmpty(openid)) {
+			cl = bladeRedis.get(openid);
+			if (Func.isEmpty(cl)) {
+				Member client = new Member();
+				client.setOpenid(openid);
+				cl = memberService.getOne(Condition.getQueryWrapper(client));
+				bladeRedis.set(cl.getOpenid(), cl);
+			}
+			memberId=cl.getId();
+		}
+
+		IPage<CarsDTO> pages = carsService.selectHomePageCarsPage(Condition.getPage(query), cars,memberId);
 		return R.data(pages);
 	}
 

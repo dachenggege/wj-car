@@ -47,6 +47,7 @@ public interface ICarsService extends IService<Cars> {
 	 * @return
 	 */
 	IPage<CarsDTO> selectCarsPage(IPage<CarsDTO> page, CarsVO cars);
+	IPage<CarsDTO> selectHomePageCarsPage(IPage<CarsDTO> page, CarsVO cars,Long memberId);
 	IPage<CarsVO> carCollectPage(IPage<CarsVO> page, CarsVO cars);
 	IPage<CarsDTO> shopAlliedCarPage(IPage<CarsDTO> page, CarsVO cars);
 

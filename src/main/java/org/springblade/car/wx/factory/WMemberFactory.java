@@ -44,13 +44,16 @@ public class WMemberFactory {
 		Member cl = new Member();
 		String openid = request.getHeader("openid");
 		if (Func.isEmpty(openid)) {
-			throw new ServiceException("为获取到用户信息");
+			throw new ServiceException("openid不能为空");
 		}
 		cl = bladeRedis.get(openid);
 		if (Func.isEmpty(cl)) {
 			Member client = new Member();
 			client.setOpenid(openid);
 			cl = memberService.getOne(Condition.getQueryWrapper(client));
+			if (Func.isEmpty(cl)) {
+				throw new ServiceException("为获取到用户信息");
+			}
 			bladeRedis.set(cl.getOpenid(), cl);
 		}
 		return cl;
@@ -61,17 +64,17 @@ public class WMemberFactory {
 		Member cl =new Member();
 		String openid = request.getHeader("openid");
 		if (Func.isEmpty(openid)) {
-			throw new ServiceException("为获取到用户信息");
+			throw new ServiceException("openid不能为空");
 		}
 		cl = bladeRedis.get(openid);
 		if (Func.isEmpty(cl)) {
 		Member client = new Member();
 		client.setOpenid(openid);
 		 cl = memberService.getOne(Condition.getQueryWrapper(client));
+			if (Func.isEmpty(cl)) {
+				throw new ServiceException("为获取到用户信息");
+			}
 			bladeRedis.set(cl.getOpenid(),cl);
-		}
-		if (Func.isEmpty(cl)) {
-			throw new ServiceException("为获取到用户信息");
 		}
 		MemberRights qrights =new MemberRights();
 		qrights.setRoletype(cl.getRoletype());
@@ -135,7 +138,7 @@ public class WMemberFactory {
 		Member cl =memberService.getById(id);
 
 		if (Func.isEmpty(cl)) {
-			throw new ServiceException("为获取到用户信息");
+			throw new ServiceException("openid不能为空");
 		}
 		MemberRights qrights =new MemberRights();
 		qrights.setRoletype(cl.getRoletype());
