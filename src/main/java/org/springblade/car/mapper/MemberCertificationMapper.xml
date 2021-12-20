@@ -32,7 +32,7 @@
         union
         select t.* from t_member t where t.is_deleted = 0
         ) t ,t_member_certification c where t.id=c.member_id
-
+            and t.roletype=c.roletype
         <if test="member.realName != null and member.realName !=''">
             and c.real_name=#{member.realName}
         </if>

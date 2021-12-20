@@ -91,7 +91,7 @@ public class WorkbenchController {
             cl.setPersonNopassnotice(personNopassnotice);
             cl.setPersonAuditTime(new Date());
         }
-        bladeRedis.set(cl.getOpenid(),cl);
+        bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
         return R.status(memberService.updateById(cl));
     }
 
@@ -134,7 +134,7 @@ public class WorkbenchController {
             cl.setCompanyNopassnotice(companyNopassnotice);
             cl.setCompanyAuditTime(new Date());
         }
-        bladeRedis.set(cl.getOpenid(),cl);
+        bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
         return R.status(memberService.updateById(cl));
     }
 
@@ -189,7 +189,7 @@ public class WorkbenchController {
             memberCertification.setNopassnotice(nopassnotice);
             memberCertification.setAuditTime(new Date());
         }
-        bladeRedis.set(cl.getOpenid(),cl);
+        bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
         return R.status(memberCertificationService.updateById(memberCertification));
     }
 

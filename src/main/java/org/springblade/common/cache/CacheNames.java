@@ -32,6 +32,8 @@ public interface CacheNames {
 	String ALIYUN_VIN_KEY = "blade:cach:vin:aliyun:";
 
 	String STYLES_KEY = "blade:cach:stylesKey:";
+	String MEMBER_OPENID_KEY = "blade:member:openid:";
+
 
 
 

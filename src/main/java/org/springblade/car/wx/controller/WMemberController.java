@@ -102,7 +102,7 @@ public class WMemberController extends BladeController {
 		}
 		cl.setLastLogin(new Date());
 		memberService.updateById(cl);
-		bladeRedis.set(cl.getOpenid(),cl);
+		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
@@ -159,7 +159,7 @@ public class WMemberController extends BladeController {
 		cl.setLng(regist.getLng());
 		cl.setLat(regist.getLat());
 		memberService.updateById(cl);
-		bladeRedis.set(cl.getOpenid(),cl);
+		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
@@ -188,7 +188,7 @@ public class WMemberController extends BladeController {
 		cl.setLng(regist.getLng());
 		cl.setLat(regist.getLat());
 		memberService.updateById(cl);
-		bladeRedis.set(cl.getOpenid(),cl);
+		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}

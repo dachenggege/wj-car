@@ -36,6 +36,7 @@ import org.springblade.car.wx.WeixinPhone.AESForWeixinGetPhoneNumber;
 import org.springblade.car.wx.WeixinPhone.WeixinPhoneDecryptInfo;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.car.wx.factory.WxFactory;
+import org.springblade.common.cache.CacheNames;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -116,7 +117,7 @@ public class WLoginController extends BladeController {
 				cl.setLastLogin(new Date());
 				cl.setMemberLv(0);
 				memberService.save(cl);
-				bladeRedis.set(cl.getOpenid(),cl);
+				bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 				MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 				return R.data(dto);
 			}
@@ -125,7 +126,7 @@ public class WLoginController extends BladeController {
 			cl.setSessionKey(jsonObject.getString("session_key"));
 			cl.setLastLogin(new Date());
 			memberService.updateById(cl);
-			bladeRedis.set(cl.getOpenid(),cl);
+			bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 			MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 			return R.data(dto);
 
@@ -152,7 +153,7 @@ public class WLoginController extends BladeController {
 		cl.setNickname(nickname);
 		cl.setHeadimgurl(headimgurl);
 		memberService.updateById(cl);
-		bladeRedis.set(cl.getOpenid(),cl);
+		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}
@@ -175,7 +176,7 @@ public class WLoginController extends BladeController {
 		cl.setCounty(county);
 		cl.setCountyName(countyName);
 		memberService.updateById(cl);
-		bladeRedis.set(cl.getOpenid(),cl);
+		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
 	}

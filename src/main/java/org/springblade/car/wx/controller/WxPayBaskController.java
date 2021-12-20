@@ -30,6 +30,7 @@ import org.springblade.car.service.IMemberRightsService;
 import org.springblade.car.service.IMemberService;
 import org.springblade.car.service.IPayOrderService;
 import org.springblade.car.wx.pay.WXXmlUtil;
+import org.springblade.common.cache.CacheNames;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.api.R;
@@ -242,7 +243,7 @@ public class WxPayBaskController extends BladeController {
 		}
 
 		res=memberService.updateById(cl);
-		bladeRedis.set(cl.getOpenid(),cl);
+		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		return res;
 	}
 

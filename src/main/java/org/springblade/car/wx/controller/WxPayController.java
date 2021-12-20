@@ -95,27 +95,29 @@ public class WxPayController extends BladeController {
 		List<MemberRightsVO> list=memberRightsService.selectMemberRightsList(memberRights);
 		List<MemberRightsPayRep> payReqs=new ArrayList<>();
 		for(MemberRights rights:list){
-			MemberRightsPayRep payReq=new MemberRightsPayRep();
-			payReq.setRightsId(rights.getId());
-			payReq.setRoleType(roteType);
-			payReq.setMemberLv(rights.getLevel());
-			payReq.setLevelName(rights.getLevelName());
-			payReq.setPayMoney(rights.getPrice());
-			payReq.setType(1);//("升级");
+			if(rights.getLevel()>=cl.getMemberLv()) {
+				MemberRightsPayRep payReq = new MemberRightsPayRep();
+				payReq.setRightsId(rights.getId());
+				payReq.setRoleType(roteType);
+				payReq.setMemberLv(rights.getLevel());
+				payReq.setLevelName(rights.getLevelName());
+				payReq.setPayMoney(rights.getPrice());
+				payReq.setType(1);//("升级");
 
-			//个人会员，银钻，金钻
-			if(Func.equals(rights.getRoletype(),2) && Func.equals(roteType,2) ){
-				if(Func.equals(memberLv,rights.getLevel())){
-					payReq.setType(2);//("续费");
+				//个人会员，银钻，金钻
+				if (Func.equals(rights.getRoletype(), 2) && Func.equals(roteType, 2)) {
+					if (Func.equals(memberLv, rights.getLevel())) {
+						payReq.setType(2);//("续费");
+					}
+					payReqs.add(payReq);
 				}
-				payReqs.add(payReq);
-			}
-			//商家
-			if(Func.equals(rights.getRoletype(),3) && Func.equals(roteType,3) ){
-				if(Func.equals(memberLv,rights.getLevel())){
-					payReq.setType(2);//("续费");
+				//商家
+				if (Func.equals(rights.getRoletype(), 3) && Func.equals(roteType, 3)) {
+					if (Func.equals(memberLv, rights.getLevel())) {
+						payReq.setType(2);//("续费");
+					}
+					payReqs.add(payReq);
 				}
-				payReqs.add(payReq);
 			}
 		}
 

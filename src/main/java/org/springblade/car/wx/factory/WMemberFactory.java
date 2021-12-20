@@ -4,6 +4,7 @@ import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.entity.*;
 import org.springblade.car.service.*;
 import org.springblade.car.vo.ShopVO;
+import org.springblade.common.cache.CacheNames;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.redis.cache.BladeRedis;
@@ -46,7 +47,7 @@ public class WMemberFactory {
 		if (Func.isEmpty(openid)) {
 			throw new ServiceException("openid不能为空");
 		}
-		cl = bladeRedis.get(openid);
+		cl = bladeRedis.get(CacheNames.MEMBER_OPENID_KEY+openid);
 		if (Func.isEmpty(cl)) {
 			Member client = new Member();
 			client.setOpenid(openid);
@@ -54,7 +55,7 @@ public class WMemberFactory {
 			if (Func.isEmpty(cl)) {
 				throw new ServiceException("为获取到用户信息");
 			}
-			bladeRedis.set(cl.getOpenid(), cl);
+			bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(), cl);
 		}
 		return cl;
 	}
@@ -66,7 +67,7 @@ public class WMemberFactory {
 		if (Func.isEmpty(openid)) {
 			throw new ServiceException("openid不能为空");
 		}
-		cl = bladeRedis.get(openid);
+		cl = bladeRedis.get(CacheNames.MEMBER_OPENID_KEY+openid);
 		if (Func.isEmpty(cl)) {
 		Member client = new Member();
 		client.setOpenid(openid);
@@ -74,7 +75,7 @@ public class WMemberFactory {
 			if (Func.isEmpty(cl)) {
 				throw new ServiceException("为获取到用户信息");
 			}
-			bladeRedis.set(cl.getOpenid(),cl);
+			bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		}
 		MemberRights qrights =new MemberRights();
 		qrights.setRoletype(cl.getRoletype());

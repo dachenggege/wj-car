@@ -271,11 +271,11 @@ public class OssEndpoint {
 		InputStream inputStream=file.getInputStream();
 
 		//对图片进行压缩
-		inputStream=MyImgUtil.getInputStream(
-				MyImgUtil.setWatermark(
-						MyImgUtil.compress(
-								ImageIO.read(inputStream))),
-				MyImgUtil.getFileExtention(fileName));
+//		inputStream=MyImgUtil.getInputStream(
+//				MyImgUtil.setWatermark(
+//						MyImgUtil.compress(
+//								ImageIO.read(inputStream))),
+//				MyImgUtil.getFileExtention(fileName));
 
 		BladeFile bladeFile = ossBuilder.template().putFile(fileName, inputStream);
 		return R.data(bladeFile);
@@ -299,11 +299,11 @@ public class OssEndpoint {
 			InputStream inputStream = file.getInputStream();
 
 			//对图片进行压缩
-			inputStream = MyImgUtil.getInputStream(
-					MyImgUtil.setWatermark(
-							MyImgUtil.compress(
-									ImageIO.read(inputStream))),
-					MyImgUtil.getFileExtention(fileName));
+//			inputStream = MyImgUtil.getInputStream(
+//					MyImgUtil.setWatermark(
+//							MyImgUtil.compress(
+//									ImageIO.read(inputStream))),
+//					MyImgUtil.getFileExtention(fileName));
 
 			BladeFile bladeFile = ossBuilder.template().putFile(fileName, inputStream);
 			bladeFiles.add(bladeFile);

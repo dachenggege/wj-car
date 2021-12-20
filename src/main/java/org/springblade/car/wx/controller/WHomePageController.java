@@ -31,6 +31,7 @@ import org.springblade.car.service.*;
 import org.springblade.car.vo.CarsVO;
 import org.springblade.car.wx.factory.WMemberFactory;
 import org.springblade.car.wx.factory.WVinServeFactory;
+import org.springblade.common.cache.CacheNames;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.mp.support.Condition;
@@ -156,12 +157,12 @@ public class WHomePageController extends BladeController {
 		Long memberId=null;
 		String openid = request.getHeader("openid");
 		if (Func.isNotEmpty(openid)) {
-			cl = bladeRedis.get(openid);
+			cl = bladeRedis.get(CacheNames.MEMBER_OPENID_KEY+openid);
 			if (Func.isEmpty(cl)) {
 				Member client = new Member();
 				client.setOpenid(openid);
 				cl = memberService.getOne(Condition.getQueryWrapper(client));
-				bladeRedis.set(cl.getOpenid(), cl);
+				bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(), cl);
 			}
 			memberId=cl.getId();
 		}

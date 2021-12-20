@@ -47,7 +47,7 @@
         <if test="mumber_id !=null and mumber_id !=''">
             and t.mumber_id=#{mumber_id}
         </if>
-
+        ORDER BY t.create_time ASC
     </select>
 
 </mapper>

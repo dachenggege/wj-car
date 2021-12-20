@@ -28,6 +28,7 @@ import org.springblade.car.Req.MemberReq;
 import org.springblade.car.dto.MemberDTO;
 import org.springblade.car.factory.UserAreaFactory;
 import org.springblade.car.wx.factory.WMemberFactory;
+import org.springblade.common.cache.CacheNames;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.redis.cache.BladeRedis;
@@ -101,7 +102,7 @@ public class MemberController extends BladeController {
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "修改用户", notes = "传入member")
 	public R update(@Valid @RequestBody Member member) {
-		bladeRedis.set(member.getOpenid(),member);
+		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+member.getOpenid(),member);
 		return R.status(memberService.updateById(member));
 	}
 

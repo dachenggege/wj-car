@@ -6,6 +6,7 @@ import org.springblade.car.enums.PayStatus;
 import org.springblade.car.enums.RoleType;
 import org.springblade.car.service.IMemberService;
 import org.springblade.car.vo.MemberVO;
+import org.springblade.common.cache.CacheNames;
 import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,7 @@ public class ExpiryMemberJob {
 
 	//到期会员处理
 	//@Scheduled(cron = "0 */2 * * * ?")
+	//每天凌晨1点执行一次
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void run() {
 		MemberReq query =new MemberReq();
@@ -45,7 +47,7 @@ public class ExpiryMemberJob {
 				entity.setMemberLv(0);//到期会员
 				entity.setIsExpiry(true);
 				list.add(entity);
-				bladeRedis.set(entity.getOpenid(),entity);
+				bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+entity.getOpenid(),entity);
 			}
 			memberService.updateBatchById(list);
 		}

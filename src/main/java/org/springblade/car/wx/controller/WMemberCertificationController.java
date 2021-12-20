@@ -61,6 +61,10 @@ public class WMemberCertificationController extends BladeController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "认证详情", notes = "传入authentication")
 	public R<MemberCertification> detail(MemberCertification memberCertification) {
+		Member cl = wMemberFactory.getMember(request);
+		memberCertification.setMemberId(cl.getId());
+		memberCertification.setRoletype(cl.getRoletype());
+		memberCertification.setIsDeleted(0);
 		MemberCertification detail = memberCertificationService.getOne(Condition.getQueryWrapper(memberCertification));
 		return R.data(detail);
 	}
