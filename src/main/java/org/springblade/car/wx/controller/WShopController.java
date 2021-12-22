@@ -88,10 +88,18 @@ public class WShopController extends BladeController {
 		//判断是否有创建门店的权限
 		MemberRights  rights=  cl.getRights();
 		if(!rights.getIsCreateShop()){
-			return R.fail("对不起您没有创建门店的权限");
+			return R.fail("对不起，金钻会员以上才能创建门店哦");
 		}
 		if(rights.getCreateShopNum()<=cl.getMyShopNum()){
-			return R.fail("对不起您会员等级只能创建"+rights.getCreateShopNum()+"个门店哦");
+			//个人、商家金钻
+			if(Func.equals(cl.getMemberLv(),2) || Func.equals(cl.getMemberLv(),3) ){
+				return R.fail("对不起，黑钻以上会员才能创建多个门店哦");
+			}
+			//商家黑钻
+			if(Func.equals(cl.getMemberLv(),4)){
+				return R.fail("对不起，黑钻PULS会员才能创建5个门店以上");
+			}
+			return R.fail("对不起您没有权限创建门店哦");
 		}
 		shop.setId(NumberUtil.getRandomNumber(6,8));
 		shop.setAuditStatus(AuditStatus.AUDITING.id);

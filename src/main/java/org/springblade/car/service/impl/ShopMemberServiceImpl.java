@@ -56,4 +56,7 @@ public class ShopMemberServiceImpl extends ServiceImpl<ShopMemberMapper, ShopMem
 	public ShopMemberRoleRightDTO getShopMemberRight(Map<String,Object> map){
 		return baseMapper.getShopMemberRight(map);
 	}
+	public Integer selectMyJoinShopCount(ShopMember shopMember){
+		return baseMapper.selectMyJoinShopCount(shopMember);
+	}
 }

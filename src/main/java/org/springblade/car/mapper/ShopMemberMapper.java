@@ -49,4 +49,6 @@ public interface ShopMemberMapper extends BaseMapper<ShopMember> {
 	List<ShopMemberRep> queryShopMemberPage(Map<String,Object> map);
 	List<ShopMemberRoleRight> selectShopMemberRoleRight();
 	ShopMemberRoleRightDTO getShopMemberRight(Map<String,Object> map);
+
+	Integer selectMyJoinShopCount(@Param("shopMember")ShopMember shopMember);
 }

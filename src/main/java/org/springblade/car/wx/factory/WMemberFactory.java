@@ -37,6 +37,8 @@ public class WMemberFactory {
 	private  IMemberCertificationService memberCertificationService;
 	@Autowired
 	private  IShopService shopService;
+	@Autowired
+	private  IShopMemberService shopMemberService;
 
 
 
@@ -77,60 +79,7 @@ public class WMemberFactory {
 			}
 			bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		}
-		MemberRights qrights =new MemberRights();
-		qrights.setRoletype(cl.getRoletype());
-		qrights.setLevel(cl.getMemberLv());
-		MemberRights rights =memberRightsService.getOne(Condition.getQueryWrapper(qrights));
-		if (Func.isEmpty(rights)) {
-			throw new ServiceException("为获取到用户权益信息");
-		}
-		BeanUtils.copyProperties(cl,memberDTO);
-
-		//会员认证
-		MemberCertification memberCertification=new MemberCertification();
-		memberCertification.setMemberId(cl.getId());
-		memberCertification.setRoletype(cl.getRoletype());
-		MemberCertification certification=memberCertificationService.getOne(Condition.getQueryWrapper(memberCertification));
-		if(Func.isNotEmpty(certification)){
-			memberDTO.setCertificationLv(certification.getLevel());
-		}
-		//粉丝数量
-		MemberFans fans=new MemberFans();
-		fans.setMemberId(cl.getId());
-		int fansNum= memberFansService.count(Condition.getQueryWrapper(fans));
-		//关注数量
-		MemberFans focus=new MemberFans();
-		focus.setFansId(cl.getId());
-		int focusNum= memberFansService.count(Condition.getQueryWrapper(focus));
-
-		//我的车源数量
-		Cars myCar=new Cars();
-		myCar.setMemberId(cl.getId());
-		myCar.setVest(1);
-		myCar.setAuditStatus(2);
-		myCar.setStatus(1);
-		int mycarNum= carsService.count(Condition.getQueryWrapper(myCar));
-
-		//我的车源数量
-		Cars myShopCar=new Cars();
-		myShopCar.setMemberId(cl.getId());
-		myShopCar.setVest(2);
-		myShopCar.setAuditStatus(2);
-		myShopCar.setStatus(1);
-		int myShopcarNum= carsService.count(Condition.getQueryWrapper(myShopCar));
-
-		//门店数
-		ShopVO queryshop =new  ShopVO();
-		queryshop.setMemberId(cl.getId());
-		Integer shopCount= shopService.selectShopCount(queryshop);
-
-
-		memberDTO.setFansNum(fansNum);
-		memberDTO.setFocusNum(focusNum);
-		memberDTO.setMyCarNum(mycarNum);
-		memberDTO.setMyShopCarNum(myShopcarNum);
-		memberDTO.setMyShopNum(shopCount);
-		memberDTO.setRights(rights);
+		memberDTO=getMemberByid(cl.getId());
 		return memberDTO;
 	}
 
@@ -188,11 +137,17 @@ public class WMemberFactory {
 		queryshop.setMemberId(cl.getId());
 		Integer shopCount= shopService.selectShopCount(queryshop);
 
+		//我加入的门店数
+		ShopMember queryJoinshop =new  ShopMember();
+		queryJoinshop.setStaffId(cl.getId());
+		Integer myJoinshopCount= shopMemberService.selectMyJoinShopCount(queryJoinshop);
+
 		memberDTO.setFansNum(fansNum);
 		memberDTO.setFocusNum(focusNum);
 		memberDTO.setMyCarNum(mycarNum);
 		memberDTO.setMyShopCarNum(myShopcarNum);
 		memberDTO.setMyShopNum(shopCount);
+		memberDTO.setMyJoinShopNum(myJoinshopCount);
 		memberDTO.setRights(rights);
 		return memberDTO;
 	}

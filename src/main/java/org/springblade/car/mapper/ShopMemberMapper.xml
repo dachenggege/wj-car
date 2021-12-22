@@ -70,4 +70,12 @@
             AND t.staff_id=#{staff_id}
             and t.shop_id=#{shop_id}
     </select>
+    <select id="selectMyJoinShopCount" resultType="java.lang.Integer"
+            parameterType="org.springblade.car.entity.ShopMember">
+
+        SELECT count(1) FROM `t_shop_member` m , `t_shop` t
+        WHERE t.`is_deleted`=0 and m.`shop_id`=t.id
+        and t.`member_id` != #{shopMember.staffId}
+        and m.`staff_id`=#{shopMember.staffId}
+    </select>
 </mapper>

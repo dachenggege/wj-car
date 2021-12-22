@@ -229,12 +229,12 @@ public class WCarController extends BladeController {
 		else{
 			Cars old=carsService.getById(cars.getId());
 			cars.setAuditStatus(AuditStatus.AUDITING.id);
-//审核通过后的车子，用户选择重新编辑，如果只改动了零售价、表显里程、年检到期、强险到期、
+//审核通过后的车子，用户选择重新编辑，如果只改动了零售价、表显里程、年检到期、强险到期、车源所属
 // 描述的其中一项或多项，而没有其他的项改动，是不需要后台重新审核的
 			if(Func.equals(old.getAuditStatus(),AuditStatus.PASS.id)){
 				if( Func.equals(old.getPmainpic(),cars.getPmainpic())//车源主图图片
 						&& Func.equals(old.getPpics(),cars.getPpics())//图片
-						&& Func.equals(old.getVest(),cars.getVest())//车源所属
+					//	&& Func.equals(old.getVest(),cars.getVest())//车源所属
 						&& Func.equals(old.getPvin(),cars.getPvin())//车架号
 						&& Func.equals(old.getBrandId(),cars.getBrandId())//品牌
 						&& Func.equals(old.getSeriesId(),cars.getSeriesId())//车型
@@ -250,6 +250,7 @@ public class WCarController extends BladeController {
 						&& Func.equals(old.getPemission(),cars.getPemission())//排放标准
 						&& Func.equals(old.getPfuel(),cars.getPfuel())//燃油类型
 						&& Func.equals(old.getPontime(),cars.getPontime())//上牌时间
+
 				){
 					cars.setAuditStatus(AuditStatus.PASS.id);
 				}

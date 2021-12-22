@@ -26,6 +26,7 @@ import org.springblade.car.vo.MemberVO;
 import org.springblade.car.vo.ShopMemberVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springblade.car.vo.ShopVO;
 
 import java.util.List;
 import java.util.Map;
@@ -49,5 +50,8 @@ public interface IShopMemberService extends IService<ShopMember> {
 	List<ShopMemberRep> queryShopMemberPage(Map<String,Object> map);
 	List<ShopMemberRoleRight> selectShopMemberRoleRight();
 	ShopMemberRoleRightDTO getShopMemberRight(Map<String,Object> map);
+
+	Integer selectMyJoinShopCount(ShopMember shopMember);
+
 
 }
