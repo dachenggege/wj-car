@@ -36,4 +36,6 @@ public interface IShopAlliedService extends IService<ShopAllied> {
 	IPage<ShopAlliedDTO> applyAlliedShopPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
 	IPage<ShopAlliedDTO> selectShopAlliedPage(IPage<ShopAlliedDTO> page, ShopAlliedDTO shopCollect);
 	ShopAllied selectShopAllied(Long shopId,Long alliedShopId);
+	Boolean delByShopId(Long shopId);
+
 }

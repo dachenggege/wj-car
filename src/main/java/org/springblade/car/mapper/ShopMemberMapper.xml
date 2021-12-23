@@ -78,4 +78,9 @@
         and t.`member_id` != #{shopMember.staffId}
         and m.`staff_id`=#{shopMember.staffId}
     </select>
+
+    <delete id="delByShopId" parameterType="java.lang.Long">
+        delete from t_shop_member where shop_id=#{shopId}
+    </delete>
+
 </mapper>

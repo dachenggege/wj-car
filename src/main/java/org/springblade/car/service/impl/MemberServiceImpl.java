@@ -49,5 +49,42 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 		return baseMapper.selectMemberCount(member);
 	}
 
+	public Boolean delCars(){
+		return baseMapper.delCars();
+	}
+	public Boolean delCarsBrowse()
+	{
+		return baseMapper.delCarsBrowse();
+	}
+	public Boolean delCarsCollect(){
+		return baseMapper.delCarsCollect();
+	}
+	public Boolean delForun(){
+		return baseMapper.delForun();
+	}
+	public Boolean delForunComment(){
+		return baseMapper.delForunComment();
+	}
+	public Boolean delForunLike(){
+		return baseMapper.delForunLike();
+	}
+	public Boolean delMemberCertification(){
+		return baseMapper.delMemberCertification();
+	}
+	public Boolean delMemberfans(){
+		return baseMapper.delMemberfans();
+	}
+	public Boolean delPhoneRecord(){
+		return baseMapper.delPhoneRecord();
+	}
+	public Boolean delShop(){
+		return baseMapper.delShop();
+	}
+	public Boolean delShopMember(){
+		return baseMapper.delShopMember();
+	}
+	public Boolean delShopAllied(){
+		return baseMapper.delShopAllied();
+	}
 
 }

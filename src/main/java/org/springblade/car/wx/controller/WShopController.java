@@ -166,6 +166,7 @@ public class WShopController extends BladeController {
 	@PostMapping("/removeShop")
 	@ApiOperationSupport(order = 5)
 	@ApiOperation(value = "删除门店", notes = "传入ids")
+	@Transactional(rollbackFor = Exception.class)
 	public R removeShop(@ApiParam(value = "主键集合", required = true) @RequestParam String id) {
 		Member cl = wMemberFactory.getMember(request);
 		Shop shop= shopService.getById(id);
@@ -174,7 +175,33 @@ public class WShopController extends BladeController {
 				return R.fail("您没有权限删除门店");
 			}
 		}
-		return R.status(shopService.removeByIds(Func.toLongList(id)));
+
+		//删除门店 删除门店成员，删除门店结盟
+		shopService.removeByIds(Func.toLongList(id));
+		shopMemberService.delByShopId(Long.valueOf(id));
+		shopAlliedService.delByShopId(Long.valueOf(id));
+
+		// 门店车源 转移到个人车源
+		Cars cars=new Cars();
+		cars.setShopId(Long.valueOf(id));
+		List<Cars> carsList= carsService.list(Condition.getQueryWrapper(cars));
+		Member member=memberService.getById(shop.getMemberId());
+
+		for(Cars car:carsList){
+			if(Func.isEmpty(member)){
+				car.setProvince(member.getProvince());
+				car.setProvinceName(member.getProvinceName());
+				car.setCity(member.getCity());
+				car.setCityName(member.getCityName());
+				car.setCounty(member.getCounty());
+				car.setCountyName(member.getCountyName());
+			}
+			car.setShopId(null);
+			car.setVest(1);
+		}
+		carsService.updateBatchById(carsList);
+
+		return R.success("操作成功");
 	}
 
 	/**
@@ -260,7 +287,7 @@ public class WShopController extends BladeController {
 		sm.setShopId(shopMember.getShopId());
 		Integer mm= shopMemberService.count(Condition.getQueryWrapper(sm));
 		if(rights.getShopMemberNum()<=mm){
-			return R.fail("对不起您的会员等级门店只能添加"+rights.getShopMemberNum()+"个店员哦");
+			 R.fail("对不起您的会员等级门店只能添加"+rights.getShopMemberNum()+"个店员哦");
 		}
 		//店员权益
 		MemberDTO Staff = wMemberFactory.getMemberByid(shopMember.getStaffId());
@@ -270,7 +297,7 @@ public class WShopController extends BladeController {
 		}
 		Integer joinShopNUm=Staff.getMyJoinShopNum()==null?0:Staff.getMyJoinShopNum();
 		if(joinShopNUm>=Staffrights.getJoinShopNum()){
-			return R.fail("对不起该会员加入门店的上限为"+rights.getJoinShopNum()+"个");
+			 R.fail("对不起该会员加入门店的上限为"+Staffrights.getJoinShopNum()+"个");
 		}
 
 		return R.status(shopMemberService.save(shopMember));

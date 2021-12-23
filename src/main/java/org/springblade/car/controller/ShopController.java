@@ -26,9 +26,7 @@ import javax.validation.Valid;
 import org.springblade.car.Req.MemberReq;
 import org.springblade.car.Req.ShopReq;
 import org.springblade.car.dto.*;
-import org.springblade.car.entity.Member;
-import org.springblade.car.entity.ShopMember;
-import org.springblade.car.entity.ShopMemberRoleRight;
+import org.springblade.car.entity.*;
 import org.springblade.car.enums.AuditStatus;
 import org.springblade.car.enums.RoleType;
 import org.springblade.car.factory.UserAreaFactory;
@@ -47,7 +45,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springblade.car.entity.Shop;
 import org.springblade.car.vo.ShopVO;
 import org.springblade.core.boot.ctrl.BladeController;
 
@@ -128,7 +125,37 @@ public class ShopController extends BladeController {
 	@ApiOperation(value = "删除门店", notes = "传入ids")
 	@Transactional(rollbackFor = Exception.class)
 	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status(shopService.removeByIds(Func.toLongList(ids)));
+		//删除门店 删除门店成员，删除门店结盟
+		List<Long> shopIds=Func.toLongList(ids);
+		for(Long id :shopIds) {
+			Shop shop=shopService.getById(id);
+			shopMemberService.delByShopId(Long.valueOf(id));
+			shopAlliedService.delByShopId(Long.valueOf(id));
+			// 门店车源 转移到个人车源
+			Cars cars=new Cars();
+			cars.setShopId(Long.valueOf(id));
+			List<Cars> carsList= carsService.list(Condition.getQueryWrapper(cars));
+			Member member=memberService.getById(shop.getMemberId());
+
+			for(Cars car:carsList){
+				if(Func.isEmpty(member)){
+					car.setProvince(member.getProvince());
+					car.setProvinceName(member.getProvinceName());
+					car.setCity(member.getCity());
+					car.setCityName(member.getCityName());
+					car.setCounty(member.getCounty());
+					car.setCountyName(member.getCountyName());
+				}
+				car.setShopId(null);
+				car.setVest(1);
+			}
+			carsService.updateBatchById(carsList);
+
+		}
+
+		shopService.removeByIds(Func.toLongList(ids));
+
+		return R.success("操作成功");
 	}
 
 

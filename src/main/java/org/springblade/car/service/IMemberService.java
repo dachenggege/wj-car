@@ -44,4 +44,17 @@ public interface IMemberService extends IService<Member> {
 	List<MemberVO> selectMemberList(MemberReq member);
 	Integer selectMemberCount(MemberReq member);
 
+	Boolean delCars();
+	Boolean delCarsBrowse();
+	Boolean delCarsCollect();
+	Boolean delForun();
+	Boolean delForunComment();
+	Boolean delForunLike();
+	Boolean delMemberCertification();
+	Boolean delMemberfans();
+	Boolean delPhoneRecord();
+	Boolean delShop();
+	Boolean delShopMember();
+	Boolean delShopAllied();
+
 }

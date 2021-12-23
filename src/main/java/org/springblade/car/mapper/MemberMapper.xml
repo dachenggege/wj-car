@@ -45,6 +45,42 @@
         <result column="update_time" property="updateTime"/>
         <result column="is_deleted" property="isDeleted"/>
     </resultMap>
+    <delete id="delCars">
+        delete from t_cars where member_id not in (select id from t_member)
+    </delete>
+    <delete id="delCarsBrowse">
+        delete from t_cars_browse where member_id not in (select id from t_member)
+    </delete>
+    <delete id="delCarsCollect">
+        delete from t_cars_collect where member_id not in (select id from t_member)
+    </delete>
+    <delete id="delForun">
+        delete from `t_forum` where member_id not in (select id from t_member)
+    </delete>
+    <delete id="delForunComment">
+        delete FROM `t_forum_comment` WHERE mumber_id NOT IN (SELECT id FROM t_member)
+    </delete>
+    <delete id="delForunLike">
+        delete from `t_forum_like` where member_id not in (select id from t_member)
+    </delete>
+    <delete id="delMemberCertification">
+        delete from `t_member_certification` where member_id not in (select id from t_member)
+    </delete>
+    <delete id="delMemberfans">
+        delete FROM `t_member_fans` WHERE member_id NOT IN (SELECT id FROM t_member)
+    </delete>
+    <delete id="delPhoneRecord">
+        delete FROM `t_phone_record` WHERE member_id NOT IN (SELECT id FROM t_member)
+    </delete>
+    <delete id="delShop">
+        delete from `t_shop` where member_id not in (select id from t_member)
+    </delete>
+    <delete id="delShopAllied">
+        delete FROM `t_shop_allied` WHERE apply_member_id NOT IN (SELECT id FROM t_member)
+    </delete>
+    <delete id="delShopMember">
+        delete from `t_shop_member` where staff_id not in (select id from t_member)
+    </delete>
 
     <select id="selectMemberCount" resultType="int">
         select count(1) from (

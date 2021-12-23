@@ -38,5 +38,6 @@ public interface ShopAlliedMapper extends BaseMapper<ShopAllied> {
 	List<ShopAlliedDTO> applyAlliedShopPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
 	List<ShopAlliedDTO> selectShopAlliedPage(IPage page, @Param("shopAllied") ShopAlliedDTO shopAllied);
 	ShopAllied selectShopAllied(@Param("shopId") Long shopId,@Param("alliedShopId") Long alliedShopId);
+	Boolean delByShopId(@Param("shopId")Long shopId);
 
 }

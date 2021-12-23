@@ -52,6 +52,6 @@ public interface IShopMemberService extends IService<ShopMember> {
 	ShopMemberRoleRightDTO getShopMemberRight(Map<String,Object> map);
 
 	Integer selectMyJoinShopCount(ShopMember shopMember);
-
+	Boolean delByShopId(Long shopId);
 
 }

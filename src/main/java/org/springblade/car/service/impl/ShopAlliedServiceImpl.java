@@ -64,5 +64,7 @@ public class ShopAlliedServiceImpl extends ServiceImpl<ShopAlliedMapper, ShopAll
 	public ShopAllied selectShopAllied(Long shopId,Long alliedShopId){
 		return baseMapper.selectShopAllied(shopId,alliedShopId);
 	}
-
+	public Boolean delByShopId(Long shopId){
+		return baseMapper.delByShopId(shopId);
+	}
 }

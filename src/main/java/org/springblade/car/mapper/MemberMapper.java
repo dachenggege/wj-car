@@ -43,4 +43,16 @@ public interface MemberMapper extends BaseMapper<Member> {
 	List<MemberVO> selectMemberPage(IPage page, @Param("member") MemberReq member);
 	Integer selectMemberCount( @Param("member") MemberReq member);
 
+	public Boolean delCars();
+	public Boolean delCarsBrowse();
+	public Boolean delCarsCollect();
+	public Boolean delForun();
+	public Boolean delForunComment();
+	public Boolean delForunLike();
+	public Boolean delMemberCertification();
+	public Boolean delMemberfans();
+	public Boolean delPhoneRecord();
+	public Boolean delShop();
+	public Boolean delShopMember();
+	public Boolean delShopAllied();
 }

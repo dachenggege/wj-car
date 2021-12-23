@@ -59,4 +59,8 @@ public class ShopMemberServiceImpl extends ServiceImpl<ShopMemberMapper, ShopMem
 	public Integer selectMyJoinShopCount(ShopMember shopMember){
 		return baseMapper.selectMyJoinShopCount(shopMember);
 	}
+
+	public Boolean delByShopId(Long shopId){
+		return baseMapper.delByShopId(shopId);
+	}
 }

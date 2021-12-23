@@ -34,6 +34,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.redis.cache.BladeRedis;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.car.entity.Member;
@@ -112,6 +113,7 @@ public class MemberController extends BladeController {
 	@PostMapping("/remove")
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "删除用户", notes = "传入ids")
+	@Transactional(rollbackFor = Exception.class)
 	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
 		return R.status(memberService.removeByIds(Func.toLongList(ids)));
 	}

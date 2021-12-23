@@ -185,7 +185,7 @@
     <select id="selectMyShopPage" resultType="org.springblade.car.dto.ShopDTO" parameterType="Long">
         SELECT t.*,s.staff_role,
         (SELECT NAME FROM t_member WHERE is_deleted = 0 AND id = t.member_id ) AS shopMember ,
-        (SELECT COUNT(1) FROM t_shop_member WHERE is_deleted = 0 AND shop_id=t.id) AS staffNum,
+        (SELECT COUNT(1) FROM t_shop_member sm,t_member m WHERE sm.is_deleted = 0 AND m.is_deleted = 0  AND m.id=sm.staff_id AND sm.shop_id=t.id ) AS staffNum,
         (SELECT COUNT(1) FROM t_cars WHERE is_deleted = 0 AND status=1 and audit_status=2 and shop_id=t.id) AS shopCarNum,
         (SELECT COUNT(1) FROM t_shop_allied WHERE allied_status=2 and (shop_id=t.id OR allied_shop_id=t.id) ) AS alliedNum,
         (SELECT COUNT(1) FROM t_shop_allied a,t_cars c
