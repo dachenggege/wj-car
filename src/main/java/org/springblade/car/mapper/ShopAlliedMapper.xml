@@ -46,8 +46,8 @@
         (SELECT COUNT(1) FROM t_cars WHERE shop_id=t.id) AS shopCarNum
         FROM t_shop  t, t_shop_allied a
         WHERE a.is_deleted = 0 AND a.allied_status=1 AND t.is_deleted = 0  AND t.audit_status =2
-        AND a.allied_shop_id=t.id
-        AND t.id =#{shopAllied.alliedShopId}
+        AND a.shop_id=t.id
+        AND a.allied_shop_id =#{shopAllied.alliedShopId}
     </select>
     <!--查询门店 -->
     <select id="selectShopAlliedPage" resultType="org.springblade.car.dto.ShopAlliedDTO" >

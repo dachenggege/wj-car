@@ -51,6 +51,8 @@ public class ShopAlliedDTO {
 
 	@ApiModelProperty(value = "联盟门店id")
 	private Long alliedShopId;
+//	@ApiModelProperty(value = "联盟门店名称")
+//	private String alliedShopName;
 	@ApiModelProperty(value = "联盟状态0未申请，1已申请，2已结盟，3取消（拒绝）")
 	private int alliedStatus;
 

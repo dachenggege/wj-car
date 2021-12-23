@@ -127,6 +127,7 @@ public class WorkbenchController {
             cl.setCompanyAuditStatus(companyAuditStatus);
             cl.setCompanyAuditTime(new Date());
             cl.setCertificationLv(0);
+            cl.setMemberLv(0);
         }
         //不通过
         if(Func.equals(companyAuditStatus,3)){

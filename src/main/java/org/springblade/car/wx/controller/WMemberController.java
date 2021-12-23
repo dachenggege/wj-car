@@ -101,7 +101,7 @@ public class WMemberController extends BladeController {
 			throw new ServiceException("为获取到用户信息");
 		}
 		cl.setLastLogin(new Date());
-		memberService.updateById(cl);
+		//memberService.updateById(cl);
 		bladeRedis.set(CacheNames.MEMBER_OPENID_KEY+cl.getOpenid(),cl);
 		MemberDTO dto = wMemberFactory.getMemberByid(cl.getId());
 		return R.data(dto);
