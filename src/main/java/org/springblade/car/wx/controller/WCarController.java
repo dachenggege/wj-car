@@ -143,6 +143,7 @@ public class WCarController extends BladeController {
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "发布(编辑)车辆", notes = "传入cars")
 	public R saveCar(@Valid @RequestBody Cars cars) {
+		Member cl = wMemberFactory.getMember(request);
 
 		wVinServeFactory.isCheckVin(cars.getPvin());
 		if(Func.isEmpty(cars.getVest())){
@@ -158,6 +159,7 @@ public class WCarController extends BladeController {
 		car.setPvin(cars.getPvin());
 		car.setIsDeleted(0);
 		car.setStatus(1);//上架
+		car.setMemberId(cl.getId());
 		Integer count= carsService.count(Condition.getQueryWrapper(car));
 
 		//如果是新增
@@ -167,7 +169,6 @@ public class WCarController extends BladeController {
 
 
 
-		Member cl = wMemberFactory.getMember(request);
 
 		//个人车源
 		if(Func.equals(cars.getVest(),1)){

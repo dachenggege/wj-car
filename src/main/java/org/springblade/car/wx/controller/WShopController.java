@@ -22,6 +22,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import org.springblade.car.Req.ShopPhoneReq;
 import org.springblade.car.dto.*;
@@ -276,28 +277,29 @@ public class WShopController extends BladeController {
 		map.put("shop_id",shopMember.getShopId());
 		ShopMemberRoleRightDTO roleRightDTO=shopMemberService.getShopMemberRight(map);
 		if(Func.isEmpty(roleRightDTO)){
-			R.fail("您没有权限添加店员哦");
+			return R.fail("您没有权限添加店员哦");
 		}
 		if(!roleRightDTO.getIsEditStaff()){
-			R.fail("您没有权限添加店员哦");
+			return R.fail("您没有权限添加店员哦");
 		}
 		//
 		MemberRights  rights=  cl.getRights();
 		ShopMember sm=new ShopMember();
 		sm.setShopId(shopMember.getShopId());
 		Integer mm= shopMemberService.count(Condition.getQueryWrapper(sm));
-		if(rights.getShopMemberNum()<=mm){
-			 R.fail("对不起您的会员等级门店只能添加"+rights.getShopMemberNum()+"个店员哦");
+		if(rights.getShopMemberNum()<=(mm+1)){
+			//return R.fail("对不起您的会员等级门店只能添加"+rights.getShopMemberNum()+"个店员哦");
+			return R.fail("对不起，请升级至黑钻会员以上才能继续招人");
 		}
 		//店员权益
 		MemberDTO Staff = wMemberFactory.getMemberByid(shopMember.getStaffId());
 		MemberRights  Staffrights=  Staff.getRights();
 		if(Func.isEmpty(Staff)){
-			R.fail("该会员权益有问题，请检查");
+			return	R.fail("该会员权益有问题，请检查");
 		}
 		Integer joinShopNUm=Staff.getMyJoinShopNum()==null?0:Staff.getMyJoinShopNum();
 		if(joinShopNUm>=Staffrights.getJoinShopNum()){
-			 R.fail("对不起该会员加入门店的上限为"+Staffrights.getJoinShopNum()+"个");
+			return R.fail("请对方升级会员才能加入多家门店");
 		}
 
 		return R.status(shopMemberService.save(shopMember));
@@ -508,6 +510,11 @@ public class WShopController extends BladeController {
 		if(!roleRightDTO.getIsEditShopAllied()){
 			R.fail("您没有权限申请门店结盟的权限哦");
 		}
+		//查询申请者门店已结盟的门店数量
+		ShopAllied apply=new ShopAllied();
+		apply.setShopId(shopAllied.getShopId());
+		Integer applyShopHadAlliedNum= shopAlliedService.count(Condition.getQueryWrapper(apply));
+
 
 
 		shopAllied.setApplyMemberId(cl.getId());

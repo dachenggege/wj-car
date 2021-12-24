@@ -33,7 +33,7 @@ public class DelMemberDataJob {
 	//处理没用的数据
 	//@Scheduled(cron = "0 */2 * * * ?")
 	//每天5分钟点执行一次
-	@Scheduled(cron = "*/5 * * * * ?")
+	@Scheduled(cron = "0 */5 * * * ?")
 	public void run() {
 		memberService.delCars();
 		memberService.delCarsBrowse();
